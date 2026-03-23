@@ -1,0 +1,18 @@
+# Archivos internos de Claude
+.claude/
+.claudeAgus/
+
+# Screenshots de trabajo
+screenshot*.png
+
+# Archivos temporales y logs
+logs/
+*.ps1
+*.zip
+*.ai
+
+# PDFs y archivos de marca (pesados)
+brand/*.pdf
+
+# Imágenes de referencia de trabajo
+WhatsApp*.jpeg
