@@ -1,0 +1,35 @@
+# Actualización automática de fixture y posiciones — AABN
+# Corre todos los días a las 8am hora Argentina (UTC-3 = 11:00 UTC)
+# También se puede disparar manualmente desde GitHub Actions
+
+name: Actualizar fixture y posiciones
+
+on:
+  schedule:
+    - cron: '0 11 * * *'
+  workflow_dispatch:
+
+jobs:
+  actualizar:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar dependencias
+        run: pip install requests beautifulsoup4
+
+      - name: Ejecutar scraper y actualizar HTML
+        run: python scripts/update_fixture.py
+
+      - name: Commit y push si hay cambios
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Auto: actualiza fixture y posiciones [skip ci]"
+          file_pattern: index.html
