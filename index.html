@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Asociación Atlética Banda Norte | El Lobo de Río Cuarto</title>
+  <meta name="description" content="Asociación Atlética Banda Norte — Club deportivo de Río Cuarto, Córdoba. Fútbol, básquet, tenis y más. Sumate al Lobo del Norte.">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -207,7 +208,7 @@
       </a>
 
       <!-- Mobile hamburger -->
-      <button class="md:hidden flex flex-col gap-1.5 p-2" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+      <button class="md:hidden flex flex-col gap-1.5 p-2" aria-label="Abrir menú" aria-expanded="false" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true'); document.getElementById('mobile-menu').classList.toggle('hidden')">
         <span class="block w-6 h-0.5 bg-white"></span>
         <span class="block w-6 h-0.5 bg-white"></span>
         <span class="block w-6 h-0.5 bg-white"></span>
@@ -292,7 +293,7 @@
     <!-- Botones CTA -->
     <div class="flex flex-wrap gap-4 justify-center">
       <a href="#equipos"
-         class="bg-verde-500 hover:bg-verde-400 text-white font-bold px-8 py-4 rounded-full transition-all shadow-lg shadow-verde-900/50 text-sm tracking-wide">
+         class="bg-verde-700 hover:bg-verde-600 text-white font-bold px-8 py-4 rounded-full transition-all shadow-lg shadow-verde-900/50 text-sm tracking-wide">
         Ver Equipos →
       </a>
       <a href="#socio"
@@ -417,7 +418,7 @@
         </div>
 
         <div class="relative flex flex-col items-center text-center">
-          <div class="w-10 h-10 rounded-full bg-verde-500 text-white flex items-center justify-center font-bold text-xs mb-3 z-10 shadow-md flex-shrink-0 ring-2 ring-verde-300">2026</div>
+          <div class="w-10 h-10 rounded-full bg-verde-700 text-white flex items-center justify-center font-bold text-xs mb-3 z-10 shadow-md flex-shrink-0 ring-2 ring-verde-300">2026</div>
           <div class="font-bold text-gray-800 text-sm">Hoy</div>
           <div class="text-gray-500 text-xs mt-1 leading-snug">Liga Federal · 4 disciplinas · 10 títulos · Parque Sarmiento</div>
         </div>
@@ -451,50 +452,50 @@
         <div class="card-hover bg-white rounded-2xl shadow-sm border border-gray-100 p-5 text-center">
           <div class="w-12 h-12 rounded-full bg-verde-100 flex items-center justify-center mx-auto mb-3 text-2xl">🏆</div>
           <div class="font-bold text-verde-800 text-sm">Primera División</div>
-          <div class="text-gray-400 text-xs mt-1">Liga Regional · Torneo Apertura</div>
+          <div class="text-gray-600 text-xs mt-1">Liga Regional · Torneo Apertura</div>
           <div class="mt-2 text-xs bg-verde-600 text-white px-2 py-0.5 rounded-full inline-block">Activo</div>
         </div>
         <div class="card-hover bg-white rounded-2xl shadow-sm border border-gray-100 p-5 text-center">
           <div class="w-12 h-12 rounded-full bg-verde-100 flex items-center justify-center mx-auto mb-3 text-2xl">🌟</div>
           <div class="font-bold text-verde-800 text-sm">Reserva</div>
-          <div class="text-gray-400 text-xs mt-1">Liga Regional</div>
+          <div class="text-gray-600 text-xs mt-1">Liga Regional</div>
           <div class="mt-2 text-xs bg-verde-600 text-white px-2 py-0.5 rounded-full inline-block">Activo</div>
         </div>
         <div class="card-hover bg-white rounded-2xl shadow-sm border border-gray-100 p-5 text-center">
           <div class="w-12 h-12 rounded-full bg-verde-100 flex items-center justify-center mx-auto mb-3 text-2xl">🎓</div>
           <div class="font-bold text-verde-800 text-sm">Sub-20</div>
-          <div class="text-gray-400 text-xs mt-1">Juveniles AFA</div>
+          <div class="text-gray-600 text-xs mt-1">Juveniles AFA</div>
           <div class="mt-2 text-xs bg-verde-600 text-white px-2 py-0.5 rounded-full inline-block">Activo</div>
         </div>
         <div class="card-hover bg-white rounded-2xl shadow-sm border border-gray-100 p-5 text-center">
           <div class="w-12 h-12 rounded-full bg-verde-100 flex items-center justify-center mx-auto mb-3 text-2xl">⚡</div>
           <div class="font-bold text-verde-800 text-sm">Sub-17</div>
-          <div class="text-gray-400 text-xs mt-1">Juveniles</div>
+          <div class="text-gray-600 text-xs mt-1">Juveniles</div>
           <div class="mt-2 text-xs bg-verde-600 text-white px-2 py-0.5 rounded-full inline-block">Activo</div>
         </div>
         <div class="card-hover bg-white rounded-2xl shadow-sm border border-gray-100 p-5 text-center">
           <div class="w-12 h-12 rounded-full bg-verde-100 flex items-center justify-center mx-auto mb-3 text-2xl">🔥</div>
           <div class="font-bold text-verde-800 text-sm">Sub-15</div>
-          <div class="text-gray-400 text-xs mt-1">Inferiores · Campeón 2025</div>
-          <div class="mt-2 text-xs bg-yellow-500 text-white px-2 py-0.5 rounded-full inline-block">🏆 Campeón</div>
+          <div class="text-gray-600 text-xs mt-1">Inferiores · Campeón 2025</div>
+          <div class="mt-2 text-xs bg-yellow-500 text-gray-900 px-2 py-0.5 rounded-full inline-block">🏆 Campeón</div>
         </div>
         <div class="card-hover bg-white rounded-2xl shadow-sm border border-gray-100 p-5 text-center">
           <div class="w-12 h-12 rounded-full bg-verde-100 flex items-center justify-center mx-auto mb-3 text-2xl">🌱</div>
           <div class="font-bold text-verde-800 text-sm">Sub-13</div>
-          <div class="text-gray-400 text-xs mt-1">Inferiores</div>
+          <div class="text-gray-600 text-xs mt-1">Inferiores</div>
           <div class="mt-2 text-xs bg-verde-600 text-white px-2 py-0.5 rounded-full inline-block">Activo</div>
         </div>
         <div class="card-hover bg-white rounded-2xl shadow-sm border border-gray-100 p-5 text-center">
           <div class="w-12 h-12 rounded-full bg-verde-100 flex items-center justify-center mx-auto mb-3 text-2xl">👶</div>
           <div class="font-bold text-verde-800 text-sm">Escuelita (5–11 años)</div>
-          <div class="text-gray-400 text-xs mt-1">Formación</div>
+          <div class="text-gray-600 text-xs mt-1">Formación</div>
           <div class="mt-2 text-xs bg-verde-600 text-white px-2 py-0.5 rounded-full inline-block">Activo</div>
         </div>
         <div class="card-hover bg-white rounded-2xl shadow-sm border border-gray-100 p-5 text-center">
           <div class="w-12 h-12 rounded-full bg-pink-100 flex items-center justify-center mx-auto mb-3 text-2xl">👩‍⚽</div>
           <div class="font-bold text-verde-800 text-sm">Fútbol Femenino</div>
-          <div class="text-gray-400 text-xs mt-1">Liga Femenina Regional</div>
-          <div class="mt-2 text-xs bg-pink-500 text-white px-2 py-0.5 rounded-full inline-block">Activo</div>
+          <div class="text-gray-600 text-xs mt-1">Liga Femenina Regional</div>
+          <div class="mt-2 text-xs bg-pink-500 text-gray-900 px-2 py-0.5 rounded-full inline-block">Activo</div>
         </div>
       </div>
     </div>
@@ -510,25 +511,25 @@
         <div class="card-hover bg-white rounded-2xl shadow-sm border border-gray-100 p-5 text-center">
           <div class="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center mx-auto mb-3 text-2xl">🏀</div>
           <div class="font-bold text-verde-800 text-sm">Primera Masculino</div>
-          <div class="text-gray-400 text-xs mt-1">🏆 Liga Federal 2026 · Zona A Centro</div>
-          <div class="mt-2 text-xs bg-orange-500 text-white px-2 py-0.5 rounded-full inline-block">⭐ Liga Federal</div>
+          <div class="text-gray-600 text-xs mt-1">🏆 Liga Federal 2026 · Zona A Centro</div>
+          <div class="mt-2 text-xs bg-orange-500 text-gray-900 px-2 py-0.5 rounded-full inline-block">⭐ Liga Federal</div>
         </div>
         <div class="card-hover bg-white rounded-2xl shadow-sm border border-gray-100 p-5 text-center">
           <div class="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center mx-auto mb-3 text-2xl">👩‍🏀</div>
           <div class="font-bold text-verde-800 text-sm">Primera Femenino</div>
-          <div class="text-gray-400 text-xs mt-1">Liga Provincial Femenina</div>
+          <div class="text-gray-600 text-xs mt-1">Liga Provincial Femenina</div>
           <div class="mt-2 text-xs bg-verde-600 text-white px-2 py-0.5 rounded-full inline-block">Activo</div>
         </div>
         <div class="card-hover bg-white rounded-2xl shadow-sm border border-gray-100 p-5 text-center">
           <div class="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center mx-auto mb-3 text-2xl">🎯</div>
           <div class="font-bold text-verde-800 text-sm">U-19 / U-17 / U-15</div>
-          <div class="text-gray-400 text-xs mt-1">Categorías Juveniles</div>
+          <div class="text-gray-600 text-xs mt-1">Categorías Juveniles</div>
           <div class="mt-2 text-xs bg-verde-600 text-white px-2 py-0.5 rounded-full inline-block">Activo</div>
         </div>
         <div class="card-hover bg-white rounded-2xl shadow-sm border border-gray-100 p-5 text-center">
           <div class="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center mx-auto mb-3 text-2xl">🧒</div>
           <div class="font-bold text-verde-800 text-sm">Mini Básquet</div>
-          <div class="text-gray-400 text-xs mt-1">Formación inicial</div>
+          <div class="text-gray-600 text-xs mt-1">Formación inicial</div>
           <div class="mt-2 text-xs bg-verde-600 text-white px-2 py-0.5 rounded-full inline-block">Activo</div>
         </div>
       </div>
@@ -545,19 +546,19 @@
         <div class="card-hover bg-white rounded-2xl shadow-sm border border-gray-100 p-5 text-center">
           <div class="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center mx-auto mb-3 text-2xl">🎾</div>
           <div class="font-bold text-verde-800 text-sm">Escuela de Tenis AABN</div>
-          <div class="text-gray-400 text-xs mt-1">Canchas propias · Todas las edades</div>
+          <div class="text-gray-600 text-xs mt-1">Canchas propias · Todas las edades</div>
           <div class="mt-2 text-xs bg-verde-600 text-white px-2 py-0.5 rounded-full inline-block">Activo</div>
         </div>
         <div class="card-hover bg-white rounded-2xl shadow-sm border border-gray-100 p-5 text-center">
           <div class="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center mx-auto mb-3 text-2xl">🏆</div>
           <div class="font-bold text-verde-800 text-sm">Torneos y Competencias</div>
-          <div class="text-gray-400 text-xs mt-1">Liga de Tenis Regional · Torneos internos</div>
+          <div class="text-gray-600 text-xs mt-1">Liga de Tenis Regional · Torneos internos</div>
           <div class="mt-2 text-xs bg-verde-600 text-white px-2 py-0.5 rounded-full inline-block">Activo</div>
         </div>
         <div class="card-hover bg-white rounded-2xl shadow-sm border border-gray-100 p-5 text-center">
           <div class="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center mx-auto mb-3 text-2xl">👶</div>
           <div class="font-bold text-verde-800 text-sm">Mini Tenis (iniciación)</div>
-          <div class="text-gray-400 text-xs mt-1">Para los más chicos</div>
+          <div class="text-gray-600 text-xs mt-1">Para los más chicos</div>
           <div class="mt-2 text-xs bg-verde-600 text-white px-2 py-0.5 rounded-full inline-block">Activo</div>
         </div>
       </div>
@@ -574,13 +575,13 @@
         <div class="card-hover bg-white rounded-2xl shadow-sm border border-gray-100 p-5 text-center">
           <div class="w-12 h-12 rounded-full bg-pink-100 flex items-center justify-center mx-auto mb-3 text-2xl">🤸‍♀️</div>
           <div class="font-bold text-verde-800 text-sm">Gimnasia Artística</div>
-          <div class="text-gray-400 text-xs mt-1">Femenina y masculina</div>
+          <div class="text-gray-600 text-xs mt-1">Femenina y masculina</div>
           <div class="mt-2 text-xs bg-verde-600 text-white px-2 py-0.5 rounded-full inline-block">Activo</div>
         </div>
         <div class="card-hover bg-white rounded-2xl shadow-sm border border-gray-100 p-5 text-center">
           <div class="w-12 h-12 rounded-full bg-pink-100 flex items-center justify-center mx-auto mb-3 text-2xl">⭐</div>
           <div class="font-bold text-verde-800 text-sm">Competencias Provinciales</div>
-          <div class="text-gray-400 text-xs mt-1">Participación en torneos de Córdoba</div>
+          <div class="text-gray-600 text-xs mt-1">Participación en torneos de Córdoba</div>
           <div class="mt-2 text-xs bg-verde-600 text-white px-2 py-0.5 rounded-full inline-block">Activo</div>
         </div>
       </div>
@@ -590,188 +591,295 @@
 
 
 <!-- ═══════════════════════════════════════════
-     FIXTURE
+     FIXTURE Y POSICIONES
 ═══════════════════════════════════════════ -->
 <section id="fixture" class="py-20 bg-verde-800 text-white">
   <div class="max-w-5xl mx-auto px-4 sm:px-6">
 
-    <div class="text-center mb-12">
-      <h2 class="text-3xl font-extrabold mb-2">Próximos Partidos</h2>
-      <p class="text-green-200">Torneo Apertura 2026 · Liga Regional</p>
+    <div class="text-center mb-8">
+      <h2 class="text-3xl font-extrabold mb-2">Fixture & Posiciones</h2>
+      <p class="text-green-200">Resultados y próximos partidos del club</p>
     </div>
 
-    <div class="space-y-4">
-      <!-- FIXTURE_START -->
-
-      <!-- Partido 1 — próximo -->
-      <div class="bg-verde-700 rounded-2xl p-5 flex flex-col sm:flex-row items-center gap-4 border border-verde-500 ring-2 ring-green-400 ring-offset-2 ring-offset-verde-800">
-        <div class="text-center sm:w-28 flex-shrink-0">
-          <div class="text-green-300 text-xs font-bold uppercase">Sáb 14/03</div>
-          <div class="text-white font-bold text-lg">16:00 hs</div>
-          <div class="text-green-300 text-xs">Fecha 9</div>
-        </div>
-        <div class="flex-1 flex items-center justify-center gap-3">
-          <div class="text-right">
-            <div class="font-bold text-white text-sm flex items-center justify-end gap-2">
-              <img src="images.jpeg" alt="AABN" class="h-7 w-auto rounded">
-              AABN
-            </div>
-            <div class="text-green-200 text-xs">Local</div>
-          </div>
-          <div class="bg-white text-verde-800 font-extrabold text-xl px-4 py-2 rounded-lg">vs</div>
-          <div>
-            <div class="font-bold text-white text-sm">Dep. Norte</div>
-            <div class="text-green-200 text-xs">Visitante</div>
-          </div>
-        </div>
-        <div class="text-center sm:w-32 flex-shrink-0">
-          <div class="text-green-200 text-xs">Estadio</div>
-          <div class="text-white text-sm font-semibold">Predio AABN</div>
-          <span class="mt-1 inline-block bg-green-400 text-verde-900 text-xs font-bold px-3 py-0.5 rounded-full">Próximo</span>
-        </div>
+    <!-- Selector de deporte -->
+    <div class="flex justify-center mb-8">
+      <div class="bg-verde-900 rounded-full p-1 flex gap-1">
+        <button onclick="cambiarTab('futbol')" id="tab-futbol"
+          class="px-5 py-2 rounded-full text-sm font-bold transition-all bg-green-400 text-verde-900">
+          ⚽ Fútbol Masculino
+        </button>
+        <button onclick="cambiarTab('basquet')" id="tab-basquet"
+          class="px-5 py-2 rounded-full text-sm font-bold transition-all text-green-200 hover:text-white">
+          🏀 Básquet Liga Federal
+        </button>
       </div>
-
-      <!-- Partido 2 -->
-      <div class="bg-verde-700 rounded-2xl p-5 flex flex-col sm:flex-row items-center gap-4 border border-verde-500">
-        <div class="text-center sm:w-28 flex-shrink-0">
-          <div class="text-green-300 text-xs font-bold uppercase">Sáb 21/03</div>
-          <div class="text-white font-bold text-lg">15:30 hs</div>
-          <div class="text-green-300 text-xs">Fecha 10</div>
-        </div>
-        <div class="flex-1 flex items-center justify-center gap-3">
-          <div class="text-right">
-            <div class="font-bold text-white text-sm">Atlético Sur</div>
-            <div class="text-green-200 text-xs">Local</div>
-          </div>
-          <div class="bg-white text-verde-800 font-extrabold text-xl px-4 py-2 rounded-lg">vs</div>
-          <div>
-            <div class="font-bold text-white text-sm flex items-center gap-2">
-              AABN
-              <img src="images.jpeg" alt="AABN" class="h-7 w-auto rounded">
-            </div>
-            <div class="text-green-200 text-xs">Visitante</div>
-          </div>
-        </div>
-        <div class="text-center sm:w-32 flex-shrink-0">
-          <div class="text-green-200 text-xs">Estadio</div>
-          <div class="text-white text-sm font-semibold">Est. Atlético Sur</div>
-        </div>
-      </div>
-
-      <!-- Partido 3 -->
-      <div class="bg-verde-700 rounded-2xl p-5 flex flex-col sm:flex-row items-center gap-4 border border-verde-500">
-        <div class="text-center sm:w-28 flex-shrink-0">
-          <div class="text-green-300 text-xs font-bold uppercase">Sáb 28/03</div>
-          <div class="text-white font-bold text-lg">17:00 hs</div>
-          <div class="text-green-300 text-xs">Fecha 11</div>
-        </div>
-        <div class="flex-1 flex items-center justify-center gap-3">
-          <div class="text-right">
-            <div class="font-bold text-white text-sm flex items-center justify-end gap-2">
-              <img src="images.jpeg" alt="AABN" class="h-7 w-auto rounded">
-              AABN
-            </div>
-            <div class="text-green-200 text-xs">Local</div>
-          </div>
-          <div class="bg-white text-verde-800 font-extrabold text-xl px-4 py-2 rounded-lg">vs</div>
-          <div>
-            <div class="font-bold text-white text-sm">Racing Club Norte</div>
-            <div class="text-green-200 text-xs">Visitante</div>
-          </div>
-        </div>
-        <div class="text-center sm:w-32 flex-shrink-0">
-          <div class="text-green-200 text-xs">Estadio</div>
-          <div class="text-white text-sm font-semibold">Predio AABN</div>
-        </div>
-      </div>
-
-      <!-- FIXTURE_END -->
     </div>
 
-    <!-- Tabla de posiciones mini -->
-    <div class="mt-12">
-      <h3 class="text-xl font-bold text-center mb-6">Tabla de Posiciones — Primera División</h3>
+    <!-- ── Panel Fútbol ─────────────────────────────── -->
+    <div id="panel-futbol">
+      <p class="text-center text-green-300 text-sm mb-5 font-semibold">Torneo Apertura 2026 · Liga Regional Río Cuarto · Fecha 5</p>
+
+      <!-- Martes 24/03 -->
+      <p class="text-green-400 text-xs font-bold uppercase tracking-widest mb-3">Martes 24/03</p>
+      <div class="space-y-3 mb-5">
+        <!-- FIXTURE_START -->
+
+        <!-- Partido AABN — próximo -->
+        <div class="bg-verde-700 rounded-2xl p-5 flex flex-col sm:flex-row items-center gap-4 border border-verde-500 ring-2 ring-green-400 ring-offset-2 ring-offset-verde-800">
+          <div class="text-center sm:w-28 flex-shrink-0">
+            <div class="text-green-300 text-xs font-bold uppercase">Mar 24/03</div>
+            <div class="text-white font-bold text-lg">18:00 hs</div>
+            <div class="text-green-300 text-xs">Fecha 5</div>
+          </div>
+          <div class="flex-1 flex items-center justify-center gap-3">
+            <div class="text-right">
+              <div class="font-bold text-white text-sm flex items-center justify-end gap-2"><img src="images.jpeg" alt="AABN" class="h-7 w-auto rounded"> AABN</div>
+              <div class="text-green-200 text-xs">Local</div>
+            </div>
+            <div class="bg-white text-verde-800 font-extrabold text-xl px-4 py-2 rounded-lg">vs</div>
+            <div>
+              <div class="font-bold text-white text-sm">San Martín (VM)</div>
+              <div class="text-green-200 text-xs">Visitante</div>
+            </div>
+          </div>
+          <div class="text-center sm:w-32 flex-shrink-0">
+            <div class="text-green-200 text-xs">Estadio</div>
+            <div class="text-white text-sm font-semibold">Parque Sarmiento</div>
+            <span class="mt-1 inline-block bg-green-400 text-verde-900 text-xs font-bold px-3 py-0.5 rounded-full">Próximo</span>
+          </div>
+        </div>
+
+        <div class="bg-verde-700 rounded-xl p-4 flex flex-col sm:flex-row items-center gap-3 border border-verde-500">
+          <div class="text-center sm:w-28 flex-shrink-0"><div class="text-green-300 text-xs font-bold uppercase">Mar 24/03</div><div class="text-white font-bold">18:00 hs</div><div class="text-green-300 text-xs">Fecha 5</div></div>
+          <div class="flex-1 flex items-center justify-center gap-3">
+            <div class="text-right"><div class="font-bold text-white text-sm">Acción Juvenil (GD)</div><div class="text-green-200 text-xs">Local</div></div>
+            <div class="bg-white text-verde-800 font-extrabold text-base px-3 py-1.5 rounded-lg">vs</div>
+            <div><div class="font-bold text-white text-sm">Atl. Adelia María</div><div class="text-green-200 text-xs">Visitante</div></div>
+          </div>
+          <div class="sm:w-32"></div>
+        </div>
+
+        <div class="bg-verde-700 rounded-xl p-4 flex flex-col sm:flex-row items-center gap-3 border border-verde-500">
+          <div class="text-center sm:w-28 flex-shrink-0"><div class="text-green-300 text-xs font-bold uppercase">Mar 24/03</div><div class="text-white font-bold">20:00 hs</div><div class="text-green-300 text-xs">Fecha 5</div></div>
+          <div class="flex-1 flex items-center justify-center gap-3">
+            <div class="text-right"><div class="font-bold text-white text-sm">Toro Club (CM)</div><div class="text-green-200 text-xs">Local</div></div>
+            <div class="bg-white text-verde-800 font-extrabold text-base px-3 py-1.5 rounded-lg">vs</div>
+            <div><div class="font-bold text-white text-sm">Belgrano (CM)</div><div class="text-green-200 text-xs">Visitante</div></div>
+          </div>
+          <div class="sm:w-32"></div>
+        </div>
+
+        <!-- FIXTURE_END -->
+      </div>
+
+      <!-- Miércoles 25/03 -->
+      <p class="text-green-400 text-xs font-bold uppercase tracking-widest mb-3">Miércoles 25/03</p>
+      <div class="space-y-3 mb-5">
+        <div class="bg-verde-700 rounded-xl p-4 flex flex-col sm:flex-row items-center gap-3 border border-verde-500">
+          <div class="text-center sm:w-28 flex-shrink-0"><div class="text-green-300 text-xs font-bold uppercase">Mié 25/03</div><div class="text-white font-bold">21:30 hs</div><div class="text-green-300 text-xs">Fecha 5</div></div>
+          <div class="flex-1 flex items-center justify-center gap-3">
+            <div class="text-right"><div class="font-bold text-white text-sm">Ateneo Vecinos (GC)</div><div class="text-green-200 text-xs">Local</div></div>
+            <div class="bg-white text-verde-800 font-extrabold text-base px-3 py-1.5 rounded-lg">vs</div>
+            <div><div class="font-bold text-white text-sm">Atl. San Basilio</div><div class="text-green-200 text-xs">Visitante</div></div>
+          </div>
+          <div class="sm:w-32"></div>
+        </div>
+        <div class="bg-verde-700 rounded-xl p-4 flex flex-col sm:flex-row items-center gap-3 border border-verde-500">
+          <div class="text-center sm:w-28 flex-shrink-0"><div class="text-green-300 text-xs font-bold uppercase">Mié 25/03</div><div class="text-white font-bold">21:30 hs</div><div class="text-green-300 text-xs">Fecha 5</div></div>
+          <div class="flex-1 flex items-center justify-center gap-3">
+            <div class="text-right"><div class="font-bold text-white text-sm">Renato Cesarini</div><div class="text-green-200 text-xs">Local</div></div>
+            <div class="bg-white text-verde-800 font-extrabold text-base px-3 py-1.5 rounded-lg">vs</div>
+            <div><div class="font-bold text-white text-sm">Universidad NRC</div><div class="text-green-200 text-xs">Visitante</div></div>
+          </div>
+          <div class="sm:w-32"></div>
+        </div>
+        <div class="bg-verde-700 rounded-xl p-4 flex flex-col sm:flex-row items-center gap-3 border border-verde-500">
+          <div class="text-center sm:w-28 flex-shrink-0"><div class="text-green-300 text-xs font-bold uppercase">Mié 25/03</div><div class="text-white font-bold">22:00 hs</div><div class="text-green-300 text-xs">Fecha 5</div></div>
+          <div class="flex-1 flex items-center justify-center gap-3">
+            <div class="text-right"><div class="font-bold text-white text-sm">Belgrano (VM)</div><div class="text-green-200 text-xs">Local</div></div>
+            <div class="bg-white text-verde-800 font-extrabold text-base px-3 py-1.5 rounded-lg">vs</div>
+            <div><div class="font-bold text-white text-sm">Everton Club (CM)</div><div class="text-green-200 text-xs">Visitante</div></div>
+          </div>
+          <div class="sm:w-32"></div>
+        </div>
+        <div class="bg-verde-700 rounded-xl p-4 flex flex-col sm:flex-row items-center gap-3 border border-verde-500">
+          <div class="text-center sm:w-28 flex-shrink-0"><div class="text-green-300 text-xs font-bold uppercase">Mié 25/03</div><div class="text-white font-bold">22:00 hs</div><div class="text-green-300 text-xs">Fecha 5</div></div>
+          <div class="flex-1 flex items-center justify-center gap-3">
+            <div class="text-right"><div class="font-bold text-white text-sm">Dep. Municipal (AM)</div><div class="text-green-200 text-xs">Local</div></div>
+            <div class="bg-white text-verde-800 font-extrabold text-base px-3 py-1.5 rounded-lg">vs</div>
+            <div><div class="font-bold text-white text-sm">Sp. Municipal</div><div class="text-green-200 text-xs">Visitante</div></div>
+          </div>
+          <div class="sm:w-32"></div>
+        </div>
+      </div>
+
+      <!-- Pendientes -->
+      <div class="bg-verde-900 rounded-xl p-4 text-xs text-green-300 mb-8 space-y-1 border border-verde-700">
+        <p>📅 <strong class="text-white">Mié 01/04:</strong> Atl. Sampacho vs Ind. Dolores (GC) — horario a confirmar</p>
+        <p>⏸️ <strong class="text-white">Postergado:</strong> Atenas vs Lautaro Roncedo (Copa Argentina 27/03)</p>
+        <p>🔵 <strong class="text-white">Libre:</strong> Lutgardis Riveros (AG)</p>
+      </div>
+
+      <!-- Tabla de posiciones fútbol -->
+      <h3 class="text-xl font-bold text-center mb-6">Tabla de Posiciones — Primera A</h3>
       <div class="bg-verde-700 rounded-2xl overflow-hidden border border-verde-500">
-        <table class="w-full text-sm">
-          <thead>
-            <tr class="bg-verde-900 text-green-200 text-xs uppercase">
-              <th class="py-3 px-4 text-left">#</th>
-              <th class="py-3 px-4 text-left">Equipo</th>
-              <th class="py-3 px-2 text-center">PJ</th>
-              <th class="py-3 px-2 text-center">G</th>
-              <th class="py-3 px-2 text-center">E</th>
-              <th class="py-3 px-2 text-center">P</th>
-              <th class="py-3 px-2 text-center">GF</th>
-              <th class="py-3 px-2 text-center">GC</th>
-              <th class="py-3 px-4 text-center font-bold text-white">Pts</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-verde-600">
-            <!-- POSICIONES_START -->
-            <tr class="bg-verde-600 font-bold">
-              <td class="py-3 px-4 text-green-200">1</td>
-              <td class="py-3 px-4 text-white flex items-center gap-2">
-                <img src="images.jpeg" alt="" class="h-5 w-auto rounded"> AABN
-              </td>
-              <td class="py-3 px-2 text-center text-white">8</td>
-              <td class="py-3 px-2 text-center text-white">6</td>
-              <td class="py-3 px-2 text-center text-white">1</td>
-              <td class="py-3 px-2 text-center text-white">1</td>
-              <td class="py-3 px-2 text-center text-white">18</td>
-              <td class="py-3 px-2 text-center text-white">8</td>
-              <td class="py-3 px-4 text-center text-green-300 font-extrabold text-base">19</td>
-            </tr>
-            <tr>
-              <td class="py-3 px-4 text-green-200">2</td>
-              <td class="py-3 px-4 text-white">Dep. Norte</td>
-              <td class="py-3 px-2 text-center text-white">8</td>
-              <td class="py-3 px-2 text-center text-white">5</td>
-              <td class="py-3 px-2 text-center text-white">2</td>
-              <td class="py-3 px-2 text-center text-white">1</td>
-              <td class="py-3 px-2 text-center text-white">14</td>
-              <td class="py-3 px-2 text-center text-white">9</td>
-              <td class="py-3 px-4 text-center text-white font-bold">17</td>
-            </tr>
-            <tr>
-              <td class="py-3 px-4 text-green-200">3</td>
-              <td class="py-3 px-4 text-white">Atlético Sur</td>
-              <td class="py-3 px-2 text-center text-white">8</td>
-              <td class="py-3 px-2 text-center text-white">4</td>
-              <td class="py-3 px-2 text-center text-white">1</td>
-              <td class="py-3 px-2 text-center text-white">3</td>
-              <td class="py-3 px-2 text-center text-white">11</td>
-              <td class="py-3 px-2 text-center text-white">12</td>
-              <td class="py-3 px-4 text-center text-white font-bold">13</td>
-            </tr>
-            <tr>
-              <td class="py-3 px-4 text-green-200">4</td>
-              <td class="py-3 px-4 text-white">Racing Club Norte</td>
-              <td class="py-3 px-2 text-center text-white">8</td>
-              <td class="py-3 px-2 text-center text-white">3</td>
-              <td class="py-3 px-2 text-center text-white">2</td>
-              <td class="py-3 px-2 text-center text-white">3</td>
-              <td class="py-3 px-2 text-center text-white">10</td>
-              <td class="py-3 px-2 text-center text-white">13</td>
-              <td class="py-3 px-4 text-center text-white font-bold">11</td>
-            </tr>
-            <tr>
-              <td class="py-3 px-4 text-green-200">5</td>
-              <td class="py-3 px-4 text-white">Independiente Este</td>
-              <td class="py-3 px-2 text-center text-white">8</td>
-              <td class="py-3 px-2 text-center text-white">2</td>
-              <td class="py-3 px-2 text-center text-white">1</td>
-              <td class="py-3 px-2 text-center text-white">5</td>
-              <td class="py-3 px-2 text-center text-white">8</td>
-              <td class="py-3 px-2 text-center text-white">17</td>
-              <td class="py-3 px-4 text-center text-white font-bold">7</td>
-            </tr>
-            <!-- POSICIONES_END -->
-          </tbody>
-        </table>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="bg-verde-900 text-green-200 text-xs uppercase">
+                <th class="py-3 px-3 text-left">#</th>
+                <th class="py-3 px-3 text-left">Equipo</th>
+                <th class="py-3 px-2 text-center">PJ</th>
+                <th class="py-3 px-2 text-center">G</th>
+                <th class="py-3 px-2 text-center">E</th>
+                <th class="py-3 px-2 text-center">P</th>
+                <th class="py-3 px-2 text-center">GF</th>
+                <th class="py-3 px-2 text-center">GC</th>
+                <th class="py-3 px-2 text-center font-bold text-white">Pts</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-verde-600">
+              <!-- POSICIONES_START -->
+              <tr><td class="py-2 px-3 text-green-200">1</td><td class="py-2 px-3 text-white">San Martín (VM)</td><td class="py-2 px-2 text-center text-white">4</td><td class="py-2 px-2 text-center text-white">3</td><td class="py-2 px-2 text-center text-white">1</td><td class="py-2 px-2 text-center text-white">0</td><td class="py-2 px-2 text-center text-white">12</td><td class="py-2 px-2 text-center text-white">6</td><td class="py-2 px-2 text-center text-white font-bold">10</td></tr>
+              <tr><td class="py-2 px-3 text-green-200">2</td><td class="py-2 px-3 text-white">Atenas</td><td class="py-2 px-2 text-center text-white">4</td><td class="py-2 px-2 text-center text-white">3</td><td class="py-2 px-2 text-center text-white">0</td><td class="py-2 px-2 text-center text-white">1</td><td class="py-2 px-2 text-center text-white">11</td><td class="py-2 px-2 text-center text-white">3</td><td class="py-2 px-2 text-center text-white font-bold">9</td></tr>
+              <tr><td class="py-2 px-3 text-green-200">3</td><td class="py-2 px-3 text-white">Lutgardis Riveros (AG)</td><td class="py-2 px-2 text-center text-white">4</td><td class="py-2 px-2 text-center text-white">3</td><td class="py-2 px-2 text-center text-white">0</td><td class="py-2 px-2 text-center text-white">1</td><td class="py-2 px-2 text-center text-white">11</td><td class="py-2 px-2 text-center text-white">4</td><td class="py-2 px-2 text-center text-white font-bold">9</td></tr>
+              <tr><td class="py-2 px-3 text-green-200">4</td><td class="py-2 px-3 text-white">Lautaro Roncedo (AG)</td><td class="py-2 px-2 text-center text-white">4</td><td class="py-2 px-2 text-center text-white">3</td><td class="py-2 px-2 text-center text-white">0</td><td class="py-2 px-2 text-center text-white">1</td><td class="py-2 px-2 text-center text-white">8</td><td class="py-2 px-2 text-center text-white">4</td><td class="py-2 px-2 text-center text-white font-bold">9</td></tr>
+              <tr><td class="py-2 px-3 text-green-200">5</td><td class="py-2 px-3 text-white">Atl. Sampacho</td><td class="py-2 px-2 text-center text-white">4</td><td class="py-2 px-2 text-center text-white">2</td><td class="py-2 px-2 text-center text-white">2</td><td class="py-2 px-2 text-center text-white">0</td><td class="py-2 px-2 text-center text-white">3</td><td class="py-2 px-2 text-center text-white">1</td><td class="py-2 px-2 text-center text-white font-bold">8</td></tr>
+              <tr><td class="py-2 px-3 text-green-200">6</td><td class="py-2 px-3 text-white">Dep. Municipal (AM)</td><td class="py-2 px-2 text-center text-white">4</td><td class="py-2 px-2 text-center text-white">2</td><td class="py-2 px-2 text-center text-white">1</td><td class="py-2 px-2 text-center text-white">1</td><td class="py-2 px-2 text-center text-white">5</td><td class="py-2 px-2 text-center text-white">2</td><td class="py-2 px-2 text-center text-white font-bold">7</td></tr>
+              <tr class="bg-verde-600 font-bold"><td class="py-2 px-3 text-green-200">7</td><td class="py-2 px-3 text-white flex items-center gap-2"><img src="images.jpeg" alt="" class="h-5 w-auto rounded"> Banda Norte</td><td class="py-2 px-2 text-center text-white">3</td><td class="py-2 px-2 text-center text-white">2</td><td class="py-2 px-2 text-center text-white">1</td><td class="py-2 px-2 text-center text-white">0</td><td class="py-2 px-2 text-center text-white">6</td><td class="py-2 px-2 text-center text-white">4</td><td class="py-2 px-2 text-center text-green-300 font-extrabold text-base">7</td></tr>
+              <tr><td class="py-2 px-3 text-green-200">8</td><td class="py-2 px-3 text-white">Acción Juvenil (GD)</td><td class="py-2 px-2 text-center text-white">3</td><td class="py-2 px-2 text-center text-white">2</td><td class="py-2 px-2 text-center text-white">0</td><td class="py-2 px-2 text-center text-white">1</td><td class="py-2 px-2 text-center text-white">4</td><td class="py-2 px-2 text-center text-white">3</td><td class="py-2 px-2 text-center text-white font-bold">6</td></tr>
+              <tr><td class="py-2 px-3 text-green-200">9</td><td class="py-2 px-3 text-white">Ateneo Vecinos (GC)</td><td class="py-2 px-2 text-center text-white">3</td><td class="py-2 px-2 text-center text-white">2</td><td class="py-2 px-2 text-center text-white">0</td><td class="py-2 px-2 text-center text-white">1</td><td class="py-2 px-2 text-center text-white">4</td><td class="py-2 px-2 text-center text-white">4</td><td class="py-2 px-2 text-center text-white font-bold">6</td></tr>
+              <tr><td class="py-2 px-3 text-green-200">10</td><td class="py-2 px-3 text-white">Belgrano (CM)</td><td class="py-2 px-2 text-center text-white">4</td><td class="py-2 px-2 text-center text-white">2</td><td class="py-2 px-2 text-center text-white">0</td><td class="py-2 px-2 text-center text-white">2</td><td class="py-2 px-2 text-center text-white">5</td><td class="py-2 px-2 text-center text-white">9</td><td class="py-2 px-2 text-center text-white font-bold">6</td></tr>
+              <tr><td class="py-2 px-3 text-green-200">11</td><td class="py-2 px-3 text-white">Belgrano (VM)</td><td class="py-2 px-2 text-center text-white">4</td><td class="py-2 px-2 text-center text-white">1</td><td class="py-2 px-2 text-center text-white">2</td><td class="py-2 px-2 text-center text-white">1</td><td class="py-2 px-2 text-center text-white">6</td><td class="py-2 px-2 text-center text-white">3</td><td class="py-2 px-2 text-center text-white font-bold">5</td></tr>
+              <tr><td class="py-2 px-3 text-green-200">12</td><td class="py-2 px-3 text-white">Atl. Adelia María</td><td class="py-2 px-2 text-center text-white">4</td><td class="py-2 px-2 text-center text-white">1</td><td class="py-2 px-2 text-center text-white">1</td><td class="py-2 px-2 text-center text-white">2</td><td class="py-2 px-2 text-center text-white">6</td><td class="py-2 px-2 text-center text-white">5</td><td class="py-2 px-2 text-center text-white font-bold">4</td></tr>
+              <tr><td class="py-2 px-3 text-green-200">13</td><td class="py-2 px-3 text-white">Renato Cesarini</td><td class="py-2 px-2 text-center text-white">4</td><td class="py-2 px-2 text-center text-white">1</td><td class="py-2 px-2 text-center text-white">1</td><td class="py-2 px-2 text-center text-white">2</td><td class="py-2 px-2 text-center text-white">5</td><td class="py-2 px-2 text-center text-white">9</td><td class="py-2 px-2 text-center text-white font-bold">4</td></tr>
+              <tr><td class="py-2 px-3 text-green-200">14</td><td class="py-2 px-3 text-white">Toro Club (CM)</td><td class="py-2 px-2 text-center text-white">3</td><td class="py-2 px-2 text-center text-white">1</td><td class="py-2 px-2 text-center text-white">0</td><td class="py-2 px-2 text-center text-white">2</td><td class="py-2 px-2 text-center text-white">5</td><td class="py-2 px-2 text-center text-white">6</td><td class="py-2 px-2 text-center text-white font-bold">3</td></tr>
+              <tr><td class="py-2 px-3 text-green-200">15</td><td class="py-2 px-3 text-white">Everton Club (CM)</td><td class="py-2 px-2 text-center text-white">4</td><td class="py-2 px-2 text-center text-white">1</td><td class="py-2 px-2 text-center text-white">0</td><td class="py-2 px-2 text-center text-white">3</td><td class="py-2 px-2 text-center text-white">5</td><td class="py-2 px-2 text-center text-white">7</td><td class="py-2 px-2 text-center text-white font-bold">3</td></tr>
+              <tr><td class="py-2 px-3 text-green-200">16</td><td class="py-2 px-3 text-white">Sp. Municipal</td><td class="py-2 px-2 text-center text-white">4</td><td class="py-2 px-2 text-center text-white">1</td><td class="py-2 px-2 text-center text-white">0</td><td class="py-2 px-2 text-center text-white">3</td><td class="py-2 px-2 text-center text-white">3</td><td class="py-2 px-2 text-center text-white">6</td><td class="py-2 px-2 text-center text-white font-bold">3</td></tr>
+              <tr><td class="py-2 px-3 text-green-200">17</td><td class="py-2 px-3 text-white">Universidad NRC</td><td class="py-2 px-2 text-center text-white">4</td><td class="py-2 px-2 text-center text-white">1</td><td class="py-2 px-2 text-center text-white">0</td><td class="py-2 px-2 text-center text-white">3</td><td class="py-2 px-2 text-center text-white">1</td><td class="py-2 px-2 text-center text-white">8</td><td class="py-2 px-2 text-center text-white font-bold">3</td></tr>
+              <tr><td class="py-2 px-3 text-green-200">18</td><td class="py-2 px-3 text-white">Atl. San Basilio</td><td class="py-2 px-2 text-center text-white">4</td><td class="py-2 px-2 text-center text-white">0</td><td class="py-2 px-2 text-center text-white">1</td><td class="py-2 px-2 text-center text-white">3</td><td class="py-2 px-2 text-center text-white">5</td><td class="py-2 px-2 text-center text-white">11</td><td class="py-2 px-2 text-center text-white font-bold">1</td></tr>
+              <tr><td class="py-2 px-3 text-green-200">19</td><td class="py-2 px-3 text-white">Ind. Dolores (GC)</td><td class="py-2 px-2 text-center text-white">4</td><td class="py-2 px-2 text-center text-white">0</td><td class="py-2 px-2 text-center text-white">0</td><td class="py-2 px-2 text-center text-white">4</td><td class="py-2 px-2 text-center text-white">1</td><td class="py-2 px-2 text-center text-white">11</td><td class="py-2 px-2 text-center text-white font-bold">0</td></tr>
+              <!-- POSICIONES_END -->
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
+
+    <!-- ── Panel Básquet ────────────────────────────── -->
+    <div id="panel-basquet" class="hidden">
+      <p class="text-center text-green-300 text-sm mb-5 font-semibold">Liga Federal 2026 · Conferencia Centro · Zona A</p>
+
+      <!-- Últimos resultados de AABN -->
+      <p class="text-green-400 text-xs font-bold uppercase tracking-widest mb-3">Últimos resultados</p>
+      <div class="space-y-3 mb-5">
+        <div class="bg-verde-700 rounded-xl p-4 flex flex-col sm:flex-row items-center gap-3 border border-verde-500">
+          <div class="text-center sm:w-28 flex-shrink-0"><div class="text-green-300 text-xs font-bold uppercase">Vie 06/03</div><div class="text-white font-bold">21:30 hs</div></div>
+          <div class="flex-1 flex items-center justify-center gap-3">
+            <div class="text-right"><div class="font-bold text-white text-sm flex items-center justify-end gap-2"><img src="images.jpeg" alt="AABN" class="h-6 w-auto rounded"> AABN</div><div class="text-green-200 text-xs">Local</div></div>
+            <div class="bg-white text-verde-800 font-extrabold text-xl px-4 py-2 rounded-lg text-center leading-none"><span>67</span><span class="text-green-600 mx-1">-</span><span>68</span></div>
+            <div><div class="font-bold text-white text-sm">El Ceibo (SF)</div><div class="text-green-200 text-xs">Visitante</div></div>
+          </div>
+          <div class="text-center sm:w-32 flex-shrink-0"><div class="text-green-200 text-xs">Club Banda Norte</div></div>
+        </div>
+        <div class="bg-verde-700 rounded-xl p-4 flex flex-col sm:flex-row items-center gap-3 border border-verde-500">
+          <div class="text-center sm:w-28 flex-shrink-0"><div class="text-green-300 text-xs font-bold uppercase">Sáb 14/03</div><div class="text-white font-bold">19:00 hs</div></div>
+          <div class="flex-1 flex items-center justify-center gap-3">
+            <div class="text-right"><div class="font-bold text-white text-sm">Urquiza (SJ)</div><div class="text-green-200 text-xs">Local</div></div>
+            <div class="bg-white text-verde-800 font-extrabold text-xl px-4 py-2 rounded-lg text-center leading-none"><span>61</span><span class="text-green-600 mx-1">-</span><span>95</span></div>
+            <div><div class="font-bold text-white text-sm flex items-center gap-2">AABN <img src="images.jpeg" alt="AABN" class="h-6 w-auto rounded"></div><div class="text-green-200 text-xs">Visitante</div></div>
+          </div>
+          <div class="text-center sm:w-32 flex-shrink-0"><div class="text-green-200 text-xs">Club Atl. Urquiza</div></div>
+        </div>
+      </div>
+
+      <!-- Próximos partidos básquet -->
+      <p class="text-green-400 text-xs font-bold uppercase tracking-widest mb-3">Próximos partidos</p>
+      <div class="space-y-4 mb-8">
+        <div class="bg-verde-700 rounded-2xl p-5 flex flex-col sm:flex-row items-center gap-4 border border-verde-500 ring-2 ring-green-400 ring-offset-2 ring-offset-verde-800">
+          <div class="text-center sm:w-28 flex-shrink-0"><div class="text-green-300 text-xs font-bold uppercase">Vie 27/03</div><div class="text-white font-bold text-lg">21:30 hs</div></div>
+          <div class="flex-1 flex items-center justify-center gap-3">
+            <div class="text-right"><div class="font-bold text-white text-sm flex items-center justify-end gap-2"><img src="images.jpeg" alt="AABN" class="h-7 w-auto rounded"> AABN</div><div class="text-green-200 text-xs">Local</div></div>
+            <div class="bg-white text-verde-800 font-extrabold text-xl px-4 py-2 rounded-lg">vs</div>
+            <div><div class="font-bold text-white text-sm">Matienzo</div><div class="text-green-200 text-xs">Visitante</div></div>
+          </div>
+          <div class="text-center sm:w-32 flex-shrink-0">
+            <div class="text-green-200 text-xs">Club Banda Norte</div>
+            <span class="mt-1 inline-block bg-green-400 text-verde-900 text-xs font-bold px-3 py-0.5 rounded-full">Próximo</span>
+          </div>
+        </div>
+        <div class="bg-verde-700 rounded-xl p-4 flex flex-col sm:flex-row items-center gap-3 border border-verde-500">
+          <div class="text-center sm:w-28 flex-shrink-0"><div class="text-green-300 text-xs font-bold uppercase">Jue 02/04</div><div class="text-white font-bold">21:00 hs</div></div>
+          <div class="flex-1 flex items-center justify-center gap-3">
+            <div class="text-right"><div class="font-bold text-white text-sm">Sparta (VM)</div><div class="text-green-200 text-xs">Local</div></div>
+            <div class="bg-white text-verde-800 font-extrabold text-base px-3 py-1.5 rounded-lg">vs</div>
+            <div><div class="font-bold text-white text-sm flex items-center gap-2">AABN <img src="images.jpeg" alt="AABN" class="h-6 w-auto rounded"></div><div class="text-green-200 text-xs">Visitante</div></div>
+          </div>
+          <div class="text-center sm:w-32 flex-shrink-0"><div class="text-green-200 text-xs">Club Sparta</div></div>
+        </div>
+        <div class="bg-verde-700 rounded-xl p-4 flex flex-col sm:flex-row items-center gap-3 border border-verde-500">
+          <div class="text-center sm:w-28 flex-shrink-0"><div class="text-green-300 text-xs font-bold uppercase">Dom 05/04</div><div class="text-white font-bold">19:00 hs</div></div>
+          <div class="flex-1 flex items-center justify-center gap-3">
+            <div class="text-right"><div class="font-bold text-white text-sm">Unión (Oncativo)</div><div class="text-green-200 text-xs">Local</div></div>
+            <div class="bg-white text-verde-800 font-extrabold text-base px-3 py-1.5 rounded-lg">vs</div>
+            <div><div class="font-bold text-white text-sm flex items-center gap-2">AABN <img src="images.jpeg" alt="AABN" class="h-6 w-auto rounded"></div><div class="text-green-200 text-xs">Visitante</div></div>
+          </div>
+          <div class="text-center sm:w-32 flex-shrink-0"><div class="text-green-200 text-xs">Erico "Cacho" Ossela</div></div>
+        </div>
+      </div>
+
+      <!-- Tabla posiciones básquet -->
+      <h3 class="text-xl font-bold text-center mb-6">Tabla de Posiciones — Liga Federal</h3>
+      <div class="bg-verde-700 rounded-2xl overflow-hidden border border-verde-500">
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="bg-verde-900 text-green-200 text-xs uppercase">
+                <th class="py-3 px-3 text-left">#</th>
+                <th class="py-3 px-3 text-left">Equipo</th>
+                <th class="py-3 px-2 text-center">PJ</th>
+                <th class="py-3 px-2 text-center">PG</th>
+                <th class="py-3 px-2 text-center">PP</th>
+                <th class="py-3 px-2 text-center">PF</th>
+                <th class="py-3 px-2 text-center">PC</th>
+                <th class="py-3 px-2 text-center font-bold text-white">Pts</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-verde-600">
+              <tr><td class="py-2 px-3 text-green-200">1</td><td class="py-2 px-3 text-white">Matienzo</td><td class="py-2 px-2 text-center text-white">3</td><td class="py-2 px-2 text-center text-white">3</td><td class="py-2 px-2 text-center text-white">0</td><td class="py-2 px-2 text-center text-white">253</td><td class="py-2 px-2 text-center text-white">202</td><td class="py-2 px-2 text-center text-white font-bold">6</td></tr>
+              <tr><td class="py-2 px-3 text-green-200">2</td><td class="py-2 px-3 text-white">Unión (Oncativo)</td><td class="py-2 px-2 text-center text-white">3</td><td class="py-2 px-2 text-center text-white">2</td><td class="py-2 px-2 text-center text-white">1</td><td class="py-2 px-2 text-center text-white">236</td><td class="py-2 px-2 text-center text-white">220</td><td class="py-2 px-2 text-center text-white font-bold">5</td></tr>
+              <tr><td class="py-2 px-3 text-green-200">3</td><td class="py-2 px-3 text-white">El Ceibo (SF)</td><td class="py-2 px-2 text-center text-white">3</td><td class="py-2 px-2 text-center text-white">2</td><td class="py-2 px-2 text-center text-white">1</td><td class="py-2 px-2 text-center text-white">214</td><td class="py-2 px-2 text-center text-white">210</td><td class="py-2 px-2 text-center text-white font-bold">5</td></tr>
+              <tr class="bg-verde-600 font-bold"><td class="py-2 px-3 text-green-200">4</td><td class="py-2 px-3 text-white flex items-center gap-2"><img src="images.jpeg" alt="" class="h-5 w-auto rounded"> AABN</td><td class="py-2 px-2 text-center text-white">2</td><td class="py-2 px-2 text-center text-white">1</td><td class="py-2 px-2 text-center text-white">1</td><td class="py-2 px-2 text-center text-white">162</td><td class="py-2 px-2 text-center text-white">129</td><td class="py-2 px-2 text-center text-green-300 font-extrabold text-base">3</td></tr>
+              <tr><td class="py-2 px-3 text-green-200">5</td><td class="py-2 px-3 text-white">Sparta (VM)</td><td class="py-2 px-2 text-center text-white">2</td><td class="py-2 px-2 text-center text-white">1</td><td class="py-2 px-2 text-center text-white">1</td><td class="py-2 px-2 text-center text-white">143</td><td class="py-2 px-2 text-center text-white">135</td><td class="py-2 px-2 text-center text-white font-bold">3</td></tr>
+              <tr><td class="py-2 px-3 text-green-200">6</td><td class="py-2 px-3 text-white">Urquiza (SJ)</td><td class="py-2 px-2 text-center text-white">3</td><td class="py-2 px-2 text-center text-white">0</td><td class="py-2 px-2 text-center text-white">3</td><td class="py-2 px-2 text-center text-white">169</td><td class="py-2 px-2 text-center text-white">264</td><td class="py-2 px-2 text-center text-white font-bold">3</td></tr>
+              <tr><td class="py-2 px-3 text-green-200">7</td><td class="py-2 px-3 text-white">Unión Central (VM)</td><td class="py-2 px-2 text-center text-white">2</td><td class="py-2 px-2 text-center text-white">0</td><td class="py-2 px-2 text-center text-white">2</td><td class="py-2 px-2 text-center text-white">136</td><td class="py-2 px-2 text-center text-white">153</td><td class="py-2 px-2 text-center text-white font-bold">2</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
+
+<script>
+/* Cambio de tabs fútbol / básquet */
+function cambiarTab(tab) {
+  const panelF = document.getElementById('panel-futbol');
+  const panelB = document.getElementById('panel-basquet');
+  const tabF   = document.getElementById('tab-futbol');
+  const tabB   = document.getElementById('tab-basquet');
+  if (tab === 'futbol') {
+    panelF.classList.remove('hidden'); panelB.classList.add('hidden');
+    tabF.classList.add('bg-green-400','text-verde-900'); tabF.classList.remove('text-green-200');
+    tabB.classList.remove('bg-green-400','text-verde-900'); tabB.classList.add('text-green-200');
+  } else {
+    panelB.classList.remove('hidden'); panelF.classList.add('hidden');
+    tabB.classList.add('bg-green-400','text-verde-900'); tabB.classList.remove('text-green-200');
+    tabF.classList.remove('bg-green-400','text-verde-900'); tabF.classList.add('text-green-200');
+  }
+}
+</script>
 
 
 <!-- ═══════════════════════════════════════════
@@ -799,7 +907,7 @@
           <span class="inline-block bg-verde-100 text-verde-700 text-xs font-bold px-2 py-0.5 rounded-full mb-2">Crónica</span>
           <h3 class="font-bold text-gray-800 leading-snug mb-2">Victoria vital: AABN vence a Atlético Sur y se afirma en la cima</h3>
           <p class="text-gray-500 text-sm leading-relaxed">Un doblete de Ramírez en la segunda parte le dio los tres puntos al equipo del Norte en un partido muy disputado...</p>
-          <div class="flex items-center gap-2 mt-4 text-xs text-gray-400">
+          <div class="flex items-center gap-2 mt-4 text-xs text-gray-600">
             <span>08/03/2026</span>
             <span>·</span>
             <span>Redacción AABN</span>
@@ -818,7 +926,7 @@
           <span class="inline-block bg-yellow-100 text-yellow-700 text-xs font-bold px-2 py-0.5 rounded-full mb-2">Inferiores</span>
           <h3 class="font-bold text-gray-800 leading-snug mb-2">¡Campeones! La Sub-15 se coronó en el Torneo Clausura 2025</h3>
           <p class="text-gray-500 text-sm leading-relaxed">Los chicos de la categoría Sub-15 lograron el título tras superar en la final a Deportivo Norte por 3 a 1...</p>
-          <div class="flex items-center gap-2 mt-4 text-xs text-gray-400">
+          <div class="flex items-center gap-2 mt-4 text-xs text-gray-600">
             <span>02/03/2026</span>
             <span>·</span>
             <span>Redacción AABN</span>
@@ -837,7 +945,7 @@
           <span class="inline-block bg-verde-100 text-verde-700 text-xs font-bold px-2 py-0.5 rounded-full mb-2">Institucional</span>
           <h3 class="font-bold text-gray-800 leading-snug mb-2">Presentamos la nueva camiseta oficial temporada 2026</h3>
           <p class="text-gray-500 text-sm leading-relaxed">Diseño renovado, mismos colores de siempre. Ya disponible en la secretaría del club a $15.000.</p>
-          <div class="flex items-center gap-2 mt-4 text-xs text-gray-400">
+          <div class="flex items-center gap-2 mt-4 text-xs text-gray-600">
             <span>28/02/2026</span>
             <span>·</span>
             <span>Prensa AABN</span>
@@ -849,13 +957,13 @@
       <div class="card-hover bg-white rounded-2xl shadow border border-gray-100 overflow-hidden">
         <div class="h-40 bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center relative">
           <div class="text-5xl">🏀</div>
-          <div class="absolute top-3 right-3 bg-orange-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">LIGA FEDERAL</div>
+          <div class="absolute top-3 right-3 bg-orange-500 text-gray-900 text-xs font-bold px-2 py-0.5 rounded-full">LIGA FEDERAL</div>
         </div>
         <div class="p-5">
           <span class="inline-block bg-orange-100 text-orange-700 text-xs font-bold px-2 py-0.5 rounded-full mb-2">Básquet</span>
           <h3 class="font-bold text-gray-800 leading-snug mb-2">El Parque Sarmiento se pone a punto para la Liga Federal</h3>
           <p class="text-gray-500 text-sm leading-relaxed">El estadio fue renovado: parquet restaurado, butacas en tribunas, nuevo circuito eléctrico y cabina de transmisiones. El debut fue el 6/03 vs El Ceibo de San Francisco.</p>
-          <div class="flex items-center gap-2 mt-4 text-xs text-gray-400">
+          <div class="flex items-center gap-2 mt-4 text-xs text-gray-600">
             <span>03/03/2026</span><span>·</span>
             <a href="https://altoquedeportes.com.ar/el-parque-sarmiento-se-pone-a-punto-para-la-liga-federal/" target="_blank" class="text-verde-600 hover:underline">Al Toque Deportes</a>
           </div>
@@ -874,7 +982,7 @@
           <span class="inline-block bg-verde-100 text-verde-700 text-xs font-bold px-2 py-0.5 rounded-full mb-2">Básquet · Nota</span>
           <h3 class="font-bold text-gray-800 leading-snug mb-2">Barjacoba: "Afrontar la Liga Federal va a ser un desafío, pero tenemos herramientas"</h3>
           <p class="text-gray-500 text-sm leading-relaxed">El base referente del plantel habló antes del debut en la Liga Federal. DT: Dante Castagno. Zona A Centro junto a Matienzo, Unión de Oncativo, Urquiza, Unión Central y Sparta.</p>
-          <div class="flex items-center gap-2 mt-4 text-xs text-gray-400">
+          <div class="flex items-center gap-2 mt-4 text-xs text-gray-600">
             <span>05/03/2026</span><span>·</span>
             <a href="https://altoquedeportes.com.ar/franco-barjacoba-afrontar-esta-liga-federal-va-a-ser-un-desafio-pero-tenemos-herramientas/" target="_blank" class="text-verde-600 hover:underline">Al Toque Deportes</a>
           </div>
@@ -892,7 +1000,7 @@
           <span class="inline-block bg-blue-100 text-blue-700 text-xs font-bold px-2 py-0.5 rounded-full mb-2">Historia · Básquet</span>
           <h3 class="font-bold text-gray-800 leading-snug mb-2">Banda Norte en el TNA: a una década del debut histórico</h3>
           <p class="text-gray-500 text-sm leading-relaxed">5 temporadas, 170 partidos, ~50 jugadores, 9 extranjeros y 3 entrenadores. Matías Cudos (126 partidos), Barlasina y Titarelli. Una historia que marcó al básquet de Río Cuarto.</p>
-          <div class="flex items-center gap-2 mt-4 text-xs text-gray-400">
+          <div class="flex items-center gap-2 mt-4 text-xs text-gray-600">
             <span>22/10/2020</span><span>·</span>
             <a href="https://altoquedeportes.com.ar/banda-norte-en-el-tna-a-una-decada-del-debut/" target="_blank" class="text-verde-600 hover:underline">Al Toque Deportes</a>
           </div>
@@ -1058,8 +1166,8 @@
       <div class="bg-white rounded-2xl p-6 border-4 border-green-400 text-verde-800 relative">
         <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-green-400 text-verde-900 text-xs font-extrabold px-4 py-1 rounded-full">Más popular</div>
         <div class="text-verde-600 font-bold text-xs uppercase tracking-widest mb-2">Socio + Actividad</div>
-        <div class="text-3xl font-extrabold mb-1">$52.000<span class="text-base font-normal text-gray-400">/mes</span></div>
-        <div class="text-gray-400 text-sm mb-5">Cuota social + disciplina deportiva</div>
+        <div class="text-3xl font-extrabold mb-1">$52.000<span class="text-base font-normal text-gray-600">/mes</span></div>
+        <div class="text-gray-600 text-sm mb-5">Cuota social + disciplina deportiva</div>
         <ul class="space-y-2 text-sm text-gray-700 mb-3">
           <li class="flex gap-2">✔ Todo lo de la Cuota Social</li>
           <li class="flex gap-2">✔ Ingreso gratuito a partidos locales</li>
@@ -1257,7 +1365,7 @@
           <div>
             <div class="font-bold text-verde-800 mb-1">WhatsApp</div>
             <div class="text-gray-600 text-sm">+54 9 342 456-7890</div>
-            <div class="text-gray-400 text-xs">Solo mensajes · Respuesta en 24hs</div>
+            <div class="text-gray-600 text-xs">Solo mensajes · Respuesta en 24hs</div>
           </div>
         </div>
 
@@ -1289,21 +1397,21 @@
         <form class="space-y-4">
           <div class="grid grid-cols-2 gap-4">
             <div>
-              <label class="block text-xs font-semibold text-gray-600 mb-1">Nombre</label>
-              <input type="text" placeholder="Tu nombre" class="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-verde-400">
+              <label for="nombre" class="block text-xs font-semibold text-gray-600 mb-1">Nombre</label>
+              <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" class="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-verde-400">
             </div>
             <div>
-              <label class="block text-xs font-semibold text-gray-600 mb-1">Apellido</label>
-              <input type="text" placeholder="Tu apellido" class="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-verde-400">
+              <label for="apellido" class="block text-xs font-semibold text-gray-600 mb-1">Apellido</label>
+              <input type="text" id="apellido" name="apellido" placeholder="Tu apellido" class="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-verde-400">
             </div>
           </div>
           <div>
-            <label class="block text-xs font-semibold text-gray-600 mb-1">Email</label>
-            <input type="email" placeholder="tu@email.com" class="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-verde-400">
+            <label for="email" class="block text-xs font-semibold text-gray-600 mb-1">Email</label>
+            <input type="email" id="email" name="email" placeholder="tu@email.com" class="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-verde-400">
           </div>
           <div>
-            <label class="block text-xs font-semibold text-gray-600 mb-1">Asunto</label>
-            <select class="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-verde-400 text-gray-600">
+            <label for="asunto" class="block text-xs font-semibold text-gray-600 mb-1">Asunto</label>
+            <select id="asunto" name="asunto" class="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-verde-400 text-gray-600">
               <option>Quiero asociarme</option>
               <option>Inscripción de menores</option>
               <option>Alquiler de instalaciones</option>
@@ -1312,8 +1420,8 @@
             </select>
           </div>
           <div>
-            <label class="block text-xs font-semibold text-gray-600 mb-1">Mensaje</label>
-            <textarea rows="4" placeholder="Escribí tu consulta acá..." class="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-verde-400 resize-none"></textarea>
+            <label for="mensaje" class="block text-xs font-semibold text-gray-600 mb-1">Mensaje</label>
+            <textarea id="mensaje" name="mensaje" rows="4" placeholder="Escribí tu consulta acá..." class="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-verde-400 resize-none"></textarea>
           </div>
           <button type="submit" class="w-full bg-verde-700 hover:bg-verde-600 text-white font-bold py-3 rounded-xl transition text-sm">
             Enviar mensaje →
@@ -1410,7 +1518,7 @@
           class="flex-1 bg-verde-900/70 border border-verde-600/60 rounded-xl px-4 py-3 text-white text-sm placeholder-verde-500/70 focus:outline-none focus:border-verde-400 transition"
         >
         <button
-          class="bg-verde-500 hover:bg-verde-400 text-white font-bold px-5 py-3 rounded-xl text-sm transition-all whitespace-nowrap shadow-lg shadow-verde-900/50"
+          class="bg-verde-300 hover:bg-verde-200 text-verde-900 font-bold px-5 py-3 rounded-xl text-sm transition-all whitespace-nowrap shadow-lg shadow-verde-900/50"
         >
           Notificarme →
         </button>
@@ -1506,7 +1614,7 @@
     <div class="border-t border-verde-700 pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
       <div class="text-green-300 text-xs text-center md:text-left">
         © 2026 Asociación Atlética Banda Norte · Todos los derechos reservados<br>
-        <span class="text-verde-500">Fundada el 1° de junio de 1952 · Parque Sarmiento · Santa Fe esq. Juan Cruz Varela, Río Cuarto, Córdoba</span>
+        <span class="text-green-300">Fundada el 1° de junio de 1952 · Parque Sarmiento · Santa Fe esq. Juan Cruz Varela, Río Cuarto, Córdoba</span>
       </div>
       <div class="flex gap-4 text-green-400 text-xs">
         <a href="#" class="hover:text-white transition">Términos y condiciones</a>
