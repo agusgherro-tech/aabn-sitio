@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acceso — Asociación Atlética Banda Norte</title>
+  <meta name="description" content="Ingresá al portal de socios o administración de la Asociación Atlética Banda Norte.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            verde: {
+              50:  '#f0f9f3',
+              100: '#d9f0e1',
+              200: '#b2e0c3',
+              300: '#7cc99a',
+              400: '#46ad6f',
+              500: '#28904f',
+              600: '#1c743e',
+              700: '#195e34',
+              800: '#174b2b',
+              900: '#133d23',
+            }
+          },
+          fontFamily: {
+            sans: ['Rag', 'Segoe UI', 'Arial', 'sans-serif'],
+            rag:  ['Rag', 'Arial', 'sans-serif'],
+            wolf:    ['Howling Wolf', 'Impact', 'sans-serif'],
+            captain: ['American Captain', 'Impact', 'sans-serif'],
+            expose:  ['Expose', 'Arial Black', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* ─── FUENTES LOCALES DEL CLUB ─── */
+    @font-face {
+      font-family: 'Howling Wolf';
+      src: url('fonts/Howling Wolf.ttf') format('truetype');
+      font-weight: normal; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'American Captain';
+      src: url('fonts/American Captain.ttf') format('truetype');
+      font-weight: normal; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Expose';
+      src: url('fonts/Expose-Black.woff2') format('woff2');
+      font-weight: 900; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Expose';
+      src: url('fonts/Expose-Bold.woff2') format('woff2');
+      font-weight: 700; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Expose';
+      src: url('fonts/Expose-Regular.woff2') format('woff2');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face { font-family: 'Rag'; src: url('fonts/Rag-Regular.woff2') format('woff2'), url('fonts/Rag-Regular.woff') format('woff'); font-weight: 400; font-style: normal; font-display: swap; }
+    @font-face { font-family: 'Rag'; src: url('fonts/Rag-Italic.woff2') format('woff2'), url('fonts/Rag-Italic.woff') format('woff'); font-weight: 400; font-style: italic; font-display: swap; }
+    @font-face { font-family: 'Rag'; src: url('fonts/Rag-Bold.woff2') format('woff2'), url('fonts/Rag-Bold.woff') format('woff'); font-weight: 700; font-style: normal; font-display: swap; }
+    @font-face { font-family: 'Rag'; src: url('fonts/Rag-BoldItalic.woff2') format('woff2'), url('fonts/Rag-BoldItalic.woff') format('woff'); font-weight: 700; font-style: italic; font-display: swap; }
+    @font-face { font-family: 'Rag'; src: url('fonts/Rag-Black.woff2') format('woff2'), url('fonts/Rag-Black.woff') format('woff'); font-weight: 900; font-style: normal; font-display: swap; }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    /* ─── ESCUDO GLOW ─── */
+    .shield-glow {
+      filter: drop-shadow(0 0 18px rgba(255,255,255,0.25));
+    }
+
+    /* ─── NAV LINK ─── */
+    .nav-link { position: relative; }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      left: 0; bottom: -2px;
+      width: 0; height: 2px;
+      background: #fff;
+      transition: width .25s;
+    }
+    .nav-link:hover::after { width: 100%; }
+
+    /* ─── FONDO HERO ─── */
+    .login-bg {
+      background: linear-gradient(135deg, #133d23 0%, #195e34 40%, #1c743e 100%);
+      min-height: 100vh;
+    }
+
+    /* ─── CARD ENTRADA ─── */
+    .login-card {
+      transition: transform .2s, box-shadow .2s;
+    }
+    .login-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 48px rgba(0,0,0,0.18);
+    }
+
+    /* ─── INPUT FOCO ─── */
+    .input-field {
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .input-field:focus {
+      outline: none;
+      border-color: #1c743e;
+      box-shadow: 0 0 0 3px rgba(28,116,62,0.15);
+    }
+
+    /* ─── DIVISOR VERTICAL ─── */
+    .divider-v {
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, #e2e8f0 30%, #e2e8f0 70%, transparent);
+    }
+
+    /* ─── PASOS REGISTRO ─── */
+    .step-dot {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700;
+      transition: all .3s;
+    }
+    .step-dot.active   { background: #1c743e; color: #fff; }
+    .step-dot.done     { background: #46ad6f; color: #fff; }
+    .step-dot.pending  { background: #e5e7eb; color: #9ca3af; }
+    .step-line { flex: 1; height: 2px; background: #e5e7eb; transition: background .3s; }
+    .step-line.done    { background: #46ad6f; }
+
+    /* ─── MODAL ─── */
+    #modal-registro {
+      backdrop-filter: blur(4px);
+    }
+
+    /* ─── BADGE ADMIN ─── */
+    .admin-badge {
+      background: linear-gradient(135deg, #1e293b, #334155);
+    }
+
+    /* ─── ALERT ─── */
+    .alert-enter { animation: alertIn .3s ease; }
+    @keyframes alertIn {
+      from { opacity: 0; transform: translateY(-8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="font-sans antialiased">
+
+<!-- ═══════════════════════════════════════════
+     NAVBAR
+═══════════════════════════════════════════ -->
+<header class="bg-verde-700 shadow-lg sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="flex items-center justify-between h-16">
+
+      <!-- Logo -->
+      <a href="index.html" class="flex items-center gap-3">
+        <img src="images.jpeg" alt="Escudo AABN" class="h-11 w-auto shield-glow rounded-sm">
+        <div class="leading-tight">
+          <div class="text-white font-extrabold text-sm tracking-wide uppercase">Asoc. Atlética</div>
+          <div class="text-green-200 font-bold text-xs tracking-widest uppercase">Banda Norte</div>
+        </div>
+      </a>
+
+      <!-- Nav desktop -->
+      <nav class="hidden md:flex items-center gap-6">
+        <a href="index.html#historia"  class="nav-link text-white text-sm font-medium hover:text-green-200 transition-colors">Historia</a>
+        <a href="index.html#equipos"   class="nav-link text-white text-sm font-medium hover:text-green-200 transition-colors">Equipos</a>
+        <a href="index.html#noticias"  class="nav-link text-white text-sm font-medium hover:text-green-200 transition-colors">Noticias</a>
+        <a href="index.html#fixture"   class="nav-link text-white text-sm font-medium hover:text-green-200 transition-colors">Fixture</a>
+        <a href="index.html#directiva" class="nav-link text-white text-sm font-medium hover:text-green-200 transition-colors">Comisión</a>
+        <a href="index.html#contacto"  class="nav-link text-white text-sm font-medium hover:text-green-200 transition-colors">Contacto</a>
+      </nav>
+
+      <!-- CTA volver -->
+      <a href="index.html" class="hidden md:inline-flex items-center gap-2 bg-white text-verde-700 font-bold text-sm px-4 py-2 rounded-full hover:bg-green-100 transition-colors shadow">
+        ← Volver al sitio
+      </a>
+
+      <!-- Mobile hamburger -->
+      <button class="md:hidden flex flex-col gap-1.5 p-2" aria-label="Abrir menú"
+        onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+        <span class="block w-6 h-0.5 bg-white"></span>
+        <span class="block w-6 h-0.5 bg-white"></span>
+        <span class="block w-6 h-0.5 bg-white"></span>
+      </button>
+    </div>
+
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="hidden md:hidden pb-4 space-y-2">
+      <a href="index.html" class="block text-green-200 text-sm py-2 border-b border-verde-600 font-semibold">← Volver al sitio</a>
+      <a href="index.html#historia"  class="block text-white text-sm py-2 border-b border-verde-600">Historia</a>
+      <a href="index.html#equipos"   class="block text-white text-sm py-2 border-b border-verde-600">Equipos</a>
+      <a href="index.html#noticias"  class="block text-white text-sm py-2 border-b border-verde-600">Noticias</a>
+      <a href="index.html#fixture"   class="block text-white text-sm py-2 border-b border-verde-600">Fixture</a>
+      <a href="index.html#directiva" class="block text-white text-sm py-2 border-b border-verde-600">Comisión</a>
+      <a href="index.html#contacto"  class="block text-white text-sm py-2">Contacto</a>
+    </div>
+  </div>
+</header>
+
+
+<!-- ═══════════════════════════════════════════
+     HERO ENCABEZADO
+═══════════════════════════════════════════ -->
+<div class="login-bg">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-14 pb-10 text-center">
+    <div class="inline-flex items-center gap-2 bg-white/10 text-green-200 text-xs font-semibold px-4 py-1.5 rounded-full mb-5 tracking-widest uppercase">
+      Portal del Club
+    </div>
+    <h1 class="font-expose font-black text-white text-4xl sm:text-5xl tracking-tight mb-3">
+      Área de Acceso
+    </h1>
+    <p class="text-green-200 text-base max-w-md mx-auto">
+      Ingresá como socio o accedé al panel de administración del club.
+    </p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       PANELES PRINCIPALES
+  ═══════════════════════════════════════════ -->
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 pb-20">
+    <div class="bg-white rounded-3xl shadow-2xl overflow-hidden">
+      <div class="flex flex-col lg:flex-row">
+
+        <!-- ─── PANEL IZQUIERDO: SOCIOS ─── -->
+        <div class="flex-1 p-8 sm:p-10">
+
+          <!-- Encabezado panel -->
+          <div class="flex items-center gap-3 mb-8">
+            <div class="w-12 h-12 bg-verde-600 rounded-2xl flex items-center justify-center text-white text-2xl shadow-md">
+              🐺
+            </div>
+            <div>
+              <h2 class="font-expose font-bold text-verde-800 text-xl tracking-tight">Área de Socios</h2>
+              <p class="text-gray-500 text-sm">Ingresá con tu número de socio y DNI</p>
+            </div>
+          </div>
+
+          <!-- Alerta resultado socio -->
+          <div id="alert-socio" class="hidden mb-5 px-4 py-3 rounded-xl text-sm font-medium alert-enter"></div>
+
+          <!-- Formulario socio -->
+          <form id="form-socio" onsubmit="loginSocio(event)" class="space-y-5">
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-1.5" for="num-socio">
+                Número de socio
+              </label>
+              <div class="relative">
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm font-bold">#</span>
+                <input
+                  id="num-socio"
+                  type="text"
+                  inputmode="numeric"
+                  pattern="[0-9]*"
+                  placeholder="Ej: 00234"
+                  maxlength="6"
+                  class="input-field w-full border border-gray-200 rounded-xl pl-8 pr-4 py-3 text-gray-800 text-sm bg-gray-50"
+                  required
+                >
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-1.5" for="dni-socio">
+                DNI (sin puntos)
+              </label>
+              <input
+                id="dni-socio"
+                type="text"
+                inputmode="numeric"
+                pattern="[0-9]*"
+                placeholder="Ej: 35412678"
+                maxlength="9"
+                class="input-field w-full border border-gray-200 rounded-xl px-4 py-3 text-gray-800 text-sm bg-gray-50"
+                required
+              >
+            </div>
+
+            <button
+              type="submit"
+              class="w-full bg-verde-600 hover:bg-verde-700 text-white font-bold py-3.5 rounded-xl transition-colors text-sm tracking-wide shadow-md hover:shadow-lg"
+            >
+              Ingresar al Portal
+            </button>
+          </form>
+
+          <!-- Divisor -->
+          <div class="flex items-center gap-3 my-6">
+            <div class="flex-1 h-px bg-gray-100"></div>
+            <span class="text-gray-400 text-xs font-medium">¿No sos socio?</span>
+            <div class="flex-1 h-px bg-gray-100"></div>
+          </div>
+
+          <!-- Botón registrarse -->
+          <button
+            onclick="abrirRegistro()"
+            class="w-full border-2 border-verde-600 text-verde-700 font-bold py-3.5 rounded-xl hover:bg-verde-50 transition-colors text-sm tracking-wide"
+          >
+            + Quiero ser socio
+          </button>
+
+          <p class="text-center text-gray-400 text-xs mt-4">
+            El registro requiere aprobación de la comisión directiva.
+          </p>
+        </div>
+
+        <!-- ─── DIVISOR VERTICAL ─── -->
+        <div class="hidden lg:flex items-stretch px-0 py-10">
+          <div class="divider-v"></div>
+        </div>
+        <div class="lg:hidden h-px bg-gray-100 mx-8"></div>
+
+        <!-- ─── PANEL DERECHO: ADMINISTRACIÓN ─── -->
+        <div class="flex-1 p-8 sm:p-10">
+
+          <!-- Encabezado panel -->
+          <div class="flex items-center gap-3 mb-8">
+            <div class="admin-badge w-12 h-12 rounded-2xl flex items-center justify-center text-white text-2xl shadow-md">
+              🛡️
+            </div>
+            <div>
+              <h2 class="font-expose font-bold text-gray-800 text-xl tracking-tight">Administración</h2>
+              <p class="text-gray-500 text-sm">Acceso exclusivo para la comisión directiva</p>
+            </div>
+          </div>
+
+          <!-- Alerta resultado admin -->
+          <div id="alert-admin" class="hidden mb-5 px-4 py-3 rounded-xl text-sm font-medium alert-enter"></div>
+
+          <!-- Formulario admin -->
+          <form id="form-admin" onsubmit="loginAdmin(event)" class="space-y-5">
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-1.5" for="email-admin">
+                Correo electrónico
+              </label>
+              <input
+                id="email-admin"
+                type="email"
+                placeholder="admin@aabn.com.ar"
+                class="input-field w-full border border-gray-200 rounded-xl px-4 py-3 text-gray-800 text-sm bg-gray-50"
+                required
+              >
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-1.5" for="pass-admin">
+                Contraseña
+              </label>
+              <div class="relative">
+                <input
+                  id="pass-admin"
+                  type="password"
+                  placeholder="••••••••"
+                  class="input-field w-full border border-gray-200 rounded-xl px-4 pr-12 py-3 text-gray-800 text-sm bg-gray-50"
+                  required
+                >
+                <button
+                  type="button"
+                  onclick="togglePass()"
+                  class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  aria-label="Mostrar/ocultar contraseña"
+                >
+                  <svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between">
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" class="rounded border-gray-300 text-verde-600 w-4 h-4">
+                <span class="text-sm text-gray-600">Mantener sesión</span>
+              </label>
+              <a href="#" class="text-sm text-verde-600 hover:text-verde-800 font-medium transition-colors">
+                ¿Olvidaste tu contraseña?
+              </a>
+            </div>
+
+            <button
+              type="submit"
+              class="w-full admin-badge text-white font-bold py-3.5 rounded-xl transition-all text-sm tracking-wide shadow-md hover:opacity-90 hover:shadow-lg"
+            >
+              Acceder al Panel
+            </button>
+          </form>
+
+          <p class="text-center text-gray-400 text-xs mt-6">
+            Acceso restringido. Si olvidaste tus datos<br>contactá a secretaría del club.
+          </p>
+        </div>
+
+      </div><!-- fin flex panels -->
+    </div><!-- fin card -->
+
+    <!-- Aviso de seguridad -->
+    <p class="text-center text-green-200/60 text-xs mt-6">
+      🔒 Conexión segura · Los datos de socios están protegidos según la Ley 25.326
+    </p>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     MODAL — REGISTRO NUEVO SOCIO
+═══════════════════════════════════════════ -->
+<div id="modal-registro"
+  class="fixed inset-0 z-[100] bg-black/60 hidden items-center justify-center p-4"
+  onclick="cerrarRegistroFuera(event)"
+>
+  <div class="bg-white rounded-3xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
+
+    <!-- Header modal -->
+    <div class="bg-verde-700 rounded-t-3xl px-8 py-6 relative">
+      <button onclick="cerrarRegistro()" class="absolute right-5 top-5 text-white/70 hover:text-white transition-colors text-2xl leading-none">&times;</button>
+      <h3 class="font-expose font-bold text-white text-xl">Solicitud de Socio</h3>
+      <p class="text-green-200 text-sm mt-1">Completá el formulario y te contactamos en 48hs.</p>
+
+      <!-- Indicador de pasos -->
+      <div class="flex items-center mt-5 gap-0">
+        <div class="step-dot active" id="dot-1">1</div>
+        <div class="step-line" id="line-1"></div>
+        <div class="step-dot pending" id="dot-2">2</div>
+        <div class="step-line" id="line-2"></div>
+        <div class="step-dot pending" id="dot-3">3</div>
+      </div>
+      <div class="flex justify-between text-green-300 text-xs mt-1">
+        <span>Datos personales</span>
+        <span class="text-center">Membresía</span>
+        <span class="text-right">Confirmación</span>
+      </div>
+    </div>
+
+    <!-- Contenido pasos -->
+    <div class="px-8 py-7">
+
+      <!-- ─── PASO 1: Datos personales ─── -->
+      <div id="paso-1" class="space-y-5">
+        <div class="grid grid-cols-2 gap-4">
+          <div class="col-span-2 sm:col-span-1">
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Nombre</label>
+            <input id="reg-nombre" type="text" placeholder="Juan" class="input-field w-full border border-gray-200 rounded-xl px-4 py-3 text-sm bg-gray-50" required>
+          </div>
+          <div class="col-span-2 sm:col-span-1">
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Apellido</label>
+            <input id="reg-apellido" type="text" placeholder="García" class="input-field w-full border border-gray-200 rounded-xl px-4 py-3 text-sm bg-gray-50" required>
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">DNI (sin puntos)</label>
+          <input id="reg-dni" type="text" inputmode="numeric" placeholder="35412678" maxlength="9" class="input-field w-full border border-gray-200 rounded-xl px-4 py-3 text-sm bg-gray-50" required>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Fecha de nacimiento</label>
+          <input id="reg-nacimiento" type="date" class="input-field w-full border border-gray-200 rounded-xl px-4 py-3 text-sm bg-gray-50" required>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Teléfono / WhatsApp</label>
+          <input id="reg-telefono" type="tel" placeholder="+54 358 4000000" class="input-field w-full border border-gray-200 rounded-xl px-4 py-3 text-sm bg-gray-50" required>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Correo electrónico</label>
+          <input id="reg-email" type="email" placeholder="juan@email.com" class="input-field w-full border border-gray-200 rounded-xl px-4 py-3 text-sm bg-gray-50" required>
+        </div>
+        <button onclick="irPaso(2)" class="w-full bg-verde-600 hover:bg-verde-700 text-white font-bold py-3.5 rounded-xl transition-colors text-sm tracking-wide">
+          Continuar →
+        </button>
+      </div>
+
+      <!-- ─── PASO 2: Membresía ─── -->
+      <div id="paso-2" class="space-y-5 hidden">
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-3">Categoría de membresía</label>
+          <div class="space-y-3">
+            <!-- Opción general -->
+            <label class="flex items-start gap-3 p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-verde-400 transition-colors has-[:checked]:border-verde-600 has-[:checked]:bg-verde-50">
+              <input type="radio" name="membresia" value="general" class="mt-0.5 text-verde-600 w-4 h-4" checked>
+              <div class="flex-1">
+                <div class="font-semibold text-gray-800 text-sm">Socio General</div>
+                <div class="text-gray-500 text-xs mt-0.5">Acceso a todas las disciplinas · Eventos del club</div>
+              </div>
+              <div class="text-verde-700 font-bold text-sm">$3.500<span class="text-gray-400 font-normal text-xs">/mes</span></div>
+            </label>
+            <!-- Opción deportiva -->
+            <label class="flex items-start gap-3 p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-verde-400 transition-colors has-[:checked]:border-verde-600 has-[:checked]:bg-verde-50">
+              <input type="radio" name="membresia" value="deportiva" class="mt-0.5 text-verde-600 w-4 h-4">
+              <div class="flex-1">
+                <div class="font-semibold text-gray-800 text-sm">Socio Deportivo</div>
+                <div class="text-gray-500 text-xs mt-0.5">Incluye inscripción a disciplina · Indumentaria de entrenamiento</div>
+              </div>
+              <div class="text-verde-700 font-bold text-sm">$5.200<span class="text-gray-400 font-normal text-xs">/mes</span></div>
+            </label>
+            <!-- Opción juvenil -->
+            <label class="flex items-start gap-3 p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-verde-400 transition-colors has-[:checked]:border-verde-600 has-[:checked]:bg-verde-50">
+              <input type="radio" name="membresia" value="juvenil" class="mt-0.5 text-verde-600 w-4 h-4">
+              <div class="flex-1">
+                <div class="font-semibold text-gray-800 text-sm">Socio Juvenil</div>
+                <div class="text-gray-500 text-xs mt-0.5">Para menores de 18 años · Requiere autorización parental</div>
+              </div>
+              <div class="text-verde-700 font-bold text-sm">$2.000<span class="text-gray-400 font-normal text-xs">/mes</span></div>
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">¿Cómo conociste el club?</label>
+          <select class="input-field w-full border border-gray-200 rounded-xl px-4 py-3 text-sm bg-gray-50 text-gray-700">
+            <option value="">Seleccioná una opción</option>
+            <option>Por un amigo o familiar socio</option>
+            <option>Redes sociales del club</option>
+            <option>Evento del club (Maratón, Volá Sunset)</option>
+            <option>Pasé por el predio</option>
+            <option>Otro</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Observaciones (opcional)</label>
+          <textarea rows="2" placeholder="¿Alguna disciplina en particular? ¿Necesitás horarios especiales?" class="input-field w-full border border-gray-200 rounded-xl px-4 py-3 text-sm bg-gray-50 resize-none"></textarea>
+        </div>
+
+        <div class="flex gap-3">
+          <button onclick="irPaso(1)" class="flex-1 border-2 border-gray-200 text-gray-600 font-bold py-3.5 rounded-xl hover:bg-gray-50 transition-colors text-sm">
+            ← Atrás
+          </button>
+          <button onclick="irPaso(3)" class="flex-1 bg-verde-600 hover:bg-verde-700 text-white font-bold py-3.5 rounded-xl transition-colors text-sm">
+            Continuar →
+          </button>
+        </div>
+      </div>
+
+      <!-- ─── PASO 3: Confirmación ─── -->
+      <div id="paso-3" class="hidden">
+        <div class="text-center py-4">
+          <div class="w-16 h-16 bg-verde-100 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">
+            📋
+          </div>
+          <h4 class="font-expose font-bold text-verde-800 text-lg mb-2">¡Casi listo!</h4>
+          <p class="text-gray-600 text-sm mb-6">
+            Revisá tu información antes de enviar la solicitud.
+          </p>
+        </div>
+
+        <!-- Resumen datos -->
+        <div class="bg-gray-50 rounded-2xl p-5 space-y-3 mb-6 text-sm">
+          <div class="flex justify-between">
+            <span class="text-gray-500">Nombre completo</span>
+            <span class="font-semibold text-gray-800" id="resumen-nombre">—</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-500">DNI</span>
+            <span class="font-semibold text-gray-800" id="resumen-dni">—</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-500">Email</span>
+            <span class="font-semibold text-gray-800" id="resumen-email">—</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-500">Teléfono</span>
+            <span class="font-semibold text-gray-800" id="resumen-tel">—</span>
+          </div>
+          <div class="h-px bg-gray-200"></div>
+          <div class="flex justify-between">
+            <span class="text-gray-500">Membresía</span>
+            <span class="font-semibold text-verde-700" id="resumen-membresia">General</span>
+          </div>
+        </div>
+
+        <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mb-6 text-xs text-yellow-800">
+          <strong>Próximos pasos:</strong> Una vez enviada la solicitud, la comisión directiva la revisará y te contactará por WhatsApp o email en un plazo de <strong>48 horas hábiles</strong>.
+        </div>
+
+        <div class="flex gap-3">
+          <button onclick="irPaso(2)" class="flex-1 border-2 border-gray-200 text-gray-600 font-bold py-3.5 rounded-xl hover:bg-gray-50 transition-colors text-sm">
+            ← Atrás
+          </button>
+          <button onclick="enviarSolicitud()" class="flex-1 bg-verde-600 hover:bg-verde-700 text-white font-bold py-3.5 rounded-xl transition-colors text-sm">
+            Enviar solicitud ✓
+          </button>
+        </div>
+      </div>
+
+      <!-- ─── PASO 4: Éxito ─── -->
+      <div id="paso-exito" class="hidden text-center py-6">
+        <div class="w-20 h-20 bg-verde-100 rounded-full flex items-center justify-center mx-auto mb-5 text-4xl">
+          ✅
+        </div>
+        <h4 class="font-expose font-bold text-verde-800 text-xl mb-3">¡Solicitud enviada!</h4>
+        <p class="text-gray-600 text-sm mb-2">
+          Tu solicitud fue recibida correctamente.
+        </p>
+        <p class="text-gray-500 text-sm mb-6">
+          En las próximas <strong>48 horas hábiles</strong> nos comunicamos con vos para completar el proceso de adhesión.
+        </p>
+        <p class="text-gray-400 text-xs mb-6">
+          📧 Recibirás un correo de confirmación en la dirección que ingresaste.
+        </p>
+        <button onclick="cerrarRegistro()" class="bg-verde-600 hover:bg-verde-700 text-white font-bold py-3 px-8 rounded-xl transition-colors text-sm">
+          Cerrar
+        </button>
+      </div>
+
+    </div><!-- fin contenido -->
+  </div><!-- fin modal card -->
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════════ -->
+<script>
+  // ─── BD MOCK DE SOCIOS ───
+  // En producción, reemplazar por fetch() a la API del sistema de gestión
+  const SOCIOS_DB = [
+    { id: '00001', dni: '20123456', nombre: 'Agustín Gherro',    categoria: 'General',   estado: 'activo' },
+    { id: '00002', dni: '32987654', nombre: 'Carlos Rodríguez',  categoria: 'Deportivo', estado: 'activo' },
+    { id: '00003', dni: '27654321', nombre: 'Lucía Fernández',   categoria: 'Juvenil',   estado: 'activo' },
+    { id: '00004', dni: '31111222', nombre: 'Martín López',      categoria: 'General',   estado: 'suspendido' },
+  ];
+
+  // ─── BD MOCK DE ADMINISTRADORES ───
+  const ADMINS_DB = [
+    { email: 'admin@aabn.com.ar',      pass: 'aabn2026',  rol: 'Presidente',         nombre: 'Agustín Gherro' },
+    { email: 'secretaria@aabn.com.ar', pass: 'secre2026', rol: 'Secretaría',         nombre: 'Secretaría AABN' },
+    { email: 'tesoreria@aabn.com.ar',  pass: 'teso2026',  rol: 'Tesorería',          nombre: 'Tesorería AABN' },
+  ];
+
+  // ─── LOGIN SOCIO ───
+  function loginSocio(e) {
+    e.preventDefault();
+    const id  = document.getElementById('num-socio').value.trim().padStart(5, '0');
+    const dni = document.getElementById('dni-socio').value.trim();
+
+    const socio = SOCIOS_DB.find(s => s.id === id && s.dni === dni);
+
+    if (!socio) {
+      mostrarAlerta('alert-socio', 'error', '❌ Número de socio o DNI incorrectos. Verificá tus datos.');
+      return;
+    }
+    if (socio.estado === 'suspendido') {
+      mostrarAlerta('alert-socio', 'warning', `⚠️ Tu membresía está suspendida, ${socio.nombre.split(' ')[0]}. Contactá a secretaría.`);
+      return;
+    }
+
+    mostrarAlerta('alert-socio', 'success', `✅ ¡Bienvenido, ${socio.nombre}! Redirigiendo al portal...`);
+
+    // Guardar sesión temporal
+    sessionStorage.setItem('socio', JSON.stringify(socio));
+
+    // Redirección (ajustar a la URL del portal cuando esté listo)
+    setTimeout(() => {
+      window.location.href = 'portal-socio.html';
+    }, 1800);
+  }
+
+  // ─── LOGIN ADMIN ───
+  function loginAdmin(e) {
+    e.preventDefault();
+    const email = document.getElementById('email-admin').value.trim().toLowerCase();
+    const pass  = document.getElementById('pass-admin').value;
+
+    const admin = ADMINS_DB.find(a => a.email === email && a.pass === pass);
+
+    if (!admin) {
+      mostrarAlerta('alert-admin', 'error', '❌ Credenciales incorrectas. Intentá de nuevo.');
+      return;
+    }
+
+    mostrarAlerta('alert-admin', 'success', `✅ Bienvenido, ${admin.nombre}. Ingresando al panel...`);
+
+    // Guardar sesión temporal
+    sessionStorage.setItem('admin', JSON.stringify({ nombre: admin.nombre, rol: admin.rol }));
+
+    setTimeout(() => {
+      window.location.href = 'selector.html';
+    }, 1800);
+  }
+
+  // ─── MOSTRAR ALERTA ───
+  function mostrarAlerta(id, tipo, mensaje) {
+    const el = document.getElementById(id);
+    el.className = 'mb-5 px-4 py-3 rounded-xl text-sm font-medium alert-enter';
+
+    if (tipo === 'success') el.classList.add('bg-verde-50', 'text-verde-800', 'border', 'border-verde-200');
+    if (tipo === 'error')   el.classList.add('bg-red-50', 'text-red-700', 'border', 'border-red-200');
+    if (tipo === 'warning') el.classList.add('bg-yellow-50', 'text-yellow-800', 'border', 'border-yellow-200');
+
+    el.textContent = mensaje;
+    el.classList.remove('hidden');
+  }
+
+  // ─── TOGGLE CONTRASEÑA ───
+  function togglePass() {
+    const input = document.getElementById('pass-admin');
+    input.type = input.type === 'password' ? 'text' : 'password';
+  }
+
+  // ─── MODAL REGISTRO ───
+  let pasoActual = 1;
+
+  function abrirRegistro() {
+    document.getElementById('modal-registro').classList.remove('hidden');
+    document.getElementById('modal-registro').classList.add('flex');
+    document.body.style.overflow = 'hidden';
+    irPaso(1);
+  }
+
+  function cerrarRegistro() {
+    document.getElementById('modal-registro').classList.add('hidden');
+    document.getElementById('modal-registro').classList.remove('flex');
+    document.body.style.overflow = '';
+  }
+
+  function cerrarRegistroFuera(e) {
+    if (e.target === document.getElementById('modal-registro')) cerrarRegistro();
+  }
+
+  function irPaso(paso) {
+    // Validar paso 1 antes de avanzar
+    if (paso === 2) {
+      const nombre    = document.getElementById('reg-nombre').value.trim();
+      const apellido  = document.getElementById('reg-apellido').value.trim();
+      const dni       = document.getElementById('reg-dni').value.trim();
+      const telefono  = document.getElementById('reg-telefono').value.trim();
+      const email     = document.getElementById('reg-email').value.trim();
+      const nacimiento= document.getElementById('reg-nacimiento').value;
+
+      if (!nombre || !apellido || !dni || !telefono || !email || !nacimiento) {
+        alert('Por favor completá todos los campos antes de continuar.');
+        return;
+      }
+    }
+
+    // Actualizar resumen en paso 3
+    if (paso === 3) {
+      const nombre   = document.getElementById('reg-nombre').value.trim();
+      const apellido = document.getElementById('reg-apellido').value.trim();
+      const dni      = document.getElementById('reg-dni').value.trim();
+      const email    = document.getElementById('reg-email').value.trim();
+      const tel      = document.getElementById('reg-telefono').value.trim();
+      const membresia = document.querySelector('input[name="membresia"]:checked')?.value || 'General';
+
+      document.getElementById('resumen-nombre').textContent = `${nombre} ${apellido}`;
+      document.getElementById('resumen-dni').textContent = dni;
+      document.getElementById('resumen-email').textContent = email;
+      document.getElementById('resumen-tel').textContent = tel;
+      document.getElementById('resumen-membresia').textContent =
+        membresia === 'general' ? 'Socio General — $3.500/mes' :
+        membresia === 'deportiva' ? 'Socio Deportivo — $5.200/mes' :
+        'Socio Juvenil — $2.000/mes';
+    }
+
+    // Ocultar todos los pasos
+    [1, 2, 3, 'exito'].forEach(p => {
+      document.getElementById(`paso-${p}`)?.classList.add('hidden');
+    });
+
+    // Mostrar paso actual
+    document.getElementById(`paso-${paso}`).classList.remove('hidden');
+    pasoActual = paso;
+
+    // Actualizar indicador visual de pasos (solo para pasos 1–3)
+    if (typeof paso === 'number' && paso <= 3) {
+      for (let i = 1; i <= 3; i++) {
+        const dot = document.getElementById(`dot-${i}`);
+        dot.className = 'step-dot ' + (i < paso ? 'done' : i === paso ? 'active' : 'pending');
+      }
+      for (let i = 1; i <= 2; i++) {
+        const line = document.getElementById(`line-${i}`);
+        line.className = 'step-line ' + (i < paso ? 'done' : '');
+      }
+    }
+  }
+
+  // ─── ENVIAR SOLICITUD ───
+  function enviarSolicitud() {
+    // En producción: hacer fetch() POST a la API con los datos del formulario
+    irPaso('exito');
+  }
+</script>
+
+</body>
+</html>

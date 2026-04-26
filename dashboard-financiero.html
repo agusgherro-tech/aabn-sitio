@@ -15,7 +15,8 @@
                    800:"#174b2b",900:"#133d23"}
           },
           fontFamily: {
-            sans:   ["Segoe UI","Arial","sans-serif"],
+            sans:   ["Rag","Segoe UI","Arial","sans-serif"],
+            rag:    ["Rag","Arial","sans-serif"],
             expose: ["Expose","Arial Black","sans-serif"],
           }
         }
@@ -26,6 +27,11 @@
     @font-face{font-family:"Expose";src:url("fonts/Expose-Black.woff2") format("woff2");font-weight:900;}
     @font-face{font-family:"Expose";src:url("fonts/Expose-Bold.woff2") format("woff2");font-weight:700;}
     @font-face{font-family:"Expose";src:url("fonts/Expose-Regular.woff2") format("woff2");font-weight:400;}
+    @font-face{font-family:"Rag";src:url("fonts/Rag-Regular.woff2") format("woff2"),url("fonts/Rag-Regular.woff") format("woff");font-weight:400;font-style:normal;font-display:swap;}
+    @font-face{font-family:"Rag";src:url("fonts/Rag-Italic.woff2") format("woff2"),url("fonts/Rag-Italic.woff") format("woff");font-weight:400;font-style:italic;font-display:swap;}
+    @font-face{font-family:"Rag";src:url("fonts/Rag-Bold.woff2") format("woff2"),url("fonts/Rag-Bold.woff") format("woff");font-weight:700;font-style:normal;font-display:swap;}
+    @font-face{font-family:"Rag";src:url("fonts/Rag-BoldItalic.woff2") format("woff2"),url("fonts/Rag-BoldItalic.woff") format("woff");font-weight:700;font-style:italic;font-display:swap;}
+    @font-face{font-family:"Rag";src:url("fonts/Rag-Black.woff2") format("woff2"),url("fonts/Rag-Black.woff") format("woff");font-weight:900;font-style:normal;font-display:swap;}
     *{box-sizing:border-box;}
     .hero-bg{background:linear-gradient(135deg,#133d23 0%,#195e34 60%,#1c743e 100%);}
     .card-num{font-size:1.6rem;font-weight:900;line-height:1;letter-spacing:-0.5px;}
@@ -60,6 +66,7 @@
         <span class="text-verde-400 text-xs">·</span>
         <span id="admin-rol" class="text-verde-300 text-xs"></span>
       </div>
+      <a href="selector.html" class="text-verde-300 hover:text-white text-xs border border-verde-700 hover:border-verde-500 rounded-full px-3.5 py-1.5 hover:bg-verde-800 transition-all">← Panel</a>
       <button onclick="cerrarSesion()" class="text-verde-300 hover:text-white text-xs border border-verde-700 hover:border-verde-500 rounded-full px-3.5 py-1.5 hover:bg-verde-800 transition-all">Cerrar sesión</button>
     </div>
   </div>
