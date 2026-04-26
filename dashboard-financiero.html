@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Financiero — A.A.B.N</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            verde:{50:"#f0f9f3",100:"#d9f0e1",200:"#b2e0c3",300:"#7cc99a",
+                   400:"#46ad6f",500:"#28904f",600:"#1c743e",700:"#195e34",
+                   800:"#174b2b",900:"#133d23"}
+          },
+          fontFamily: {
+            sans:   ["Segoe UI","Arial","sans-serif"],
+            expose: ["Expose","Arial Black","sans-serif"],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @font-face{font-family:"Expose";src:url("fonts/Expose-Black.woff2") format("woff2");font-weight:900;}
+    @font-face{font-family:"Expose";src:url("fonts/Expose-Bold.woff2") format("woff2");font-weight:700;}
+    @font-face{font-family:"Expose";src:url("fonts/Expose-Regular.woff2") format("woff2");font-weight:400;}
+    *{box-sizing:border-box;}
+    .hero-bg{background:linear-gradient(135deg,#133d23 0%,#195e34 60%,#1c743e 100%);}
+    .card-num{font-size:1.6rem;font-weight:900;line-height:1;letter-spacing:-0.5px;}
+    .card-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .input-f{border:1.5px solid #e5e7eb;border-radius:10px;padding:8px 14px;font-size:13px;
+             background:#fff;color:#374151;outline:none;transition:border-color .2s;}
+    .input-f:focus{border-color:#28904f;box-shadow:0 0 0 3px rgba(40,144,79,.1);}
+    .sortable{cursor:pointer;user-select:none;}
+    .sortable:hover{background:#1a5c31;}
+    thead th{position:sticky;top:0;z-index:10;}
+    .table-wrap{max-height:480px;overflow-y:auto;border-radius:0 0 16px 16px;}
+    tr.data-row:hover td{background:#f6fef9;}
+    tr.data-row:nth-child(even) td{background:#fafafa;}
+    .pos{color:#059669;font-weight:700;}
+    .neg{color:#dc2626;font-weight:700;}
+    .bar-ing{background:#4ade80;height:8px;border-radius:4px;}
+    .bar-gas{background:#f87171;height:8px;border-radius:4px;}
+  </style>
+</head>
+<body class="bg-gray-50 font-sans antialiased min-h-screen">
+
+<!-- NAV -->
+<header class="bg-verde-900 shadow-lg sticky top-0 z-50 border-b border-verde-800">
+  <div class="max-w-screen-xl mx-auto px-5 h-14 flex items-center justify-between gap-4">
+    <a href="index.html" class="flex items-center gap-3 shrink-0">
+      <img src="images.jpeg" alt="AABN" class="h-8 w-auto rounded-md">
+      <span class="text-white font-expose font-black text-sm tracking-widest uppercase hidden sm:block">A.A.B.N</span>
+    </a>
+    <div class="flex items-center gap-2.5">
+      <div id="admin-info" class="hidden sm:flex items-center gap-2 bg-verde-800 border border-verde-700 rounded-full px-3.5 py-1.5">
+        <span id="admin-nombre" class="text-white text-xs font-semibold"></span>
+        <span class="text-verde-400 text-xs">·</span>
+        <span id="admin-rol" class="text-verde-300 text-xs"></span>
+      </div>
+      <button onclick="cerrarSesion()" class="text-verde-300 hover:text-white text-xs border border-verde-700 hover:border-verde-500 rounded-full px-3.5 py-1.5 hover:bg-verde-800 transition-all">Cerrar sesión</button>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero-bg px-5 pt-8 pb-10">
+  <div class="max-w-screen-xl mx-auto">
+    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+      <div>
+        <div class="flex items-center gap-2 mb-3">
+          <span class="inline-block bg-verde-600/50 border border-verde-500/40 text-green-200 text-xs font-bold px-3 py-1 rounded-full tracking-widest uppercase">Panel de Administración</span>
+        </div>
+        <h1 class="font-expose font-black text-white text-4xl sm:text-5xl tracking-tight leading-none">FINANCIERO</h1>
+        <div class="flex items-center gap-3 mt-2">
+          <span class="font-expose font-bold text-verde-300 text-xl sm:text-2xl tracking-widest">A.A.B.N</span>
+          <span class="w-px h-5 bg-verde-600"></span>
+          <span class="text-verde-400 text-sm">Posición Financiera 2026</span>
+        </div>
+      </div>
+      <div class="text-right">
+        <div class="text-verde-400 text-xs uppercase tracking-widest font-semibold mb-1">Actualización</div>
+        <div id="fecha-gen" class="text-white font-bold text-base"></div>
+        <div class="text-verde-400 text-xs mt-0.5">Fuente: POSICIÓN FINANCIERA AABN 2026.xlsx</div>
+      </div>
+    </div>
+
+    <!-- Tarjetas cuentas -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-8" id="cards-cuentas"></div>
+
+    <!-- Tarjetas resumen YTD -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-3">
+      <div class="bg-white/10 backdrop-blur border border-white/10 rounded-2xl p-5">
+        <div class="text-verde-300 text-xs font-semibold uppercase tracking-wide mb-1">Ingresos estimados 2026</div>
+        <div id="ytd-ing" class="card-num text-green-300"></div>
+      </div>
+      <div class="bg-white/10 backdrop-blur border border-white/10 rounded-2xl p-5">
+        <div class="text-verde-300 text-xs font-semibold uppercase tracking-wide mb-1">Gastos estimados 2026</div>
+        <div id="ytd-gas" class="card-num text-red-300"></div>
+      </div>
+      <div class="bg-white/10 backdrop-blur border border-white/10 rounded-2xl p-5">
+        <div class="text-verde-300 text-xs font-semibold uppercase tracking-wide mb-1">Resultado estimado 2026</div>
+        <div id="ytd-res" class="card-num"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="max-w-screen-xl mx-auto px-5 py-7 grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+  <!-- Tabla mensual -->
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+    <div class="px-6 py-5 border-b border-gray-100">
+      <h2 class="font-expose font-bold text-verde-800 text-xl tracking-tight">Resumen Mensual</h2>
+      <p class="text-gray-400 text-xs mt-0.5">Proyecciones del mes según el Excel</p>
+    </div>
+    <div class="table-wrap">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="bg-verde-800 text-white text-left">
+            <th class="px-4 py-3 text-xs font-semibold tracking-wide">Mes</th>
+            <th class="px-4 py-3 text-xs font-semibold tracking-wide text-right">Ingresos</th>
+            <th class="px-4 py-3 text-xs font-semibold tracking-wide text-right">Gastos</th>
+            <th class="px-4 py-3 text-xs font-semibold tracking-wide text-right">Resultado</th>
+          </tr>
+        </thead>
+        <tbody id="tbody-meses"></tbody>
+      </table>
+    </div>
+    <div class="px-6 py-3 border-t border-gray-100 text-xs text-gray-400 bg-gray-50">
+      Datos proyectados — fuente: POSICIÓN FINANCIERA AABN 2026.xlsx
+    </div>
+  </div>
+
+  <!-- Últimos movimientos -->
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+    <div class="px-6 py-5 border-b border-gray-100">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div>
+          <h2 class="font-expose font-bold text-verde-800 text-xl tracking-tight">Movimientos</h2>
+          <p class="text-gray-400 text-xs mt-0.5">Últimos 50 — MOV DIARIOS</p>
+        </div>
+        <div class="flex gap-2">
+          <input id="f-mov" oninput="filtrarMovs()" type="text" placeholder="Buscar…" class="input-f w-40 sm:w-48">
+          <select id="f-cuenta" onchange="filtrarMovs()" class="input-f">
+            <option value="">Todas</option>
+            <option value="Efectivo">Caja/Efectivo</option>
+            <option value="Macro">Macro</option>
+            <option value="Cordoba">Córdoba</option>
+            <option value="Mercado Pago">Mercado Pago</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="bg-verde-800 text-white text-left">
+            <th class="px-4 py-3 text-xs font-semibold tracking-wide">Fecha</th>
+            <th class="px-4 py-3 text-xs font-semibold tracking-wide">Concepto</th>
+            <th class="px-4 py-3 text-xs font-semibold tracking-wide">Cuenta</th>
+            <th class="px-4 py-3 text-xs font-semibold tracking-wide text-right">Monto</th>
+          </tr>
+        </thead>
+        <tbody id="tbody-movs"></tbody>
+      </table>
+    </div>
+    <div class="px-6 py-3 border-t border-gray-100 text-xs text-gray-400 bg-gray-50">
+      Fuente: hoja MOV DIARIOS
+    </div>
+  </div>
+
+</div>
+
+<script>
+const DATA = {"_generado":"25/04/2026","_mes_actual":"Abril","_saldos":{"Caja":11314900.0,"Banco Macro":23703803.48,"Banco Cordoba":2150977.58,"Mercado Pago":1835547.02},"_saldo_total":39005228.08,"_tot_ingresos":391903163.27,"_tot_gastos":324209193.95,"_tot_resultado":67693969.31,"_meses":[{"mes":"Enero","ingresos":99315012.88765001,"gastos":80877593.72,"resultado":18437419.167650014},{"mes":"Febrero","ingresos":73276312.35765,"gastos":58788419.348,"resultado":14487893.00965},{"mes":"Marzo","ingresos":102539764.24,"gastos":77401260.84333333,"resultado":25138503.39666666},{"mes":"Abril","ingresos":116772073.78,"gastos":107141920.03999999,"resultado":9630153.74000001}],"_movimientos":[{"fecha":"24/04/2026","concepto":"PAGO SEMANAL POR LIMPIEZA DE CANCHAS DEL 20 AL 24/04 CARLOS VEGAS","monto":-125000.0,"cuenta":"Efectivo"},{"fecha":"24/04/2026","concepto":"SANCOR SEGUROS A PRESTADOR MATIAS BRIZUELA","monto":-456950.0,"cuenta":"Macro"},{"fecha":"24/04/2026","concepto":"COMPRA DE LAVARROPAS DREAN MERCADOLIBRE","monto":-195199.0,"cuenta":"Mercado Pago"},{"fecha":"24/04/2026","concepto":"REYNOSO CHORIZOS 06/03 41 KG","monto":-328000.0,"cuenta":"Efectivo"},{"fecha":"24/04/2026","concepto":"SALDO FINAL TRANSFERENCIA JORGE BECERRA","monto":-300000.0,"cuenta":"Macro"},{"fecha":"24/04/2026","concepto":"COOPERACION SEGUROS ABRIL SIVENDIA","monto":-15750.0,"cuenta":"Mercado Pago"},{"fecha":"24/04/2026","concepto":"REYNOSO CHORIZOS 15/03 49,8 KG","monto":-398400.0,"cuenta":"Efectivo"},{"fecha":"24/04/2026","concepto":"OP 421031 FOGLIETTA SANTINO SANCOR SEGUROS A PRESTADOR GMRS","monto":-960000.0,"cuenta":"Macro"},{"fecha":"24/04/2026","concepto":"COOPERACION SEGUROS ABRIL BANCARIA","monto":-15750.0,"cuenta":"Mercado Pago"},{"fecha":"24/04/2026","concepto":"BONACCI 70 TIRAS DE PAN 04/03","monto":-77000.0,"cuenta":"Efectivo"},{"fecha":"24/04/2026","concepto":"OP 421031 FOGLIETTA SANTINO SANCOR SEGUROS A PRESTADOR NEOCLINICA","monto":-1283000.0,"cuenta":"Macro"},{"fecha":"24/04/2026","concepto":"COOPERACION SEGUROS ABRIL SEDE","monto":-116900.0,"cuenta":"Mercado Pago"},{"fecha":"24/04/2026","concepto":"BONACCI 60 TIRAS DE PAN 14/03","monto":-66000.0,"cuenta":"Efectivo"},{"fecha":"24/04/2026","concepto":"SUELDO MARCELO SAYAGO AYUDANTE DE CAMPO","monto":-600000.0,"cuenta":"Macro"},{"fecha":"24/04/2026","concepto":"RENDICION CANCHA 23/04 INFANTO Y PRIMERA FEM VS ATENEO","monto":110000.0,"cuenta":"Mercado Pago"},{"fecha":"24/04/2026","concepto":"BONACCI 60 TIRAS DE PAN 21/03","monto":-66000.0,"cuenta":"Efectivo"},{"fecha":"24/04/2026","concepto":"SUELDO MARCELO SAYAGO","monto":-1790000.0,"cuenta":"Macro"},{"fecha":"24/04/2026","concepto":"TRANSFERENCIA ENTRE CUENTAS PROPIAS","monto":5326600.0,"cuenta":"Mercado Pago"},{"fecha":"24/04/2026","concepto":"RENDICION CANCHA 23/04 INFANTO Y PRIMERA FEM VS ATENEO","monto":-184000.0,"cuenta":"Efectivo"},{"fecha":"24/04/2026","concepto":"OP 413814 RIVAROLA JOAQUIN, PEREZ CIRO, OVIEDO PERRONE, OP 421031 SOSA BENJAMIN, DELVALLE PEREYA, OP 422066 CORREA GASTON SANCOR SEGUROS A PRESTADOR SANATORIO PRIVADO","monto":247120.21,"cuenta":"Macro"},{"fecha":"24/04/2026","concepto":"TORNEO FEDERAL DARIO ACTIZ","monto":-80000.0,"cuenta":"Mercado Pago"},{"fecha":"24/04/2026","concepto":"SALDO FINAL RETIRA MARIANO RIGHETTO","monto":-290000.0,"cuenta":"Efectivo"},{"fecha":"24/04/2026","concepto":"TRANSFERENCIA ENTRE CUENTAS PROPIAS","monto":-5326600.0,"cuenta":"Macro"},{"fecha":"24/04/2026","concepto":"TORNEO FEDERAL ENCHANDIA","monto":-150000.0,"cuenta":"Mercado Pago"},{"fecha":"24/04/2026","concepto":"SUELDO MARCELO SAYAGO","monto":-10000.0,"cuenta":"Efectivo"},{"fecha":"24/04/2026","concepto":"TORNEO FEDERAL TITARELLI","monto":-150000.0,"cuenta":"Mercado Pago"},{"fecha":"24/04/2026","concepto":"RENDICION CANTINA 23/04 RUBEN LOPEZ","monto":176000.0,"cuenta":"Efectivo"},{"fecha":"24/04/2026","concepto":"TORNEO FEDERAL PAULA MENA","monto":-100000.0,"cuenta":"Mercado Pago"},{"fecha":"24/04/2026","concepto":"ADELANTO DE SUELDO ELBA MONTIEL","monto":-150000.0,"cuenta":"Efectivo"},{"fecha":"24/04/2026","concepto":"HANGOVER AGUSTIN PEREZ","monto":-403000.0,"cuenta":"Mercado Pago"},{"fecha":"24/04/2026","concepto":"HANGOVER BAUTISTA HID","monto":-243600.0,"cuenta":"Mercado Pago"},{"fecha":"24/04/2026","concepto":"CONFEDERACION ARGENTINA DE BASQUET ARANCELES 2026","monto":-200000.0,"cuenta":"Mercado Pago"},{"fecha":"24/04/2026","concepto":"HANGOVER EZEQUIEL CORDOBA","monto":-4000000.0,"cuenta":"Mercado Pago"},{"fecha":"23/04/2026","concepto":"GRAFICA RC SELLO TESORERA","monto":-15000.0,"cuenta":"Efectivo"},{"fecha":"23/04/2026","concepto":"ECHEQ GOMERIA ALTAMIRANO 25/03","monto":108323.35,"cuenta":"Macro"},{"fecha":"23/04/2026","concepto":"REDES ABRIL FLORENCIA GRAMAJO","monto":-150000.0,"cuenta":"Mercado Pago"},{"fecha":"23/04/2026","concepto":"RENDICION PARTIDO PRIMERA 22/04 RUBEN LOPEZ","monto":570000.0,"cuenta":"Efectivo"},{"fecha":"23/04/2026","concepto":"DELINTER BEBIDAS CANTINA","monto":-335543.28,"cuenta":"Macro"},{"fecha":"23/04/2026","concepto":"REDES ABRIL TOMAS ESCUDERO","monto":-300000.0,"cuenta":"Mercado Pago"},{"fecha":"23/04/2026","concepto":"COMISION 30% RUBEN LOPEZ","monto":-171000.0,"cuenta":"Efectivo"},{"fecha":"23/04/2026","concepto":"SUELDO FACUNDO POSSE","monto":-1200000.0,"cuenta":"Macro"},{"fecha":"23/04/2026","concepto":"RENDICION PRIMERA MASC 22/04 LUIS RATTO","monto":150000.0,"cuenta":"Mercado Pago"},{"fecha":"23/04/2026","concepto":"RENDICION PRIMERA MASC 22/04 LUIS RATTO","monto":647000.0,"cuenta":"Efectivo"},{"fecha":"23/04/2026","concepto":"PAGO A CUENTA CLAUDIO MASSI","monto":-400000.0,"cuenta":"Macro"},{"fecha":"23/04/2026","concepto":"CAJA OFICINA","monto":135400.0,"cuenta":"Efectivo"},{"fecha":"22/04/2026","concepto":"PARTIDOS GANADOS EN MARZO JUAN MARTIN GUTIERREZ","monto":-60000.0,"cuenta":"Efectivo"},{"fecha":"22/04/2026","concepto":"POLICIA ADICIONALES PARTIDO 22-04","monto":-160605.12,"cuenta":"Macro"},{"fecha":"22/04/2026","concepto":"SANCOR SEGUROS POLIZA BASQUET FEMENINO","monto":-65565.0,"cuenta":"Mercado Pago"},{"fecha":"22/04/2026","concepto":"DIFERENCIA SUELDO JUAN MARTIN GUTIERREZ","monto":-100000.0,"cuenta":"Efectivo"},{"fecha":"22/04/2026","concepto":"CAPITAINE MARKETING GCX FEE MARZO","monto":-490000.0,"cuenta":"Macro"}]};
+
+// Auth
+const admin = JSON.parse(sessionStorage.getItem("admin") || "null");
+if (!admin) { window.location.href = "login.html"; }
+else {
+  document.getElementById("admin-info").classList.remove("hidden");
+  document.getElementById("admin-nombre").textContent = admin.nombre;
+  document.getElementById("admin-rol").textContent    = admin.rol;
+}
+function cerrarSesion() { sessionStorage.removeItem("admin"); window.location.href = "login.html"; }
+
+document.getElementById("fecha-gen").textContent = DATA._generado || "";
+
+function fmtARS(n) {
+  if (n == null) return "—";
+  return "$" + Math.abs(n).toLocaleString("es-AR", {maximumFractionDigits:0});
+}
+
+// Tarjetas cuentas
+const CUENTA_ICONS = {
+  "Caja": "💵", "Banco Macro": "🏦", "Banco Cordoba": "🏛", "Mercado Pago": "📱"
+};
+const c = document.getElementById("cards-cuentas");
+Object.entries(DATA._saldos).forEach(([k, v]) => {
+  c.innerHTML += `<div class="bg-white/10 backdrop-blur border border-white/10 rounded-2xl p-5 flex items-start gap-3">
+    <div class="card-icon bg-white/15 text-2xl">${CUENTA_ICONS[k] || "💳"}</div>
+    <div><div class="card-num text-white" style="font-size:1.3rem">${fmtARS(v)}</div>
+    <div class="text-verde-300 text-xs font-semibold mt-1 uppercase tracking-wide">${k}</div></div>
+  </div>`;
+});
+
+// Resumen YTD
+const ir = DATA._tot_ingresos, ga = DATA._tot_gastos, re = DATA._tot_resultado;
+document.getElementById("ytd-ing").textContent = fmtARS(ir);
+document.getElementById("ytd-gas").textContent = fmtARS(ga);
+const resEl = document.getElementById("ytd-res");
+resEl.textContent = (re >= 0 ? "+" : "") + fmtARS(re);
+resEl.className = "card-num " + (re >= 0 ? "text-green-300" : "text-red-300");
+
+// Tabla mensual
+const tbM = document.getElementById("tbody-meses");
+DATA._meses.forEach((m, i) => {
+  const resOk = m.resultado != null && m.resultado >= 0;
+  const resCls = m.resultado == null ? "text-gray-300" : (resOk ? "pos" : "neg");
+  const resStr = m.resultado == null ? "—" : (m.resultado >= 0 ? "+" : "") + fmtARS(m.resultado);
+  tbM.innerHTML += `<tr class="data-row border-b border-gray-100">
+    <td class="px-4 py-2.5 font-semibold text-gray-700">${m.mes}</td>
+    <td class="px-4 py-2.5 text-right text-emerald-600 font-medium">${m.ingresos ? fmtARS(m.ingresos) : "—"}</td>
+    <td class="px-4 py-2.5 text-right text-red-500 font-medium">${m.gastos ? fmtARS(m.gastos) : "—"}</td>
+    <td class="px-4 py-2.5 text-right ${resCls}">${resStr}</td>
+  </tr>`;
+});
+
+// Movimientos
+let movsAll = DATA._movimientos || [];
+let movsFilt = [...movsAll];
+
+function filtrarMovs() {
+  const q = document.getElementById("f-mov").value.toLowerCase().trim();
+  const cu = document.getElementById("f-cuenta").value;
+  movsFilt = movsAll.filter(m => {
+    if (cu && !m.cuenta.includes(cu)) return false;
+    if (q && !m.concepto.toLowerCase().includes(q)) return false;
+    return true;
+  });
+  renderMovs();
+}
+
+function renderMovs() {
+  const tb = document.getElementById("tbody-movs");
+  if (!movsFilt.length) {
+    tb.innerHTML = `<tr><td colspan="4" class="text-center text-gray-400 py-10 text-sm">Sin resultados</td></tr>`;
+    return;
+  }
+  tb.innerHTML = movsFilt.map((m, i) => {
+    const cls = m.monto > 0 ? "pos" : "neg";
+    const pref = m.monto > 0 ? "+" : "";
+    const bg = i % 2 === 0 ? "" : "bg-gray-50/70";
+    return `<tr class="data-row border-b border-gray-100">
+      <td class="px-4 py-2 text-gray-400 text-xs font-mono whitespace-nowrap">${m.fecha}</td>
+      <td class="px-4 py-2 text-gray-700 text-xs max-w-xs truncate" title="${m.concepto}">${m.concepto}</td>
+      <td class="px-4 py-2 text-gray-400 text-xs whitespace-nowrap">${m.cuenta}</td>
+      <td class="px-4 py-2 text-right text-xs ${cls} whitespace-nowrap">${pref}${Math.abs(m.monto).toLocaleString("es-AR",{maximumFractionDigits:0})}</td>
+    </tr>`;
+  }).join("");
+}
+
+renderMovs();
+</script>
+</body>
+</html>
