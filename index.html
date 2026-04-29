@@ -203,9 +203,14 @@
       </nav>
 
       <!-- CTA -->
-      <a href="#socio" class="hidden md:inline-flex items-center gap-2 bg-white text-verde-700 font-bold text-sm px-4 py-2 rounded-full hover:bg-green-100 transition-colors shadow">
-        🤝 Hacete Socio
-      </a>
+      <div class="hidden md:flex items-center gap-2">
+        <a href="login.html" class="inline-flex items-center gap-1.5 border border-white/40 text-white font-semibold text-sm px-4 py-2 rounded-full hover:bg-white/10 transition-colors">
+          🔑 Ingresar
+        </a>
+        <a href="#socio" class="inline-flex items-center gap-2 bg-white text-verde-700 font-bold text-sm px-4 py-2 rounded-full hover:bg-green-100 transition-colors shadow">
+          🤝 Hacete Socio
+        </a>
+      </div>
 
       <!-- Mobile hamburger -->
       <button class="md:hidden flex flex-col gap-1.5 p-2" aria-label="Abrir menú" aria-expanded="false" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true'); document.getElementById('mobile-menu').classList.toggle('hidden')">
@@ -228,6 +233,7 @@
   </div>
 </header>
 
+<main>
 
 <!-- ═══════════════════════════════════════════
      HERO — Portada renovada "El Lobo del Parque"
