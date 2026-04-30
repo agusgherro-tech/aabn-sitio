@@ -164,30 +164,44 @@
     .modal-val-monto{font-size:13px;font-weight:700;color:#dc2626;}
     .modal-empty{text-align:center;color:#9ca3af;font-size:13px;padding:28px 0;}
 
+    /* ── Becado / Observación ── */
+    .badge-becado{display:inline-block;font-size:9px;font-weight:700;background:#fdf4ff;color:#9333ea;border:1px solid rgba(147,51,234,.2);padding:2px 6px;border-radius:6px;margin-left:4px;vertical-align:middle;}
+    .obs-text{font-size:10px;color:#9ca3af;font-style:italic;margin-top:1px;white-space:normal;line-height:1.3;}
+
     /* ── Métricas globales ── */
     .metrics-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
     .metrics-title{font-size:10px;font-weight:700;letter-spacing:2px;color:#6b7280;text-transform:uppercase;}
     .metrics-date{font-size:11px;color:#9ca3af;}
-    .metric-grid{display:grid;grid-template-columns:2fr 1fr;gap:14px;}
-    .metric-wrap{position:relative;}
-    .metric-card{background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:16px;padding:22px 24px;box-shadow:0 1px 4px rgba(0,0,0,.05);transition:border-color .2s,box-shadow .2s;cursor:default;}
-    .metric-card:hover{border-color:rgba(26,103,42,.3);box-shadow:0 4px 20px rgba(26,103,42,.1);}
-    .metric-lbl{font-size:12px;color:#6b7280;margin-bottom:6px;}
-    .metric-val{font-size:28px;font-weight:900;font-family:'Expose',sans-serif;color:#154C20;line-height:1;margin-bottom:4px;}
-    .metric-sub{font-size:11px;color:#9ca3af;line-height:1.5;}
-    .desglose{position:absolute;top:calc(100% + 10px);left:0;right:0;background:#fff;border:1px solid rgba(0,0,0,.1);border-radius:14px;padding:16px 20px;box-shadow:0 10px 40px rgba(0,0,0,.13);z-index:30;opacity:0;pointer-events:none;transform:translateY(-8px);transition:opacity .2s,transform .2s;min-width:340px;}
-    .metric-wrap:hover .desglose{opacity:1;pointer-events:auto;transform:translateY(0);}
-    .desglose-titulo{font-size:10px;font-weight:700;letter-spacing:1.5px;color:#9ca3af;text-transform:uppercase;margin-bottom:12px;}
-    .desglose-fila{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid rgba(0,0,0,.04);}
-    .desglose-fila:last-of-type{border-bottom:none;}
-    .desglose-disc{font-size:13px;font-weight:600;color:#374151;flex:1;white-space:nowrap;}
-    .desglose-barra-wrap{width:70px;background:#f3f4f6;border-radius:4px;height:5px;overflow:hidden;flex-shrink:0;}
-    .desglose-barra{height:5px;border-radius:4px;background:#1a672a;}
-    .desglose-monto{font-size:13px;font-weight:700;color:#dc2626;text-align:right;min-width:90px;}
-    .desglose-total{margin-top:10px;padding-top:10px;border-top:2px solid rgba(0,0,0,.07);display:flex;justify-content:space-between;align-items:center;}
-    .desglose-total-lbl{font-size:12px;font-weight:700;color:#374151;}
-    .desglose-total-val{font-size:15px;font-weight:900;color:#dc2626;font-family:'Expose',sans-serif;}
     .divider-mini{height:1px;background:rgba(0,0,0,.06);margin:28px 0;}
+
+    /* ── Aging cards ── */
+    .aging-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:24px;}
+    .aging-card{background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:12px;padding:14px 16px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.04);}
+    .ac-num{font-size:26px;font-weight:900;font-family:'Expose',sans-serif;line-height:1;}
+    .ac-pct{font-size:12px;font-weight:700;margin-top:3px;}
+    .ac-lbl{font-size:9px;color:#9ca3af;margin-top:5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;}
+
+    /* ── Desglose fijo ── */
+    .desglose-panel{background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:16px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.05);}
+    .dsg-header{display:grid;grid-template-columns:2fr 1.4fr 70px 110px;gap:8px;padding:8px 20px;background:#f8fafb;border-bottom:1px solid rgba(0,0,0,.06);font-size:10px;font-weight:700;letter-spacing:1px;color:#9ca3af;text-transform:uppercase;align-items:center;}
+    .dsg-disc-row{display:grid;grid-template-columns:2fr 1.4fr 70px 110px;gap:8px;padding:11px 20px;border-bottom:1px solid rgba(0,0,0,.04);cursor:pointer;align-items:center;transition:background .12s;user-select:none;}
+    .dsg-disc-row:hover{background:#f0fdf4;}
+    .dsg-cats-wrap{background:#fafafa;border-bottom:1px solid rgba(0,0,0,.04);}
+    .dsg-cat-row{display:grid;grid-template-columns:2fr 1.4fr 70px 110px;gap:8px;padding:7px 20px 7px 36px;border-bottom:1px solid rgba(0,0,0,.03);align-items:center;}
+    .dsg-cat-row:last-child{border-bottom:none;}
+    .dsg-total-row{display:grid;grid-template-columns:2fr 1.4fr 70px 110px;gap:8px;padding:11px 20px;background:#f8fafb;border-top:2px solid rgba(0,0,0,.07);align-items:center;}
+    .dsg-col-disc{font-size:13px;font-weight:600;color:#374151;display:flex;align-items:center;gap:6px;min-width:0;}
+    .dsg-cat-name{font-size:12px;color:#6b7280;font-weight:500;}
+    .dsg-emoji{font-size:15px;flex-shrink:0;}
+    .dsg-col-stats{display:flex;align-items:center;gap:5px;flex-wrap:nowrap;}
+    .dsg-pct-bar{width:44px;background:#f3f4f6;border-radius:4px;height:5px;overflow:hidden;flex-shrink:0;}
+    .dsg-pct-fill{height:5px;border-radius:4px;background:#1a672a;}
+    .pct-ok{font-size:11px;font-weight:700;color:#16a34a;white-space:nowrap;}
+    .pct-debe{font-size:11px;color:#dc2626;white-space:nowrap;}
+    .dsg-col-num{font-size:12px;text-align:center;}
+    .dsg-col-monto{font-size:13px;font-weight:700;color:#dc2626;text-align:right;white-space:nowrap;}
+    .dsg-chevron{font-size:10px;color:#9ca3af;margin-left:auto;flex-shrink:0;transition:transform .15s;}
+    .dsg-chevron.open{transform:rotate(90deg);}
   </style>
 </head>
 <body class="font-sans antialiased">
@@ -239,6 +253,9 @@
       </svg>
       Socios Asistencia
     </a>
+    <div class="nav-subitems" id="disc-nav-subitems" style="display:none;">
+      <!-- generado dinámicamente al cargar datos -->
+    </div>
 
     <div class="nav-parent">
       <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
@@ -346,38 +363,23 @@
 
   <div class="divider-mini"></div>
 
-  <!-- MÉTRICAS GLOBALES -->
+  <!-- MORA POR ANTIGÜEDAD (de columna MESES) -->
   <div class="metrics-head">
-    <div class="metrics-title">Deuda pendiente a cobrar</div>
-    <div class="metrics-date">Datos en tiempo real desde Drive</div>
+    <div class="metrics-title">Mora por antigüedad</div>
+    <div class="metrics-date" id="reporte-aging">Datos en tiempo real desde Drive</div>
+  </div>
+  <div class="aging-grid" id="aging-grid">
+    <!-- generado en JS -->
+    <div class="aging-card" style="border-top:3px solid #e5e7eb"><div class="ac-num" style="color:#9ca3af">—</div><div class="ac-lbl">Cargando</div></div>
   </div>
 
-  <div class="metric-grid">
-
-    <div class="metric-wrap">
-      <div class="metric-card">
-        <div class="metric-lbl">Deuda total del club</div>
-        <div class="metric-val" id="total-deuda" style="color:#9ca3af;font-size:20px;">Calculando…</div>
-        <div class="metric-sub" style="margin-top:6px;">Pasá el cursor para ver el desglose por disciplina →</div>
-      </div>
-      <div class="desglose">
-        <div class="desglose-titulo">Desglose por disciplina</div>
-        <div id="desglose-filas"><div style="color:#9ca3af;font-size:13px;padding:8px 0;">Cargando…</div></div>
-        <div class="desglose-total">
-          <div class="desglose-total-lbl">Total</div>
-          <div class="desglose-total-val" id="desglose-total-val">—</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="metric-wrap">
-      <div class="metric-card" style="height:100%;">
-        <div class="metric-lbl">Deudores activos</div>
-        <div class="metric-val" id="total-deudores" style="color:#9ca3af;font-size:20px;">—</div>
-        <div class="metric-sub" id="deudores-sub" style="margin-top:6px;">En 6 disciplinas</div>
-      </div>
-    </div>
-
+  <!-- DEUDA PENDIENTE — desglose fijo -->
+  <div class="metrics-head" style="margin-top:4px;">
+    <div class="metrics-title">Deuda pendiente a cobrar</div>
+    <div class="metrics-date">Hacé clic en una disciplina para ver sus categorías</div>
+  </div>
+  <div class="desglose-panel" id="desglose-panel">
+    <div style="padding:32px;text-align:center;color:#9ca3af;font-size:13px;">Cargando…</div>
   </div>
 
 </main>
@@ -469,6 +471,8 @@
       else if (u.includes('SOCIA') || u.includes('SOCIO')) c.socio = i;
       else if (u === 'MESES') c.meses = i;
       else if (u === 'TOTAL') c.total = i;
+      else if (u.includes('BECAD') || u === 'BECA') c.becado = i;
+      else if (u.includes('OBSERV') || u === 'OBS') c.obs = i;
     });
     if (c.nombre   === undefined) c.nombre   = 1;
     if (c.cat      === undefined) c.cat      = c.nombre + 1;
@@ -488,6 +492,12 @@
   }
 
   function normDNI(v) { return String(v || '').replace(/[.\s\-]/g, '').trim(); }
+
+  function parsearMesesDeuda(v) {
+    if (!v || /al.?d[ií]a/i.test(v)) return 0;
+    const match = String(v).match(/\d+/);
+    return match ? parseInt(match[0]) : (v.trim().length > 0 ? 1 : 0);
+  }
 
   async function fetchLatestTab(id, tabs) {
     for (const tab of tabs) {
@@ -532,6 +542,10 @@
         const cat      = (cols.cat      !== undefined ? f[cols.cat]      || '' : '').trim();
         const dni      = normDNI(cols.dni      !== undefined ? f[cols.dni]      : '');
         const fechaNac = (cols.fechaNac !== undefined ? f[cols.fechaNac] || '' : '').trim();
+        const becado   = (cols.becado   !== undefined ? f[cols.becado]   || '' : '').trim();
+        const obs      = (cols.obs      !== undefined ? f[cols.obs]      || '' : '').trim();
+        const mesesTxt = (cols.meses    !== undefined ? f[cols.meses]    || '' : '').trim();
+        const mesesDeuda = parsearMesesDeuda(mesesTxt);
 
         /* Capturar todas las columnas del rango */
         const mesesVals = [];
@@ -553,7 +567,7 @@
         }
         const alDia = total === 0;
 
-        socios.push({ nombre, cat, dni, fechaNac, mesesVals, total, alDia, disc: sh.nombre, emoji: sh.emoji });
+        socios.push({ nombre, cat, dni, fechaNac, becado, obs, mesesDeuda, mesesVals, total, alDia, disc: sh.nombre, emoji: sh.emoji });
       }
 
       const deuda      = socios.reduce((s, x) => s + x.total, 0);
@@ -586,6 +600,22 @@
     document.getElementById('reporte-mes').textContent = 'Pestaña: ' + tabs;
     renderDiscTabs();
     renderMetricasGlobales();
+    /* Poblar subitems de disciplinas en el sidebar */
+    const nav = document.getElementById('disc-nav-subitems');
+    if (nav) {
+      nav.style.display = '';
+      nav.innerHTML = statsPorDisc.map(d =>
+        `<a class="nav-subitem" href="#" onclick="event.preventDefault();seleccionarDiscYScroll('${d.disc.replace(/'/g,"\\'")}')">
+          <span style="font-size:13px;">${d.emoji}</span>
+          ${d.disc.replace(' Masculino',' M.').replace(' Femenino',' F.')}
+        </a>`
+      ).join('');
+    }
+  }
+
+  function seleccionarDiscYScroll(disc) {
+    seleccionarDisc(disc);
+    document.getElementById('disc-tabs-pill').scrollIntoView({ behavior:'smooth', block:'start' });
   }
 
   /* ─── DISC TABS ─── */
@@ -757,7 +787,9 @@
       ? lista.map((s, idx) => {
           const condVal  = s.mesesVals[0]?.valor || '';
           const noSocia  = /no.?soci/i.test(condVal);
-          const condBadge = `<span class="${noSocia ? 'badge-no-socia' : 'badge-socia'}">${condVal || '—'}</span>`;
+          const esBecado = /s[ií]/i.test(s.becado || '');
+          const condBadge = `<span class="${noSocia ? 'badge-no-socia' : 'badge-socia'}">${condVal || '—'}</span>`
+            + (esBecado ? `<span class="badge-becado">BECADO</span>` : '');
 
           const ultMes = getUltMes(s);
           const isP    = ultMes && (normStr(ultMes.valor) === 'P' || normStr(ultMes.valor) === 'PRESENTE');
@@ -772,16 +804,19 @@
             ? `<button class="btn-deuda" onclick="abrirModalDeuda(${idx})">Detalle</button>`
             : '';
 
-          /* DNI y fecha de nacimiento en la celda de nombre */
+          /* DNI, fecha de nacimiento y observación */
           const dniLine = s.dni
             ? `<span style="font-size:10px;color:#9ca3af;font-weight:400;">DNI ${s.dni}</span>` : '';
           const nacLine = s.fechaNac
             ? `<span style="font-size:10px;color:#9ca3af;font-weight:400;"> · F.Nac ${s.fechaNac}</span>` : '';
+          const obsLine = s.obs
+            ? `<div class="obs-text">${s.obs}</div>` : '';
 
           return `<tr>
             <td class="td-nombre">
               ${s.nombre}
               ${(dniLine || nacLine) ? `<span style="display:block;margin-top:2px;">${dniLine}${nacLine}</span>` : ''}
+              ${obsLine}
             </td>
             <td>${condBadge}</td>
             <td>
@@ -845,34 +880,96 @@
 
   /* ─── Métricas globales ─── */
   function renderMetricasGlobales() {
+    /* ── 1. AGING (de columna MESES) ── */
+    const grupos = { 0:0, 1:0, 2:0, 3:0, 4:0 };
+    sociosTodos.forEach(s => {
+      const m = Math.min(s.mesesDeuda || 0, 4);
+      grupos[m] = (grupos[m] || 0) + 1;
+    });
+    const totalSoc = sociosTodos.length || 1;
+    const agingLabels = ['AL DÍA','1 MES','2 MESES','3 MESES','4+ MESES'];
+    const agingColors = ['#16a34a','#f59e0b','#f97316','#ef4444','#991b1b'];
+    document.getElementById('aging-grid').innerHTML = [0,1,2,3,4].map(k => {
+      const n   = grupos[k] || 0;
+      const pct = Math.round(n / totalSoc * 100);
+      return `<div class="aging-card" style="border-top:3px solid ${agingColors[k]}">
+        <div class="ac-num" style="color:${agingColors[k]}">${n}</div>
+        <div class="ac-pct" style="color:${agingColors[k]}">${pct}%</div>
+        <div class="ac-lbl">${agingLabels[k]}</div>
+      </div>`;
+    }).join('');
+
+    /* ── 2. DESGLOSE FIJO por disciplina (expandible a categorías) ── */
     const totalDeuda    = statsPorDisc.reduce((s, x) => s + x.deuda, 0);
+    const totalAlDia    = statsPorDisc.reduce((s, x) => s + x.alDia, 0);
     const totalDeudores = statsPorDisc.reduce((s, x) => s + x.deudores, 0);
+    const totalTotal    = statsPorDisc.reduce((s, x) => s + x.total, 0);
+    const pctGlobal     = totalTotal ? Math.round(totalAlDia / totalTotal * 100) : 0;
 
-    const elDeuda = document.getElementById('total-deuda');
-    elDeuda.style.fontSize = '28px'; elDeuda.style.color = '#154C20';
-    elDeuda.textContent = fmtPeso(totalDeuda);
-    document.getElementById('desglose-total-val').textContent = fmtPeso(totalDeuda);
+    document.getElementById('desglose-panel').innerHTML = `
+      <div class="dsg-header">
+        <span>Disciplina / Categoría</span>
+        <span>% Al día</span>
+        <span style="text-align:center;">Deben</span>
+        <span style="text-align:right;">Deuda total</span>
+      </div>
+      ${statsPorDisc.map((d, di) => {
+        const pct = d.total ? Math.round(d.alDia / d.total * 100) : 0;
+        const cats = [...new Set(d.socios.map(s => s.cat).filter(c => c))].sort();
+        const catsHtml = cats.map(cat => {
+          const sc = d.socios.filter(s => s.cat === cat);
+          const okC = sc.filter(s => s.alDia).length;
+          const debeC = sc.length - okC;
+          const deudaC = sc.reduce((a, s) => a + s.total, 0);
+          const pCat = sc.length ? Math.round(okC / sc.length * 100) : 0;
+          return `<div class="dsg-cat-row">
+            <span class="dsg-cat-name">↳ ${cat} <span style="color:#9ca3af;font-weight:400;">(${sc.length})</span></span>
+            <span class="dsg-col-stats">
+              <div class="dsg-pct-bar"><div class="dsg-pct-fill" style="width:${pCat}%"></div></div>
+              <span class="pct-ok">${pCat}%</span>
+              <span class="pct-debe">· ${100-pCat}%</span>
+            </span>
+            <span class="dsg-col-num" style="color:#dc2626;font-weight:700;">${debeC}</span>
+            <span class="dsg-col-monto" style="font-size:12px;">${deudaC > 0 ? fmtPeso(deudaC) : '<span style="color:#16a34a;font-weight:600;">AL DÍA</span>'}</span>
+          </div>`;
+        }).join('');
+        return `
+          <div class="dsg-disc-row" onclick="toggleDiscDesglose(${di})">
+            <span class="dsg-col-disc">
+              <span class="dsg-emoji">${d.emoji}</span>
+              <span>${d.disc}</span>
+              <span style="font-size:11px;color:#9ca3af;font-weight:400;">(${d.total})</span>
+              <span class="dsg-chevron" id="dsg-chev-${di}">▶</span>
+            </span>
+            <span class="dsg-col-stats">
+              <div class="dsg-pct-bar"><div class="dsg-pct-fill" style="width:${pct}%"></div></div>
+              <span class="pct-ok">${pct}%</span>
+              <span class="pct-debe">· ${100-pct}%</span>
+            </span>
+            <span class="dsg-col-num" style="color:#dc2626;font-weight:700;">${d.deudores}</span>
+            <span class="dsg-col-monto">${d.deuda > 0 ? fmtPeso(d.deuda) : '<span style="color:#16a34a;font-weight:600;">AL DÍA</span>'}</span>
+          </div>
+          <div class="dsg-cats-wrap" id="dsg-cats-${di}" style="display:none;">${catsHtml || '<div style="padding:10px 20px 10px 36px;font-size:12px;color:#9ca3af;">Sin categorías detectadas</div>'}</div>`;
+      }).join('')}
+      <div class="dsg-total-row">
+        <span class="dsg-col-disc" style="font-weight:700;color:#111827;font-size:13px;">TOTAL CLUB (${totalTotal} socios)</span>
+        <span class="dsg-col-stats">
+          <div class="dsg-pct-bar"><div class="dsg-pct-fill" style="width:${pctGlobal}%"></div></div>
+          <span class="pct-ok">${pctGlobal}%</span>
+          <span class="pct-debe">· ${100-pctGlobal}%</span>
+        </span>
+        <span class="dsg-col-num" style="color:#dc2626;font-weight:900;font-size:15px;">${totalDeudores}</span>
+        <span class="dsg-col-monto" style="font-size:15px;font-weight:900;">${fmtPeso(totalDeuda)}</span>
+      </div>`;
+  }
 
-    const elDeud = document.getElementById('total-deudores');
-    elDeud.style.fontSize = '28px'; elDeud.style.color = '#dc2626';
-    elDeud.textContent = totalDeudores;
-
-    const sub = statsPorDisc.filter(x => x.deudores > 0)
-      .map(x => `${x.emoji} ${x.disc.replace(' Masculino','M.').replace(' Femenino','F.')}: ${x.deudores}`)
-      .join(' · ');
-    document.getElementById('deudores-sub').textContent = sub || 'Sin deudores registrados';
-
-    const max = Math.max(...statsPorDisc.map(x => x.deuda), 1);
-    document.getElementById('desglose-filas').innerHTML = statsPorDisc
-      .filter(x => x.deuda > 0)
-      .sort((a, b) => b.deuda - a.deuda)
-      .map(x => `
-        <div class="desglose-fila">
-          <div class="desglose-disc">${x.emoji} ${x.disc}</div>
-          <div class="desglose-barra-wrap"><div class="desglose-barra" style="width:${Math.round(x.deuda / max * 100)}%"></div></div>
-          <div class="desglose-monto">${fmtPeso(x.deuda)}</div>
-        </div>`)
-      .join('') || '<div style="color:#9ca3af;font-size:13px;padding:8px 0;">Sin deuda registrada</div>';
+  function toggleDiscDesglose(di) {
+    const cats = document.getElementById(`dsg-cats-${di}`);
+    const chev = document.getElementById(`dsg-chev-${di}`);
+    if (!cats) return;
+    const open = cats.style.display !== 'none';
+    cats.style.display = open ? 'none' : 'block';
+    if (chev) chev.classList.toggle('open', !open);
   }
 
   /* ─── Búsqueda ─── */
