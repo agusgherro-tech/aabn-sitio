@@ -32,10 +32,9 @@
     @font-face{font-family:"Rag";src:url("fonts/Rag-Bold.woff2") format("woff2"),url("fonts/Rag-Bold.woff") format("woff");font-weight:700;font-display:swap;}
     @font-face{font-family:"Rag";src:url("fonts/Rag-Black.woff2") format("woff2"),url("fonts/Rag-Black.woff") format("woff");font-weight:900;font-display:swap;}
     *{box-sizing:border-box;margin:0;padding:0;}
-
     body{background:#f0fdf4;color:#111827;min-height:100vh;display:flex;}
 
-    /* ── Sidebar (idéntico a selector.html) ── */
+    /* ── Sidebar ── */
     #sidebar{width:240px;min-width:240px;background:#154C20;border-right:1px solid rgba(255,255,255,.07);display:flex;flex-direction:column;min-height:100vh;position:fixed;top:0;left:0;bottom:0;z-index:40;}
     .sidebar-logo{padding:20px 16px 16px;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:10px;}
     .sidebar-logo img{height:36px;width:auto;border-radius:8px;}
@@ -64,7 +63,6 @@
 
     /* ── Main ── */
     #main{margin-left:240px;flex:1;min-height:100vh;padding:40px 48px;}
-
     .welcome-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(26,103,42,.18);border:1px solid rgba(74,222,128,.25);color:#4ade80;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:5px 14px;border-radius:100px;margin-bottom:20px;}
 
     /* ── Buscador ── */
@@ -72,10 +70,10 @@
     .search-wrap:focus-within{border-color:#1a672a;box-shadow:0 2px 18px rgba(26,103,42,.12);}
     #search-input{flex:1;font-size:15px;font-family:'Rag',sans-serif;border:none;outline:none;color:#111827;background:transparent;}
     #search-input::placeholder{color:#9ca3af;}
-    .search-tag{font-size:11px;font-weight:700;letter-spacing:1px;background:#f0fdf4;border:1px solid rgba(26,103,42,.2);color:#1a672a;padding:4px 10px;border-radius:100px;}
+    .search-tag{font-size:11px;font-weight:700;letter-spacing:1px;background:#f0fdf4;border:1px solid rgba(26,103,42,.2);color:#1a672a;padding:4px 10px;border-radius:100px;white-space:nowrap;}
     #btn-clear{display:none;background:none;border:none;color:#9ca3af;cursor:pointer;padding:4px;line-height:0;}
 
-    /* Resultados */
+    /* ── Resultados ── */
     #search-results{background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:14px;margin-bottom:32px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.06);display:none;}
     .res-header{padding:10px 20px;background:#f8fafb;border-bottom:1px solid rgba(0,0,0,.06);font-size:10px;font-weight:700;letter-spacing:1.5px;color:#9ca3af;text-transform:uppercase;}
     .res-row{display:flex;align-items:center;gap:14px;padding:11px 20px;border-bottom:1px solid rgba(0,0,0,.04);cursor:default;transition:background .1s;}
@@ -83,41 +81,44 @@
     .res-row:hover{background:#f0fdf4;}
     .res-avatar{width:34px;height:34px;background:#1a672a;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;}
     .res-name{font-size:14px;font-weight:600;color:#111827;}
-    .res-meta{font-size:12px;color:#6b7280;margin-top:1px;}
-    .res-tag{margin-left:auto;flex-shrink:0;font-size:11px;font-weight:700;background:#f0fdf4;color:#1a672a;border:1px solid rgba(26,103,42,.2);padding:3px 10px;border-radius:8px;}
+    .res-meta{font-size:12px;color:#6b7280;margin-top:2px;}
     .res-empty{padding:28px;text-align:center;color:#9ca3af;font-size:13px;line-height:1.6;}
+    .res-estado{flex-shrink:0;font-size:11px;font-weight:700;padding:4px 10px;border-radius:8px;letter-spacing:.5px;}
+    .res-ok{background:#f0fdf4;color:#16a34a;border:1px solid rgba(22,163,74,.2);}
+    .res-debe{background:#fef2f2;color:#dc2626;border:1px solid rgba(220,38,38,.2);}
+    .res-cat{display:inline-block;font-size:10px;font-weight:700;background:#eff6ff;color:#1d4ed8;border:1px solid rgba(29,78,216,.18);padding:1px 6px;border-radius:6px;margin-right:4px;}
 
-    /* ── Disciplinas ── */
-    .section-label{font-size:10px;font-weight:700;letter-spacing:2px;color:#6b7280;text-transform:uppercase;margin-bottom:12px;}
-    .disc-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:36px;}
-    .disc-btn{background:#fff;border:1.5px solid rgba(0,0,0,.07);border-radius:14px;padding:18px 10px;text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;transition:all .2s;text-align:center;}
-    .disc-btn:hover{border-color:#1a672a;background:#f0fdf4;transform:translateY(-3px);box-shadow:0 8px 24px rgba(26,103,42,.12);}
-    .disc-icon{font-size:1.9rem;line-height:1;}
-    .disc-name{font-size:12px;font-weight:700;color:#154C20;line-height:1.2;}
-    .disc-count{font-size:11px;color:#6b7280;}
+    /* ── Disc report cards ── */
+    .disc-report-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:36px;}
+    .disc-report-card{background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:16px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.05);transition:border-color .2s,box-shadow .2s;}
+    .disc-report-card:hover{border-color:rgba(26,103,42,.25);box-shadow:0 4px 16px rgba(26,103,42,.08);}
+    .disc-report-card.skeleton{height:162px;background:linear-gradient(90deg,#f3f4f6 25%,#e8eaed 50%,#f3f4f6 75%);background-size:400% 100%;animation:shimmer 1.4s infinite;border:1px solid #e5e7eb;}
+    @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+    .drc-header{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+    .drc-emoji{font-size:1.5rem;line-height:1;}
+    .drc-nombre{font-weight:700;font-size:13px;color:#154C20;flex:1;}
+    .drc-tab{font-size:10px;color:#9ca3af;background:#f3f4f6;padding:2px 8px;border-radius:100px;}
+    .drc-stats{display:flex;gap:8px;margin-bottom:10px;}
+    .drc-stat{display:flex;flex-direction:column;align-items:center;flex:1;background:#f9fafb;border-radius:8px;padding:7px 4px;}
+    .drc-num{font-size:20px;font-weight:900;font-family:'Expose',sans-serif;line-height:1;}
+    .drc-lbl{font-size:9px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:#9ca3af;margin-top:2px;}
+    .drc-progress-wrap{height:5px;background:#f3f4f6;border-radius:4px;overflow:hidden;margin-bottom:4px;}
+    .drc-progress-bar{height:5px;background:#1a672a;border-radius:4px;}
+    .drc-pct{font-size:10px;color:#6b7280;margin-bottom:6px;}
+    .drc-deuda{font-size:13px;font-weight:700;}
 
     /* ── Métricas ── */
     .metrics-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
     .metrics-title{font-size:10px;font-weight:700;letter-spacing:2px;color:#6b7280;text-transform:uppercase;}
     .metrics-date{font-size:11px;color:#9ca3af;}
-    .metric-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:14px;}
-
-    /* Tarjeta con hover */
+    .metric-grid{display:grid;grid-template-columns:2fr 1fr;gap:14px;}
     .metric-wrap{position:relative;}
     .metric-card{background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:16px;padding:22px 24px;box-shadow:0 1px 4px rgba(0,0,0,.05);transition:border-color .2s,box-shadow .2s;cursor:default;}
     .metric-card:hover{border-color:rgba(26,103,42,.3);box-shadow:0 4px 20px rgba(26,103,42,.1);}
     .metric-lbl{font-size:12px;color:#6b7280;margin-bottom:6px;}
     .metric-val{font-size:28px;font-weight:900;font-family:'Expose',sans-serif;color:#154C20;line-height:1;margin-bottom:4px;}
-    .metric-sub{font-size:11px;color:#9ca3af;}
-
-    /* Desglose hover */
-    .desglose{
-      position:absolute;top:calc(100% + 10px);left:0;right:0;
-      background:#fff;border:1px solid rgba(0,0,0,.1);border-radius:14px;
-      padding:16px 20px;box-shadow:0 10px 40px rgba(0,0,0,.13);z-index:30;
-      opacity:0;pointer-events:none;transform:translateY(-8px);
-      transition:opacity .2s,transform .2s;min-width:340px;
-    }
+    .metric-sub{font-size:11px;color:#9ca3af;line-height:1.5;}
+    .desglose{position:absolute;top:calc(100% + 10px);left:0;right:0;background:#fff;border:1px solid rgba(0,0,0,.1);border-radius:14px;padding:16px 20px;box-shadow:0 10px 40px rgba(0,0,0,.13);z-index:30;opacity:0;pointer-events:none;transform:translateY(-8px);transition:opacity .2s,transform .2s;min-width:340px;}
     .metric-wrap:hover .desglose{opacity:1;pointer-events:auto;transform:translateY(0);}
     .desglose-titulo{font-size:10px;font-weight:700;letter-spacing:1.5px;color:#9ca3af;text-transform:uppercase;margin-bottom:12px;}
     .desglose-fila{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid rgba(0,0,0,.04);}
@@ -129,7 +130,6 @@
     .desglose-total{margin-top:10px;padding-top:10px;border-top:2px solid rgba(0,0,0,.07);display:flex;justify-content:space-between;align-items:center;}
     .desglose-total-lbl{font-size:12px;font-weight:700;color:#374151;}
     .desglose-total-val{font-size:15px;font-weight:900;color:#dc2626;font-family:'Expose',sans-serif;}
-
     .divider-mini{height:1px;background:rgba(0,0,0,.06);margin:28px 0;}
   </style>
 </head>
@@ -228,8 +228,8 @@
   <h1 class="font-expose font-black mb-1" style="font-size:2.4rem;letter-spacing:-1px;color:#154C20;">
     SOCIOS — ASISTENCIAS
   </h1>
-  <p class="text-sm mb-8" style="color:#1a672a;" id="bienvenida">
-    Buscá un socio por nombre o DNI, o accedé directamente a una disciplina.
+  <p class="text-sm mb-6" style="color:#6b7280;">
+    Buscá por nombre o DNI. Los datos se cargan en tiempo real desde las planillas de Drive.
   </p>
 
   <!-- BUSCADOR -->
@@ -238,7 +238,7 @@
       <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
     </svg>
     <input id="search-input" type="text" placeholder="Nombre y apellido o DNI…" oninput="buscarSocio(this.value)" autocomplete="off">
-    <span class="search-tag">DNI · Nombre</span>
+    <span class="search-tag" id="search-tag-status">Cargando…</span>
     <button id="btn-clear" onclick="limpiarBusqueda()">
       <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
@@ -252,108 +252,54 @@
     <div id="result-list"></div>
   </div>
 
-  <!-- DISCIPLINAS -->
-  <div class="section-label">Disciplinas</div>
-  <div class="disc-grid">
-    <a href="https://docs.google.com/spreadsheets/d/1Y6v5HeQxe-OtRgqoI6k473I_8hxFQPfT2SHatKXMHRE/edit" target="_blank" class="disc-btn">
-      <div class="disc-icon">⚽</div>
-      <div class="disc-name">Fútbol Masculino</div>
-      <div class="disc-count">192 alumnos</div>
-    </a>
-    <a href="https://docs.google.com/spreadsheets/d/1E3u_GFRI4J5AqdTXsETiUXKf_CRnttT5P5TIKOalPZE/edit" target="_blank" class="disc-btn">
-      <div class="disc-icon">⚽</div>
-      <div class="disc-name">Fútbol Femenino</div>
-      <div class="disc-count">~80 alumnos</div>
-    </a>
-    <a href="https://docs.google.com/spreadsheets/d/1yrGvGBjh3j-qZvBwXmUZoRIfZgznoejLjs9q2uS21Bg/edit" target="_blank" class="disc-btn">
-      <div class="disc-icon">🏀</div>
-      <div class="disc-name">Básquet Masculino</div>
-      <div class="disc-count">~120 alumnos</div>
-    </a>
-    <a href="https://docs.google.com/spreadsheets/d/160RkywlXeVOZSh8H4HX1cIDmIJ_yPCjR2dmMSZ8BVf8/edit" target="_blank" class="disc-btn">
-      <div class="disc-icon">🏀</div>
-      <div class="disc-name">Básquet Femenino</div>
-      <div class="disc-count">86 alumnos</div>
-    </a>
-    <a href="https://docs.google.com/spreadsheets/d/1ugDHlZWeRaB_2YNr0wp7hi85MKbGkVzDKfJ8ncK0p74/edit" target="_blank" class="disc-btn">
-      <div class="disc-icon">🤸</div>
-      <div class="disc-name">Gimnasia</div>
-      <div class="disc-count">130 alumnos</div>
-    </a>
-    <a href="https://docs.google.com/spreadsheets/d/1TkL0PdhjSO0vj-MxFMg7NGpsl9tf5ZYDqJlQvWLME_A/edit" target="_blank" class="disc-btn">
-      <div class="disc-icon">⛸️</div>
-      <div class="disc-name">Patín</div>
-      <div class="disc-count">~90 alumnos</div>
-    </a>
+  <div class="divider-mini"></div>
+
+  <!-- INFORME POR DISCIPLINA -->
+  <div class="metrics-head" style="margin-bottom:14px;">
+    <div class="metrics-title">Informe por disciplina</div>
+    <div class="metrics-date" id="reporte-mes">Cargando planillas…</div>
+  </div>
+
+  <div id="disc-report-grid" class="disc-report-grid">
+    <div class="disc-report-card skeleton"></div>
+    <div class="disc-report-card skeleton"></div>
+    <div class="disc-report-card skeleton"></div>
+    <div class="disc-report-card skeleton"></div>
+    <div class="disc-report-card skeleton"></div>
+    <div class="disc-report-card skeleton"></div>
   </div>
 
   <div class="divider-mini"></div>
 
-  <!-- MÉTRICAS DE DEUDA -->
+  <!-- MÉTRICAS GLOBALES -->
   <div class="metrics-head">
     <div class="metrics-title">Deuda pendiente a cobrar</div>
-    <div class="metrics-date">Datos al 30/04/2026</div>
+    <div class="metrics-date">Datos en tiempo real desde Drive</div>
   </div>
 
   <div class="metric-grid">
 
-    <!-- Deuda total — con desglose al hover -->
-    <div class="metric-wrap" style="grid-column:span 2;">
+    <div class="metric-wrap">
       <div class="metric-card">
         <div class="metric-lbl">Deuda total del club</div>
-        <div class="metric-val">$10.702.000</div>
+        <div class="metric-val" id="total-deuda" style="color:#9ca3af;font-size:20px;">Calculando…</div>
         <div class="metric-sub" style="margin-top:6px;">Pasá el cursor para ver el desglose por disciplina →</div>
       </div>
       <div class="desglose">
         <div class="desglose-titulo">Desglose por disciplina</div>
-
-        <div class="desglose-fila">
-          <div class="desglose-disc">⚽ Fútbol Masculino</div>
-          <div class="desglose-barra-wrap"><div class="desglose-barra" style="width:100%;"></div></div>
-          <div class="desglose-monto">$4.860.000</div>
-        </div>
-        <div class="desglose-fila">
-          <div class="desglose-disc">🤸 Gimnasia</div>
-          <div class="desglose-barra-wrap"><div class="desglose-barra" style="width:63%;"></div></div>
-          <div class="desglose-monto">$3.047.000</div>
-        </div>
-        <div class="desglose-fila">
-          <div class="desglose-disc">⛸️ Patín</div>
-          <div class="desglose-barra-wrap"><div class="desglose-barra" style="width:24%;"></div></div>
-          <div class="desglose-monto">$1.185.000</div>
-        </div>
-        <div class="desglose-fila">
-          <div class="desglose-disc">🏀 Básquet Femenino</div>
-          <div class="desglose-barra-wrap"><div class="desglose-barra" style="width:16%;"></div></div>
-          <div class="desglose-monto">$780.000</div>
-        </div>
-        <div class="desglose-fila">
-          <div class="desglose-disc">⚽ Fútbol Femenino</div>
-          <div class="desglose-barra-wrap"><div class="desglose-barra" style="width:10%;"></div></div>
-          <div class="desglose-monto">$480.000</div>
-        </div>
-        <div class="desglose-fila">
-          <div class="desglose-disc">🏀 Básquet Masculino</div>
-          <div class="desglose-barra-wrap"><div class="desglose-barra" style="width:7%;"></div></div>
-          <div class="desglose-monto">$350.000</div>
-        </div>
+        <div id="desglose-filas"><div style="color:#9ca3af;font-size:13px;padding:8px 0;">Cargando…</div></div>
         <div class="desglose-total">
           <div class="desglose-total-lbl">Total</div>
-          <div class="desglose-total-val">$10.702.000</div>
+          <div class="desglose-total-val" id="desglose-total-val">—</div>
         </div>
       </div>
     </div>
 
-    <!-- Deudores -->
     <div class="metric-wrap">
       <div class="metric-card" style="height:100%;">
         <div class="metric-lbl">Deudores activos</div>
-        <div class="metric-val" style="color:#dc2626;">~148</div>
-        <div class="metric-sub" style="margin-top:6px;">
-          En 6 disciplinas<br>
-          Fútbol Masc: 54 · Gimn: 26 · Patín: 17<br>
-          Básq. Fem: 26 · Fútbol Fem: 15 · Básq. Masc: 10
-        </div>
+        <div class="metric-val" id="total-deudores" style="color:#9ca3af;font-size:20px;">—</div>
+        <div class="metric-sub" id="deudores-sub" style="margin-top:6px;">En 6 disciplinas</div>
       </div>
     </div>
 
@@ -362,34 +308,28 @@
 </main>
 
 <script>
-  /* Usuario */
-  const a = JSON.parse(sessionStorage.getItem('admin') || 'null');
-  if (a) {
-    document.getElementById('user-nombre').textContent = a.nombre;
-    document.getElementById('user-rol').textContent    = a.rol;
-    document.getElementById('user-avatar').textContent = a.nombre.charAt(0).toUpperCase();
-    document.getElementById('bienvenida').textContent  = `Buscá un socio o accedé a una disciplina.`;
+  /* ── Auth ── */
+  const _admin = JSON.parse(sessionStorage.getItem('admin') || 'null');
+  if (_admin) {
+    document.getElementById('user-nombre').textContent = _admin.nombre;
+    document.getElementById('user-rol').textContent    = _admin.rol;
+    document.getElementById('user-avatar').textContent = _admin.nombre.charAt(0).toUpperCase();
   }
-  function cerrarSesion() {
-    sessionStorage.removeItem('admin');
-    window.location.href = 'login.html';
-  }
+  function cerrarSesion() { sessionStorage.removeItem('admin'); window.location.href = 'login.html'; }
 
-  /* ── Búsqueda dinámica (requiere que los Sheets sean "Acceso público") ── */
+  /* ── Config sheets ── */
   const SHEETS = [
-    { nombre:'Fútbol Masc.',  emoji:'⚽', id:'1Y6v5HeQxe-OtRgqoI6k473I_8hxFQPfT2SHatKXMHRE' },
-    { nombre:'Fútbol Fem.',   emoji:'⚽', id:'1E3u_GFRI4J5AqdTXsETiUXKf_CRnttT5P5TIKOalPZE' },
-    { nombre:'Básquet Masc.', emoji:'🏀', id:'1yrGvGBjh3j-qZvBwXmUZoRIfZgznoejLjs9q2uS21Bg' },
-    { nombre:'Básquet Fem.',  emoji:'🏀', id:'160RkywlXeVOZSh8H4HX1cIDmIJ_yPCjR2dmMSZ8BVf8' },
-    { nombre:'Gimnasia',      emoji:'🤸', id:'1ugDHlZWeRaB_2YNr0wp7hi85MKbGkVzDKfJ8ncK0p74' },
-    { nombre:'Patín',         emoji:'⛸️', id:'1TkL0PdhjSO0vj-MxFMg7NGpsl9tf5ZYDqJlQvWLME_A' },
+    { nombre:'Fútbol Masculino', emoji:'⚽', id:'1Y6v5HeQxe-OtRgqoI6k473I_8hxFQPfT2SHatKXMHRE', tabs:['04/26','03/26','02/26'] },
+    { nombre:'Fútbol Femenino',  emoji:'⚽', id:'1E3u_GFRI4J5AqdTXsETiUXKf_CRnttT5P5TIKOalPZE', tabs:['04/26','03/26','02/26'] },
+    { nombre:'Básquet Masculino',emoji:'🏀', id:'1yrGvGBjh3j-qZvBwXmUZoRIfZgznoejLjs9q2uS21Bg', tabs:['04/26','03/26','02/26','BASQUET AL 20/2'] },
+    { nombre:'Básquet Femenino', emoji:'🏀', id:'160RkywlXeVOZSh8H4HX1cIDmIJ_yPCjR2dmMSZ8BVf8', tabs:['04/26','03/26','02/26'] },
+    { nombre:'Gimnasia',         emoji:'🤸', id:'1ugDHlZWeRaB_2YNr0wp7hi85MKbGkVzDKfJ8ncK0p74', tabs:['04/26','03/26','02/26'] },
+    { nombre:'Patín',            emoji:'⛸️', id:'1TkL0PdhjSO0vj-MxFMg7NGpsl9tf5ZYDqJlQvWLME_A', tabs:['04/26','03/26','02/26'] },
   ];
 
-  let socios = [];
-  let cargado = false;
-  let cargando = false;
+  let sociosTodos = [], statsPorDisc = [], cargado = false, cargando = false;
 
-  /* Parsea CSV exportado por Google Sheets */
+  /* ── CSV parser ── */
   function parsearCSV(txt) {
     const filas = [];
     let dentro = false, campo = '', fila = [];
@@ -409,26 +349,174 @@
     return filas;
   }
 
+  function encontrarHeader(filas) {
+    for (let i = 0; i < Math.min(filas.length, 8); i++)
+      if (filas[i].some(c => c.toUpperCase().includes('NOMBRE') && c.toUpperCase().includes('APELLIDO'))) return i;
+    return -1;
+  }
+
+  function normStr(s) {
+    return String(s || '').toUpperCase()
+      .replace(/[ÁÀÂÄ]/g,'A').replace(/[ÉÈÊË]/g,'E')
+      .replace(/[ÍÌÎÏ]/g,'I').replace(/[ÓÒÔÖ]/g,'O').replace(/[ÚÙÛÜ]/g,'U').trim();
+  }
+
+  function detectarCols(hdr) {
+    const c = {};
+    hdr.forEach((h, i) => {
+      const u = normStr(h);
+      if (u.includes('NOMBRE') && u.includes('APELLIDO')) c.nombre = i;
+      else if (u === 'CATEGORIA' || u === 'CATEGORÍA') c.cat = i;
+      else if (u === 'DNI') c.dni = i;
+      else if (u.includes('SOCIA') || u.includes('SOCIO')) c.socio = i;
+      else if (u === 'MESES') c.meses = i;
+      else if (u === 'TOTAL') c.total = i;
+    });
+    if (c.nombre === undefined) c.nombre = 1;
+    if (c.cat    === undefined) c.cat    = 2;
+    if (c.dni    === undefined) c.dni    = 4;
+    return c;
+  }
+
+  function parsearMonto(v) {
+    if (!v) return 0;
+    /* Formato argentino: 204.380 = 204380 pesos (punto como separador de miles) */
+    const s = String(v).replace(/[$\s€]/g, '').replace(/\./g, '').replace(',', '.');
+    const n = parseFloat(s);
+    return isNaN(n) ? 0 : n;
+  }
+
+  function normDNI(v) { return String(v || '').replace(/[.\s\-]/g, '').trim(); }
+
+  async function fetchLatestTab(id, tabs) {
+    for (const tab of tabs) {
+      try {
+        const url = `https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(tab)}`;
+        const r = await fetch(url, { cache: 'no-store' });
+        if (!r.ok) continue;
+        const txt = await r.text();
+        if (txt.length < 100 || txt.startsWith('<!') || txt.includes('"errors"')) continue;
+        return { tab, txt };
+      } catch {}
+    }
+    /* fallback: pestaña por defecto */
+    const r = await fetch(`https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:csv`, { cache: 'no-store' });
+    return { tab: 'default', txt: await r.text() };
+  }
+
+  async function procesarSheet(sh) {
+    try {
+      const { tab, txt } = await fetchLatestTab(sh.id, sh.tabs);
+      const filas = parsearCSV(txt);
+      const hIdx = encontrarHeader(filas);
+      if (hIdx < 0) return { disc: sh.nombre, emoji: sh.emoji, tab, socios: [], total: 0, alDia: 0, deudores: 0, deuda: 0 };
+      const cols = detectarCols(filas[hIdx]);
+      const socios = [];
+      for (const f of filas.slice(hIdx + 1)) {
+        const nombre = (f[cols.nombre] || '').trim();
+        if (!nombre || nombre.length < 3) continue;
+        /* filtrar filas de metadatos */
+        if (/^(falta|mes|total|n[°o ]|basquet|al.?d[ií]a|deben|socio|resumen|categoria)/i.test(nombre)) continue;
+        const cat   = (cols.cat   !== undefined ? f[cols.cat]   || '' : '').trim();
+        const dni   = normDNI(cols.dni !== undefined ? f[cols.dni] : '');
+        const meses = (cols.meses !== undefined ? f[cols.meses] || '' : '').trim();
+        const total = parsearMonto(cols.total !== undefined ? f[cols.total] : 0);
+        const alDia = total === 0 || /al.?d[ií]a/i.test(meses) || meses === '' || meses === '0';
+        socios.push({ nombre, cat, dni, meses, total, alDia, disc: sh.nombre, emoji: sh.emoji });
+      }
+      const deuda = socios.reduce((s, x) => s + x.total, 0);
+      const alDiaCount = socios.filter(x => x.alDia).length;
+      return { disc: sh.nombre, emoji: sh.emoji, tab, socios, total: socios.length, alDia: alDiaCount, deudores: socios.length - alDiaCount, deuda };
+    } catch (e) {
+      console.error('Error procesando', sh.nombre, e);
+      return { disc: sh.nombre, emoji: sh.emoji, tab: '—', socios: [], total: 0, alDia: 0, deudores: 0, deuda: 0 };
+    }
+  }
+
   async function cargarTodos() {
     if (cargado || cargando) return;
     cargando = true;
-    const promesas = SHEETS.map(async sh => {
-      try {
-        const url = `https://docs.google.com/spreadsheets/d/${sh.id}/gviz/tq?tqx=out:csv`;
-        const res = await fetch(url, { cache:'no-store' });
-        if (!res.ok) return [];
-        const txt = await res.text();
-        const filas = parsearCSV(txt).slice(1); /* salta encabezado */
-        return filas
-          .map(f => ({ nombre:(f[1]||'').trim(), dni:(f[4]||'').replace(/[.\s]/g,'').trim(), disc:sh.nombre, emoji:sh.emoji }))
-          .filter(s => s.nombre.length > 3 && !/nombre/i.test(s.nombre));
-      } catch { return []; }
-    });
-    const todos = await Promise.all(promesas);
-    socios = todos.flat();
+    const resultados = await Promise.all(SHEETS.map(procesarSheet));
+    statsPorDisc = resultados;
+    sociosTodos = resultados.flatMap(r => r.socios);
     cargado = true; cargando = false;
+    actualizarUI();
   }
 
+  function fmtPeso(n) {
+    if (n === 0) return '$0';
+    return '$' + Math.round(n).toLocaleString('es-AR');
+  }
+
+  function actualizarUI() {
+    document.getElementById('search-tag-status').textContent = 'DNI · Nombre';
+    const tabs = [...new Set(statsPorDisc.map(r => r.tab))].join(' · ');
+    document.getElementById('reporte-mes').textContent = 'Pestaña: ' + tabs;
+    renderInformeDisciplinas();
+    renderMetricasGlobales();
+  }
+
+  function renderInformeDisciplinas() {
+    const grid = document.getElementById('disc-report-grid');
+    grid.innerHTML = '';
+    for (const s of statsPorDisc) {
+      const pct = s.total > 0 ? Math.round(s.alDia / s.total * 100) : 0;
+      const card = document.createElement('div');
+      card.className = 'disc-report-card';
+      card.innerHTML = `
+        <div class="drc-header">
+          <span class="drc-emoji">${s.emoji}</span>
+          <span class="drc-nombre">${s.disc}</span>
+          <span class="drc-tab">${s.tab}</span>
+        </div>
+        <div class="drc-stats">
+          <div class="drc-stat"><span class="drc-num">${s.total}</span><span class="drc-lbl">inscriptos</span></div>
+          <div class="drc-stat" style="color:#16a34a"><span class="drc-num">${s.alDia}</span><span class="drc-lbl">al día</span></div>
+          <div class="drc-stat" style="color:#dc2626"><span class="drc-num">${s.deudores}</span><span class="drc-lbl">deudores</span></div>
+        </div>
+        <div class="drc-progress-wrap">
+          <div class="drc-progress-bar" style="width:${pct}%"></div>
+        </div>
+        <div class="drc-pct">${pct}% al día</div>
+        <div class="drc-deuda" style="color:${s.deuda > 0 ? '#dc2626' : '#16a34a'}">
+          ${s.deuda > 0 ? fmtPeso(s.deuda) + ' pendiente' : 'Sin deuda registrada'}
+        </div>`;
+      grid.appendChild(card);
+    }
+  }
+
+  function renderMetricasGlobales() {
+    const totalDeuda    = statsPorDisc.reduce((s, x) => s + x.deuda, 0);
+    const totalDeudores = statsPorDisc.reduce((s, x) => s + x.deudores, 0);
+
+    const elDeuda = document.getElementById('total-deuda');
+    elDeuda.style.fontSize = '28px'; elDeuda.style.color = '#154C20';
+    elDeuda.textContent = fmtPeso(totalDeuda);
+    document.getElementById('desglose-total-val').textContent = fmtPeso(totalDeuda);
+
+    const elDeud = document.getElementById('total-deudores');
+    elDeud.style.fontSize = '28px'; elDeud.style.color = '#dc2626';
+    elDeud.textContent = totalDeudores;
+
+    const sub = statsPorDisc.filter(x => x.deudores > 0)
+      .map(x => `${x.emoji} ${x.disc.replace(' Masculino','M.').replace(' Femenino','F.')}: ${x.deudores}`)
+      .join(' · ');
+    document.getElementById('deudores-sub').textContent = sub || 'Sin deudores registrados';
+
+    const max = Math.max(...statsPorDisc.map(x => x.deuda), 1);
+    document.getElementById('desglose-filas').innerHTML = statsPorDisc
+      .filter(x => x.deuda > 0)
+      .sort((a, b) => b.deuda - a.deuda)
+      .map(x => `
+        <div class="desglose-fila">
+          <div class="desglose-disc">${x.emoji} ${x.disc}</div>
+          <div class="desglose-barra-wrap"><div class="desglose-barra" style="width:${Math.round(x.deuda / max * 100)}%"></div></div>
+          <div class="desglose-monto">${fmtPeso(x.deuda)}</div>
+        </div>`)
+      .join('') || '<div style="color:#9ca3af;font-size:13px;padding:8px 0;">Sin deuda registrada</div>';
+  }
+
+  /* ── Búsqueda ── */
   let timer = null;
   function buscarSocio(q) {
     q = q.trim();
@@ -437,36 +525,42 @@
     if (q.length < 2) { document.getElementById('search-results').style.display = 'none'; return; }
     timer = setTimeout(async () => {
       if (!cargado) await cargarTodos();
-      const ql = q.toLowerCase().replace(/[.\s]/g,'');
-      const res = socios.filter(s =>
-        s.nombre.toLowerCase().includes(q.toLowerCase()) ||
-        s.dni.includes(ql)
+      const ql = normDNI(q);
+      const qn = q.toLowerCase();
+      const res = sociosTodos.filter(s =>
+        s.nombre.toLowerCase().includes(qn) ||
+        (s.dni && s.dni.includes(ql))
       ).slice(0, 12);
       renderResultados(res, q);
     }, 280);
   }
 
   function renderResultados(res, q) {
-    const wrap = document.getElementById('search-results');
-    const list = document.getElementById('result-list');
+    const wrap  = document.getElementById('search-results');
+    const list  = document.getElementById('result-list');
     const title = document.getElementById('res-title');
     wrap.style.display = '';
-    if (res.length === 0) {
-      list.innerHTML = `<div class="res-empty">Sin resultados para <strong>"${q}"</strong>.<br>
-        <span style="font-size:11px;color:#cbd5e1;">Verificá que los Sheets estén compartidos como "Cualquier persona con el enlace puede ver".</span></div>`;
+    if (!res.length) {
       title.textContent = 'Sin resultados';
+      list.innerHTML = `<div class="res-empty">Sin resultados para <strong>"${q}"</strong>.<br>
+        <span style="font-size:11px;color:#9ca3af;">Verificá que los Sheets tengan "Cualquier persona con el enlace puede ver".</span></div>`;
       return;
     }
-    title.textContent = `${res.length} resultado${res.length>1?'s':''} encontrado${res.length>1?'s':''}`;
-    list.innerHTML = res.map(s => `
-      <div class="res-row">
-        <div class="res-avatar">${(s.nombre.charAt(0)||'?').toUpperCase()}</div>
-        <div>
+    title.textContent = `${res.length} resultado${res.length > 1 ? 's' : ''} encontrado${res.length > 1 ? 's' : ''}`;
+    list.innerHTML = res.map(s => {
+      const estadoHtml = s.alDia
+        ? `<span class="res-estado res-ok">AL DÍA</span>`
+        : `<span class="res-estado res-debe">DEBE ${fmtPeso(s.total)}</span>`;
+      const catHtml = s.cat ? `<span class="res-cat">${s.cat}</span>` : '';
+      return `<div class="res-row">
+        <div class="res-avatar">${(s.nombre.charAt(0) || '?').toUpperCase()}</div>
+        <div style="flex:1;min-width:0;">
           <div class="res-name">${s.nombre}</div>
-          <div class="res-meta">DNI: ${s.dni || '—'}</div>
+          <div class="res-meta">${s.dni ? 'DNI: ' + s.dni + ' · ' : ''}${catHtml}${s.emoji} ${s.disc}</div>
         </div>
-        <div class="res-tag">${s.emoji} ${s.disc}</div>
-      </div>`).join('');
+        ${estadoHtml}
+      </div>`;
+    }).join('');
   }
 
   function limpiarBusqueda() {
@@ -475,8 +569,7 @@
     document.getElementById('btn-clear').style.display = 'none';
   }
 
-  /* Pre-carga datos al abrir (sin bloquear) */
-  window.addEventListener('load', () => setTimeout(cargarTodos, 600));
+  window.addEventListener('load', () => cargarTodos());
 </script>
 
 </body>

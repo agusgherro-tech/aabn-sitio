@@ -325,6 +325,20 @@ HTML_TEMPLATE = """\
     .input-f::placeholder{color:rgba(0,0,0,.3);}
     .input-f option{background:#fff;color:#374151;}
 
+    /* ── Panel de sugerencias de búsqueda ── */
+    #sugg-panel{position:absolute;left:0;right:0;top:calc(100% + 6px);background:#fff;border:1px solid rgba(0,0,0,.1);border-radius:14px;box-shadow:0 10px 36px rgba(0,0,0,.12);z-index:100;overflow:hidden;display:none;}
+    .sugg-header{padding:8px 16px;background:#f8fafb;border-bottom:1px solid rgba(0,0,0,.06);font-size:10px;font-weight:700;letter-spacing:1.5px;color:#9ca3af;text-transform:uppercase;}
+    .sugg-row{display:flex;align-items:center;gap:12px;padding:9px 16px;border-bottom:1px solid rgba(0,0,0,.04);cursor:pointer;transition:background .1s;}
+    .sugg-row:last-child{border-bottom:none;}
+    .sugg-row:hover{background:#f0fdf4;}
+    .sugg-avatar{width:30px;height:30px;background:#1a672a;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0;}
+    .sugg-name{font-size:13px;font-weight:600;color:#111827;}
+    .sugg-meta{font-size:11px;color:#6b7280;margin-top:1px;}
+    .sugg-cat{display:inline-block;font-size:10px;font-weight:700;background:#eff6ff;color:#1d4ed8;border:1px solid rgba(29,78,216,.18);padding:1px 5px;border-radius:5px;margin-right:3px;}
+    .sugg-ok{flex-shrink:0;font-size:10px;font-weight:700;padding:3px 8px;border-radius:6px;background:#f0fdf4;color:#16a34a;border:1px solid rgba(22,163,74,.2);}
+    .sugg-debe{flex-shrink:0;font-size:10px;font-weight:700;padding:3px 8px;border-radius:6px;background:#fef2f2;color:#dc2626;border:1px solid rgba(220,38,38,.2);}
+    #buscar-wrap{position:relative;}
+
     .tag-disc{display:inline-flex;align-items:center;background:rgba(40,144,79,.13);color:#86efac;
               font-size:10px;font-weight:600;padding:1px 7px;border-radius:20px;
               white-space:nowrap;border:1px solid rgba(134,239,172,.14);}
@@ -488,9 +502,15 @@ HTML_TEMPLATE = """\
           </div>
         </div>
         <div style="display:flex;flex-wrap:wrap;gap:8px">
-          <input id="f-buscar" oninput="filtrar()" type="text"
-            placeholder="Buscar nombre, DNI, Nº, email, teléfono…"
-            class="input-f" style="flex:1;min-width:200px">
+          <div id="buscar-wrap" style="flex:1;min-width:200px;position:relative;">
+            <input id="f-buscar" oninput="filtrar()" type="text"
+              placeholder="Buscar nombre, DNI, Nº, email, teléfono…"
+              class="input-f" style="width:100%">
+            <div id="sugg-panel">
+              <div class="sugg-header" id="sugg-title">Coincidencias</div>
+              <div id="sugg-list"></div>
+            </div>
+          </div>
           <select id="f-estado" onchange="filtrar()" class="input-f">
             <option value="">Todos los estados</option>
             <option value="al_dia">Al día</option>
@@ -683,10 +703,13 @@ let filasFiltradas = [...filasTodas];
 let ordenCol = "nombre", ordenAsc = true;
 
 function filtrar() {
-  const q      = document.getElementById("f-buscar").value.toLowerCase().trim();
+  const qRaw   = document.getElementById("f-buscar").value.trim();
+  const q      = qRaw.toLowerCase();
   const estado = document.getElementById("f-estado").value;
   const disc   = document.getElementById("f-disc").value;
   const deb    = document.getElementById("f-deb").value;
+
+  actualizarSugg(qRaw);
 
   filasFiltradas = filasTodas.filter(r => {
     if (estado && r.estado_final !== estado) return false;
@@ -713,8 +736,118 @@ function limpiar() {
   document.getElementById("f-disc").value   = "";
   document.getElementById("f-deb").value    = "";
   filasFiltradas = [...filasTodas];
+  document.getElementById("sugg-panel").style.display = "none";
   renderTabla();
 }
+
+// ── Drive: categorías por DNI ───────────────────────────────────────────────
+const DRIVE_SHEETS = [
+  { nombre:"Fútbol Masculino", emoji:"⚽", id:"1Y6v5HeQxe-OtRgqoI6k473I_8hxFQPfT2SHatKXMHRE", tabs:["04/26","03/26","02/26"] },
+  { nombre:"Fútbol Femenino",  emoji:"⚽", id:"1E3u_GFRI4J5AqdTXsETiUXKf_CRnttT5P5TIKOalPZE", tabs:["04/26","03/26","02/26"] },
+  { nombre:"Básquet Masc.",    emoji:"🏀", id:"1yrGvGBjh3j-qZvBwXmUZoRIfZgznoejLjs9q2uS21Bg", tabs:["04/26","03/26","02/26","BASQUET AL 20/2"] },
+  { nombre:"Básquet Fem.",     emoji:"🏀", id:"160RkywlXeVOZSh8H4HX1cIDmIJ_yPCjR2dmMSZ8BVf8", tabs:["04/26","03/26","02/26"] },
+  { nombre:"Gimnasia",         emoji:"🤸", id:"1ugDHlZWeRaB_2YNr0wp7hi85MKbGkVzDKfJ8ncK0p74", tabs:["04/26","03/26","02/26"] },
+  { nombre:"Patín",            emoji:"⛸️", id:"1TkL0PdhjSO0vj-MxFMg7NGpsl9tf5ZYDqJlQvWLME_A", tabs:["04/26","03/26","02/26"] },
+];
+const dniCatMap = {};
+
+function normDniDrive(v){ return String(v||"").replace(/[.\\s\\-]/g,"").trim(); }
+
+function parsearCSVDrive(txt){
+  const filas=[];let dentro=false,campo="",fila=[];
+  for(let i=0;i<txt.length;i++){
+    const c=txt[i];
+    if(c==='"'){dentro=!dentro;continue;}
+    if(!dentro&&c===","){fila.push(campo.trim());campo="";continue;}
+    if(!dentro&&(c==="\\n"||c==="\\r")){
+      if(campo.trim()||fila.length){fila.push(campo.trim());filas.push(fila);}
+      campo="";fila=[];if(txt[i+1]==="\\n")i++;continue;
+    }
+    campo+=c;
+  }
+  if(campo||fila.length){fila.push(campo.trim());filas.push(fila);}
+  return filas;
+}
+
+async function cargarCategoriasDrive(){
+  for(const sh of DRIVE_SHEETS){
+    for(const tab of sh.tabs){
+      try{
+        const url=`https://docs.google.com/spreadsheets/d/${sh.id}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(tab)}`;
+        const r=await fetch(url,{cache:"no-store"});
+        if(!r.ok) continue;
+        const txt=await r.text();
+        if(txt.length<100||txt.startsWith("<!")) continue;
+        const filas=parsearCSVDrive(txt);
+        let hIdx=-1;
+        for(let i=0;i<Math.min(filas.length,8);i++)
+          if(filas[i].some(c=>c.toUpperCase().includes("NOMBRE")&&c.toUpperCase().includes("APELLIDO"))){hIdx=i;break;}
+        if(hIdx<0) continue;
+        const hdr=filas[hIdx];
+        let iDni=-1,iCat=-1;
+        hdr.forEach((h,i)=>{
+          const u=h.toUpperCase().trim();
+          if(u==="DNI") iDni=i;
+          if(u==="CATEGORÍA"||u==="CATEGORIA") iCat=i;
+        });
+        if(iDni<0) iDni=4; if(iCat<0) iCat=2;
+        for(const f of filas.slice(hIdx+1)){
+          const dni=normDniDrive(f[iDni]||"");
+          if(!dni) continue;
+          const cat=(f[iCat]||"").trim();
+          if(cat) dniCatMap[dni]={cat,disc:sh.nombre,emoji:sh.emoji};
+        }
+        break; // tab exitosa, pasar al siguiente sheet
+      }catch{}
+    }
+  }
+}
+cargarCategoriasDrive();
+
+// ── Panel de sugerencias rápidas ────────────────────────────────────────────
+function fmtPesoSwin(n){return n?("$"+Math.round(n).toLocaleString("es-AR")):"$0";}
+
+function actualizarSugg(q){
+  const panel=document.getElementById("sugg-panel");
+  if(!q||q.length<2){panel.style.display="none";return;}
+  const ql=q.replace(/[.\\s\\-]/g,"").toLowerCase();
+  const qn=q.toLowerCase();
+  const res=filasTodas.filter(r=>
+    (r.nombre||"").toLowerCase().includes(qn)||
+    (r.dni||"").includes(ql)||
+    String(r.nro_socio||"").includes(ql)
+  ).slice(0,8);
+  if(!res.length){panel.style.display="none";return;}
+  document.getElementById("sugg-title").textContent=res.length+" coincidencia"+(res.length>1?"s":"");
+  document.getElementById("sugg-list").innerHTML=res.map(r=>{
+    const driveInfo=dniCatMap[normDniDrive(r.dni||"")];
+    const catHtml=driveInfo?`<span class="sugg-cat">${driveInfo.cat}</span>`:"";
+    const discDrive=driveInfo?` ${driveInfo.emoji} ${driveInfo.disc}`:"";
+    const estadoHtml=r.estado_final==="deudor"
+      ?`<span class="sugg-debe">DEBE</span>`
+      :`<span class="sugg-ok">AL DÍA</span>`;
+    return `<div class="sugg-row" onclick="irAFila(${r.nro_socio||0})">
+      <div class="sugg-avatar">${(r.nombre||"?").charAt(0).toUpperCase()}</div>
+      <div style="flex:1;min-width:0">
+        <div class="sugg-name">${r.nombre||"—"}</div>
+        <div class="sugg-meta">${r.dni?"DNI: "+r.dni+" · ":""}${catHtml}${r.disciplinas||discDrive||"—"}</div>
+      </div>
+      ${estadoHtml}
+    </div>`;
+  }).join("");
+  panel.style.display="";
+}
+
+function irAFila(nroSocio){
+  document.getElementById("sugg-panel").style.display="none";
+  const fila=document.querySelector(`tr[data-nro="${nroSocio}"]`);
+  if(fila){fila.scrollIntoView({behavior:"smooth",block:"center"});fila.style.background="#fef9c3";setTimeout(()=>fila.style.background="",1800);}
+}
+
+document.addEventListener("click",e=>{
+  if(!document.getElementById("buscar-wrap").contains(e.target))
+    document.getElementById("sugg-panel").style.display="none";
+});
 
 function ordenar(col) {
   if (ordenCol === col) ordenAsc = !ordenAsc;
@@ -766,7 +899,7 @@ function renderTabla() {
       ? `<span style="font-weight:700;color:#dc2626">${r.cant_pend}</span>`
       : `<span style="color:rgba(0,0,0,.18)">—</span>`;
     const badgeCls = "badge-" + (r.estado_final || "baja");
-    return `<tr class="data-row">
+    return `<tr class="data-row" data-nro="${r.nro_socio||0}" style="transition:background .4s">
       <td class="px-3 py-3 text-center text-xs font-mono" style="color:rgba(0,0,0,.35)">${r.nro_socio||"—"}</td>
       <td class="px-4 py-3 font-semibold" style="color:#111827">${r.nombre}</td>
       <td class="px-4 py-3 font-mono text-xs" style="color:rgba(0,0,0,.4)">${r.dni||"—"}</td>
