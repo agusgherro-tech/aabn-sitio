@@ -539,7 +539,7 @@
     const wrap  = document.getElementById('search-results');
     const list  = document.getElementById('result-list');
     const title = document.getElementById('res-title');
-    wrap.style.display = '';
+    wrap.style.display = 'block';
     if (!res.length) {
       title.textContent = 'Sin resultados';
       list.innerHTML = `<div class="res-empty">Sin resultados para <strong>"${q}"</strong>.<br>
