@@ -744,12 +744,12 @@
       return;
     }
 
+    const headers = socios[0]?.mesesVals?.map(m => m.header) || [];
+    const midCount = Math.max(0, headers.length - 2);
     thead.innerHTML = `
       <tr>
         <th style="position:sticky;left:0;z-index:3;background:#f8fafb;">Nombre · DNI</th>
-        <th>Condición</th>
-        <th>Últ. mes</th>
-        <th>Total deuda</th>
+        ${headers.map(h => `<th>${h}</th>`).join('')}
       </tr>
       <tr class="filter-row">
         <th style="position:sticky;left:0;z-index:3;background:#f8fafb;">
@@ -762,13 +762,7 @@
             <option value="NO">No socio/a</option>
           </select>
         </th>
-        <th>
-          <select class="tbl-filter" onchange="filtros.ultMes=this.value;actualizarFiltros()">
-            <option value="">Todos</option>
-            <option value="P">Presente</option>
-            <option value="A">Ausente</option>
-          </select>
-        </th>
+        ${'<th></th>'.repeat(midCount)}
         <th>
           <select class="tbl-filter" onchange="filtros.deuda=this.value;actualizarFiltros()">
             <option value="">Todos</option>
@@ -785,32 +779,49 @@
   function renderFilas(lista) {
     document.getElementById('sb-tbody').innerHTML = lista.length
       ? lista.map((s, idx) => {
-          const condVal  = s.mesesVals[0]?.valor || '';
-          const noSocia  = /no.?soci/i.test(condVal);
-          const esBecado = /s[ií]/i.test(s.becado || '');
-          const condBadge = `<span class="${noSocia ? 'badge-no-socia' : 'badge-socia'}">${condVal || '—'}</span>`
-            + (esBecado ? `<span class="badge-becado">BECADO</span>` : '');
-
-          const ultMes = getUltMes(s);
-          const isP    = ultMes && (normStr(ultMes.valor) === 'P' || normStr(ultMes.valor) === 'PRESENTE');
-          const ultMesCell = ultMes
-            ? `<span class="${isP ? 'cell-p' : 'cell-a'}" title="${ultMes.header}">${isP ? 'P' : 'A'}</span>`
-            : `<span class="cell-vacio">—</span>`;
-
-          const totalCell = s.alDia
-            ? `<span class="cell-ok">AL DÍA</span>`
-            : `<span class="cell-debe">${fmtPeso(s.total)}</span>`;
-          const btnDeuda = !s.alDia
-            ? `<button class="btn-deuda" onclick="abrirModalDeuda(${idx})">Detalle</button>`
-            : '';
-
-          /* DNI, fecha de nacimiento y observación */
           const dniLine = s.dni
             ? `<span style="font-size:10px;color:#9ca3af;font-weight:400;">DNI ${s.dni}</span>` : '';
           const nacLine = s.fechaNac
             ? `<span style="font-size:10px;color:#9ca3af;font-weight:400;"> · F.Nac ${s.fechaNac}</span>` : '';
-          const obsLine = s.obs
-            ? `<div class="obs-text">${s.obs}</div>` : '';
+          const obsLine = s.obs ? `<div class="obs-text">${s.obs}</div>` : '';
+
+          const cells = (s.mesesVals || []).map((m, i) => {
+            const hNorm  = normStr(m.header);
+            const v      = m.valor;
+            const vNorm  = normStr(v);
+            const isFirst = i === 0;
+            const isLast  = i === s.mesesVals.length - 1;
+
+            /* Primera columna: SOCIA/NO SOCIA + becado + botón asistencia */
+            if (isFirst || hNorm.includes('SOCIA') || hNorm.includes('SOCIO')) {
+              const noSocia  = /no.?soci/i.test(v);
+              const esBecado = /s[ií]/i.test(s.becado || '');
+              return `<td>
+                <span class="${noSocia ? 'badge-no-socia' : 'badge-socia'}">${v || '—'}</span>
+                ${esBecado ? `<span class="badge-becado">BECADO</span>` : ''}
+                <div style="margin-top:4px;"><button class="btn-hist" onclick="abrirModalAsistencia(${idx})">Asistencia</button></div>
+              </td>`;
+            }
+
+            /* Última columna: TOTAL + botón detalle deuda */
+            if (isLast || hNorm === 'TOTAL') {
+              const monto = parsearMonto(v);
+              return `<td>
+                <span class="${monto === 0 ? 'cell-ok' : 'cell-debe'}">${monto === 0 ? 'AL DÍA' : fmtPeso(monto)}</span>
+                ${monto > 0 ? `<div style="margin-top:4px;"><button class="btn-deuda" onclick="abrirModalDeuda(${idx})">Detalle</button></div>` : ''}
+              </td>`;
+            }
+
+            /* Presencia P / A */
+            if (vNorm === 'P' || vNorm === 'PRESENTE') return `<td class="cell-p">P</td>`;
+            if (vNorm === 'A' || vNorm === 'AUSENTE')  return `<td class="cell-a">A</td>`;
+
+            /* Montos intermedios */
+            const monto = parsearMonto(v);
+            if (monto > 0) return `<td class="cell-monto">${fmtPeso(monto)}</td>`;
+
+            return `<td class="cell-vacio">—</td>`;
+          }).join('');
 
           return `<tr>
             <td class="td-nombre">
@@ -818,15 +829,10 @@
               ${(dniLine || nacLine) ? `<span style="display:block;margin-top:2px;">${dniLine}${nacLine}</span>` : ''}
               ${obsLine}
             </td>
-            <td>${condBadge}</td>
-            <td>
-              ${ultMesCell}
-              <button class="btn-hist" onclick="abrirModalAsistencia(${idx})">Asistencia</button>
-            </td>
-            <td>${totalCell}${btnDeuda}</td>
+            ${cells}
           </tr>`;
         }).join('')
-      : `<tr><td colspan="4" class="sb-empty">Sin resultados con los filtros aplicados.</td></tr>`;
+      : `<tr><td colspan="20" class="sb-empty">Sin resultados con los filtros aplicados.</td></tr>`;
   }
 
   /* ─── Modales de detalle ─── */
