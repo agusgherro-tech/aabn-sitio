@@ -376,6 +376,13 @@ HTML_TEMPLATE = """\
       Sitio web
     </a>
 
+    <a href="asistencia.html" class="nav-item">
+      <svg style="width:16px;height:16px;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+      </svg>
+      Socios Asistencia
+    </a>
+
     <div style="height:1px;background:rgba(255,255,255,.05);margin:8px 0"></div>
     <div style="font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:0 8px;margin-bottom:8px;color:rgba(255,255,255,.18)">Gestión</div>
     <button onclick="mostrarVista('socios')" id="nav-socios" class="nav-item nav-active">

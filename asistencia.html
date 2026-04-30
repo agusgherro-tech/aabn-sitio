@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Socios — Asistencias | A.A.B.N</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            verde: {
+              50:'#f0f9f3',100:'#d9f0e1',200:'#b2e0c3',300:'#7cc99a',
+              400:'#46ad6f',500:'#1a672a',600:'#154C20',700:'#113d1a',
+              800:'#0d2e14',900:'#09200e',
+            }
+          },
+          fontFamily: {
+            sans:   ['Rag','Segoe UI','Arial','sans-serif'],
+            expose: ['Expose','Arial Black','sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @font-face{font-family:"Expose";src:url("fonts/Expose-Black.woff2") format("woff2");font-weight:900;font-display:swap;}
+    @font-face{font-family:"Expose";src:url("fonts/Expose-Bold.woff2") format("woff2");font-weight:700;font-display:swap;}
+    @font-face{font-family:"Expose";src:url("fonts/Expose-Regular.woff2") format("woff2");font-weight:400;font-display:swap;}
+    @font-face{font-family:"Rag";src:url("fonts/Rag-Regular.woff2") format("woff2"),url("fonts/Rag-Regular.woff") format("woff");font-weight:400;font-display:swap;}
+    @font-face{font-family:"Rag";src:url("fonts/Rag-Bold.woff2") format("woff2"),url("fonts/Rag-Bold.woff") format("woff");font-weight:700;font-display:swap;}
+    @font-face{font-family:"Rag";src:url("fonts/Rag-Black.woff2") format("woff2"),url("fonts/Rag-Black.woff") format("woff");font-weight:900;font-display:swap;}
+    *{box-sizing:border-box;margin:0;padding:0;}
+
+    body{background:#f0fdf4;color:#111827;min-height:100vh;display:flex;}
+
+    /* ── Sidebar (idéntico a selector.html) ── */
+    #sidebar{width:240px;min-width:240px;background:#154C20;border-right:1px solid rgba(255,255,255,.07);display:flex;flex-direction:column;min-height:100vh;position:fixed;top:0;left:0;bottom:0;z-index:40;}
+    .sidebar-logo{padding:20px 16px 16px;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:10px;}
+    .sidebar-logo img{height:36px;width:auto;border-radius:8px;}
+    .sidebar-logo-text .club{font-family:'Expose',sans-serif;font-weight:900;font-size:13px;letter-spacing:3px;color:#fff;}
+    .sidebar-logo-text .sub{font-size:10px;color:#6ee7b7;letter-spacing:1px;}
+    .sidebar-section{padding:20px 12px 6px;}
+    .sidebar-section-label{font-size:10px;font-weight:700;letter-spacing:2px;color:#4ade80;text-transform:uppercase;padding:0 8px;margin-bottom:6px;}
+    .nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;cursor:pointer;font-size:13.5px;font-weight:500;color:#cbd5e1;text-decoration:none;transition:background .15s,color .15s;margin-bottom:2px;}
+    .nav-item:hover{background:rgba(255,255,255,.07);color:#fff;}
+    .nav-item.active{background:#1a672a;color:#fff;}
+    .nav-item svg{width:16px;height:16px;opacity:.7;flex-shrink:0;}
+    .nav-item.active svg{opacity:1;}
+    .nav-parent{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;font-size:13.5px;font-weight:500;color:#cbd5e1;margin-bottom:2px;}
+    .nav-parent svg{width:16px;height:16px;opacity:.7;flex-shrink:0;}
+    .nav-subitems{padding-left:20px;}
+    .nav-subitem{display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:8px;cursor:pointer;font-size:13px;color:#94a3b8;text-decoration:none;transition:background .15s,color .15s;margin-bottom:1px;border-left:2px solid rgba(255,255,255,.08);}
+    .nav-subitem:hover{background:rgba(255,255,255,.06);color:#e2e8f0;border-left-color:#1a672a;}
+    .nav-subitem.active{color:#4ade80;border-left-color:#4ade80;background:rgba(74,222,128,.06);}
+    .sidebar-footer{margin-top:auto;padding:12px;border-top:1px solid rgba(255,255,255,.07);}
+    .user-chip{display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(255,255,255,.05);border-radius:12px;margin-bottom:8px;}
+    .user-avatar{width:34px;height:34px;background:#1a672a;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;}
+    .user-name{font-size:13px;font-weight:600;color:#f1f5f9;}
+    .user-role{font-size:11px;color:#4ade80;}
+    .btn-logout{width:100%;padding:8px 12px;background:transparent;border:1px solid rgba(255,255,255,.1);border-radius:8px;color:#94a3b8;font-size:12px;cursor:pointer;transition:all .15s;text-align:center;}
+    .btn-logout:hover{background:rgba(255,255,255,.06);color:#f1f5f9;border-color:rgba(255,255,255,.2);}
+
+    /* ── Main ── */
+    #main{margin-left:240px;flex:1;min-height:100vh;padding:40px 48px;}
+
+    .welcome-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(26,103,42,.18);border:1px solid rgba(74,222,128,.25);color:#4ade80;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:5px 14px;border-radius:100px;margin-bottom:20px;}
+
+    /* ── Buscador ── */
+    .search-wrap{background:#fff;border:1.5px solid rgba(0,0,0,.09);border-radius:16px;padding:16px 20px;display:flex;align-items:center;gap:14px;box-shadow:0 2px 10px rgba(0,0,0,.05);transition:border-color .2s,box-shadow .2s;margin-bottom:16px;}
+    .search-wrap:focus-within{border-color:#1a672a;box-shadow:0 2px 18px rgba(26,103,42,.12);}
+    #search-input{flex:1;font-size:15px;font-family:'Rag',sans-serif;border:none;outline:none;color:#111827;background:transparent;}
+    #search-input::placeholder{color:#9ca3af;}
+    .search-tag{font-size:11px;font-weight:700;letter-spacing:1px;background:#f0fdf4;border:1px solid rgba(26,103,42,.2);color:#1a672a;padding:4px 10px;border-radius:100px;}
+    #btn-clear{display:none;background:none;border:none;color:#9ca3af;cursor:pointer;padding:4px;line-height:0;}
+
+    /* Resultados */
+    #search-results{background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:14px;margin-bottom:32px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.06);display:none;}
+    .res-header{padding:10px 20px;background:#f8fafb;border-bottom:1px solid rgba(0,0,0,.06);font-size:10px;font-weight:700;letter-spacing:1.5px;color:#9ca3af;text-transform:uppercase;}
+    .res-row{display:flex;align-items:center;gap:14px;padding:11px 20px;border-bottom:1px solid rgba(0,0,0,.04);cursor:default;transition:background .1s;}
+    .res-row:last-child{border-bottom:none;}
+    .res-row:hover{background:#f0fdf4;}
+    .res-avatar{width:34px;height:34px;background:#1a672a;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;}
+    .res-name{font-size:14px;font-weight:600;color:#111827;}
+    .res-meta{font-size:12px;color:#6b7280;margin-top:1px;}
+    .res-tag{margin-left:auto;flex-shrink:0;font-size:11px;font-weight:700;background:#f0fdf4;color:#1a672a;border:1px solid rgba(26,103,42,.2);padding:3px 10px;border-radius:8px;}
+    .res-empty{padding:28px;text-align:center;color:#9ca3af;font-size:13px;line-height:1.6;}
+
+    /* ── Disciplinas ── */
+    .section-label{font-size:10px;font-weight:700;letter-spacing:2px;color:#6b7280;text-transform:uppercase;margin-bottom:12px;}
+    .disc-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:36px;}
+    .disc-btn{background:#fff;border:1.5px solid rgba(0,0,0,.07);border-radius:14px;padding:18px 10px;text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;transition:all .2s;text-align:center;}
+    .disc-btn:hover{border-color:#1a672a;background:#f0fdf4;transform:translateY(-3px);box-shadow:0 8px 24px rgba(26,103,42,.12);}
+    .disc-icon{font-size:1.9rem;line-height:1;}
+    .disc-name{font-size:12px;font-weight:700;color:#154C20;line-height:1.2;}
+    .disc-count{font-size:11px;color:#6b7280;}
+
+    /* ── Métricas ── */
+    .metrics-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+    .metrics-title{font-size:10px;font-weight:700;letter-spacing:2px;color:#6b7280;text-transform:uppercase;}
+    .metrics-date{font-size:11px;color:#9ca3af;}
+    .metric-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:14px;}
+
+    /* Tarjeta con hover */
+    .metric-wrap{position:relative;}
+    .metric-card{background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:16px;padding:22px 24px;box-shadow:0 1px 4px rgba(0,0,0,.05);transition:border-color .2s,box-shadow .2s;cursor:default;}
+    .metric-card:hover{border-color:rgba(26,103,42,.3);box-shadow:0 4px 20px rgba(26,103,42,.1);}
+    .metric-lbl{font-size:12px;color:#6b7280;margin-bottom:6px;}
+    .metric-val{font-size:28px;font-weight:900;font-family:'Expose',sans-serif;color:#154C20;line-height:1;margin-bottom:4px;}
+    .metric-sub{font-size:11px;color:#9ca3af;}
+
+    /* Desglose hover */
+    .desglose{
+      position:absolute;top:calc(100% + 10px);left:0;right:0;
+      background:#fff;border:1px solid rgba(0,0,0,.1);border-radius:14px;
+      padding:16px 20px;box-shadow:0 10px 40px rgba(0,0,0,.13);z-index:30;
+      opacity:0;pointer-events:none;transform:translateY(-8px);
+      transition:opacity .2s,transform .2s;min-width:340px;
+    }
+    .metric-wrap:hover .desglose{opacity:1;pointer-events:auto;transform:translateY(0);}
+    .desglose-titulo{font-size:10px;font-weight:700;letter-spacing:1.5px;color:#9ca3af;text-transform:uppercase;margin-bottom:12px;}
+    .desglose-fila{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid rgba(0,0,0,.04);}
+    .desglose-fila:last-of-type{border-bottom:none;}
+    .desglose-disc{font-size:13px;font-weight:600;color:#374151;flex:1;white-space:nowrap;}
+    .desglose-barra-wrap{width:70px;background:#f3f4f6;border-radius:4px;height:5px;overflow:hidden;flex-shrink:0;}
+    .desglose-barra{height:5px;border-radius:4px;background:#1a672a;}
+    .desglose-monto{font-size:13px;font-weight:700;color:#dc2626;text-align:right;min-width:90px;}
+    .desglose-total{margin-top:10px;padding-top:10px;border-top:2px solid rgba(0,0,0,.07);display:flex;justify-content:space-between;align-items:center;}
+    .desglose-total-lbl{font-size:12px;font-weight:700;color:#374151;}
+    .desglose-total-val{font-size:15px;font-weight:900;color:#dc2626;font-family:'Expose',sans-serif;}
+
+    .divider-mini{height:1px;background:rgba(0,0,0,.06);margin:28px 0;}
+  </style>
+</head>
+<body class="font-sans antialiased">
+
+<script>
+  const admin = JSON.parse(sessionStorage.getItem('admin') || 'null');
+  if (!admin) window.location.href = 'login.html';
+</script>
+
+<!-- SIDEBAR -->
+<aside id="sidebar">
+  <div class="sidebar-logo">
+    <img src="images.jpeg" alt="AABN">
+    <div class="sidebar-logo-text">
+      <div class="club">A.A.B.N</div>
+      <div class="sub">Banda Norte</div>
+    </div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-label">Navegación</div>
+    <a href="selector.html" class="nav-item">
+      <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+      </svg>
+      Panel principal
+    </a>
+    <a href="index.html" class="nav-item">
+      <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9"/>
+      </svg>
+      Sitio web
+    </a>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-label">Gestión</div>
+
+    <a href="panel-admin.html" class="nav-item">
+      <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0"/>
+      </svg>
+      Socios SWIN
+    </a>
+
+    <a href="asistencia.html" class="nav-item active">
+      <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+      </svg>
+      Socios Asistencia
+    </a>
+
+    <div class="nav-parent">
+      <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
+      Finanzas
+    </div>
+    <div class="nav-subitems">
+      <a href="dashboard-financiero.html" class="nav-subitem">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+        </svg>
+        Posición Financiera
+      </a>
+      <a href="estado-resultados.html" class="nav-subitem">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+        </svg>
+        Resultado
+      </a>
+    </div>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="user-chip">
+      <div class="user-avatar" id="user-avatar">A</div>
+      <div>
+        <div class="user-name" id="user-nombre">—</div>
+        <div class="user-role"  id="user-rol">—</div>
+      </div>
+    </div>
+    <button class="btn-logout" onclick="cerrarSesion()">Cerrar sesión</button>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main id="main">
+
+  <div class="welcome-badge">
+    <svg width="10" height="10" fill="currentColor" viewBox="0 0 20 20"><circle cx="10" cy="10" r="10"/></svg>
+    Gestión de Socios
+  </div>
+
+  <h1 class="font-expose font-black mb-1" style="font-size:2.4rem;letter-spacing:-1px;color:#154C20;">
+    SOCIOS — ASISTENCIAS
+  </h1>
+  <p class="text-sm mb-8" style="color:#1a672a;" id="bienvenida">
+    Buscá un socio por nombre o DNI, o accedé directamente a una disciplina.
+  </p>
+
+  <!-- BUSCADOR -->
+  <div class="search-wrap">
+    <svg width="20" height="20" fill="none" stroke="#9ca3af" stroke-width="2" viewBox="0 0 24 24" style="flex-shrink:0;">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+    </svg>
+    <input id="search-input" type="text" placeholder="Nombre y apellido o DNI…" oninput="buscarSocio(this.value)" autocomplete="off">
+    <span class="search-tag">DNI · Nombre</span>
+    <button id="btn-clear" onclick="limpiarBusqueda()">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- RESULTADOS -->
+  <div id="search-results">
+    <div class="res-header" id="res-title">Resultados</div>
+    <div id="result-list"></div>
+  </div>
+
+  <!-- DISCIPLINAS -->
+  <div class="section-label">Disciplinas</div>
+  <div class="disc-grid">
+    <a href="https://docs.google.com/spreadsheets/d/1Y6v5HeQxe-OtRgqoI6k473I_8hxFQPfT2SHatKXMHRE/edit" target="_blank" class="disc-btn">
+      <div class="disc-icon">⚽</div>
+      <div class="disc-name">Fútbol Masculino</div>
+      <div class="disc-count">192 alumnos</div>
+    </a>
+    <a href="https://docs.google.com/spreadsheets/d/1E3u_GFRI4J5AqdTXsETiUXKf_CRnttT5P5TIKOalPZE/edit" target="_blank" class="disc-btn">
+      <div class="disc-icon">⚽</div>
+      <div class="disc-name">Fútbol Femenino</div>
+      <div class="disc-count">~80 alumnos</div>
+    </a>
+    <a href="https://docs.google.com/spreadsheets/d/1yrGvGBjh3j-qZvBwXmUZoRIfZgznoejLjs9q2uS21Bg/edit" target="_blank" class="disc-btn">
+      <div class="disc-icon">🏀</div>
+      <div class="disc-name">Básquet Masculino</div>
+      <div class="disc-count">~120 alumnos</div>
+    </a>
+    <a href="https://docs.google.com/spreadsheets/d/160RkywlXeVOZSh8H4HX1cIDmIJ_yPCjR2dmMSZ8BVf8/edit" target="_blank" class="disc-btn">
+      <div class="disc-icon">🏀</div>
+      <div class="disc-name">Básquet Femenino</div>
+      <div class="disc-count">86 alumnos</div>
+    </a>
+    <a href="https://docs.google.com/spreadsheets/d/1ugDHlZWeRaB_2YNr0wp7hi85MKbGkVzDKfJ8ncK0p74/edit" target="_blank" class="disc-btn">
+      <div class="disc-icon">🤸</div>
+      <div class="disc-name">Gimnasia</div>
+      <div class="disc-count">130 alumnos</div>
+    </a>
+    <a href="https://docs.google.com/spreadsheets/d/1TkL0PdhjSO0vj-MxFMg7NGpsl9tf5ZYDqJlQvWLME_A/edit" target="_blank" class="disc-btn">
+      <div class="disc-icon">⛸️</div>
+      <div class="disc-name">Patín</div>
+      <div class="disc-count">~90 alumnos</div>
+    </a>
+  </div>
+
+  <div class="divider-mini"></div>
+
+  <!-- MÉTRICAS DE DEUDA -->
+  <div class="metrics-head">
+    <div class="metrics-title">Deuda pendiente a cobrar</div>
+    <div class="metrics-date">Datos al 30/04/2026</div>
+  </div>
+
+  <div class="metric-grid">
+
+    <!-- Deuda total — con desglose al hover -->
+    <div class="metric-wrap" style="grid-column:span 2;">
+      <div class="metric-card">
+        <div class="metric-lbl">Deuda total del club</div>
+        <div class="metric-val">$10.702.000</div>
+        <div class="metric-sub" style="margin-top:6px;">Pasá el cursor para ver el desglose por disciplina →</div>
+      </div>
+      <div class="desglose">
+        <div class="desglose-titulo">Desglose por disciplina</div>
+
+        <div class="desglose-fila">
+          <div class="desglose-disc">⚽ Fútbol Masculino</div>
+          <div class="desglose-barra-wrap"><div class="desglose-barra" style="width:100%;"></div></div>
+          <div class="desglose-monto">$4.860.000</div>
+        </div>
+        <div class="desglose-fila">
+          <div class="desglose-disc">🤸 Gimnasia</div>
+          <div class="desglose-barra-wrap"><div class="desglose-barra" style="width:63%;"></div></div>
+          <div class="desglose-monto">$3.047.000</div>
+        </div>
+        <div class="desglose-fila">
+          <div class="desglose-disc">⛸️ Patín</div>
+          <div class="desglose-barra-wrap"><div class="desglose-barra" style="width:24%;"></div></div>
+          <div class="desglose-monto">$1.185.000</div>
+        </div>
+        <div class="desglose-fila">
+          <div class="desglose-disc">🏀 Básquet Femenino</div>
+          <div class="desglose-barra-wrap"><div class="desglose-barra" style="width:16%;"></div></div>
+          <div class="desglose-monto">$780.000</div>
+        </div>
+        <div class="desglose-fila">
+          <div class="desglose-disc">⚽ Fútbol Femenino</div>
+          <div class="desglose-barra-wrap"><div class="desglose-barra" style="width:10%;"></div></div>
+          <div class="desglose-monto">$480.000</div>
+        </div>
+        <div class="desglose-fila">
+          <div class="desglose-disc">🏀 Básquet Masculino</div>
+          <div class="desglose-barra-wrap"><div class="desglose-barra" style="width:7%;"></div></div>
+          <div class="desglose-monto">$350.000</div>
+        </div>
+        <div class="desglose-total">
+          <div class="desglose-total-lbl">Total</div>
+          <div class="desglose-total-val">$10.702.000</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Deudores -->
+    <div class="metric-wrap">
+      <div class="metric-card" style="height:100%;">
+        <div class="metric-lbl">Deudores activos</div>
+        <div class="metric-val" style="color:#dc2626;">~148</div>
+        <div class="metric-sub" style="margin-top:6px;">
+          En 6 disciplinas<br>
+          Fútbol Masc: 54 · Gimn: 26 · Patín: 17<br>
+          Básq. Fem: 26 · Fútbol Fem: 15 · Básq. Masc: 10
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<script>
+  /* Usuario */
+  const a = JSON.parse(sessionStorage.getItem('admin') || 'null');
+  if (a) {
+    document.getElementById('user-nombre').textContent = a.nombre;
+    document.getElementById('user-rol').textContent    = a.rol;
+    document.getElementById('user-avatar').textContent = a.nombre.charAt(0).toUpperCase();
+    document.getElementById('bienvenida').textContent  = `Buscá un socio o accedé a una disciplina.`;
+  }
+  function cerrarSesion() {
+    sessionStorage.removeItem('admin');
+    window.location.href = 'login.html';
+  }
+
+  /* ── Búsqueda dinámica (requiere que los Sheets sean "Acceso público") ── */
+  const SHEETS = [
+    { nombre:'Fútbol Masc.',  emoji:'⚽', id:'1Y6v5HeQxe-OtRgqoI6k473I_8hxFQPfT2SHatKXMHRE' },
+    { nombre:'Fútbol Fem.',   emoji:'⚽', id:'1E3u_GFRI4J5AqdTXsETiUXKf_CRnttT5P5TIKOalPZE' },
+    { nombre:'Básquet Masc.', emoji:'🏀', id:'1yrGvGBjh3j-qZvBwXmUZoRIfZgznoejLjs9q2uS21Bg' },
+    { nombre:'Básquet Fem.',  emoji:'🏀', id:'160RkywlXeVOZSh8H4HX1cIDmIJ_yPCjR2dmMSZ8BVf8' },
+    { nombre:'Gimnasia',      emoji:'🤸', id:'1ugDHlZWeRaB_2YNr0wp7hi85MKbGkVzDKfJ8ncK0p74' },
+    { nombre:'Patín',         emoji:'⛸️', id:'1TkL0PdhjSO0vj-MxFMg7NGpsl9tf5ZYDqJlQvWLME_A' },
+  ];
+
+  let socios = [];
+  let cargado = false;
+  let cargando = false;
+
+  /* Parsea CSV exportado por Google Sheets */
+  function parsearCSV(txt) {
+    const filas = [];
+    let dentro = false, campo = '', fila = [];
+    for (let i = 0; i < txt.length; i++) {
+      const c = txt[i];
+      if (c === '"') { dentro = !dentro; continue; }
+      if (!dentro && c === ',') { fila.push(campo.trim()); campo = ''; continue; }
+      if (!dentro && (c === '\n' || c === '\r')) {
+        if (campo.trim() || fila.length) { fila.push(campo.trim()); filas.push(fila); }
+        campo = ''; fila = [];
+        if (txt[i+1] === '\n') i++;
+        continue;
+      }
+      campo += c;
+    }
+    if (campo || fila.length) { fila.push(campo.trim()); filas.push(fila); }
+    return filas;
+  }
+
+  async function cargarTodos() {
+    if (cargado || cargando) return;
+    cargando = true;
+    const promesas = SHEETS.map(async sh => {
+      try {
+        const url = `https://docs.google.com/spreadsheets/d/${sh.id}/gviz/tq?tqx=out:csv`;
+        const res = await fetch(url, { cache:'no-store' });
+        if (!res.ok) return [];
+        const txt = await res.text();
+        const filas = parsearCSV(txt).slice(1); /* salta encabezado */
+        return filas
+          .map(f => ({ nombre:(f[1]||'').trim(), dni:(f[4]||'').replace(/[.\s]/g,'').trim(), disc:sh.nombre, emoji:sh.emoji }))
+          .filter(s => s.nombre.length > 3 && !/nombre/i.test(s.nombre));
+      } catch { return []; }
+    });
+    const todos = await Promise.all(promesas);
+    socios = todos.flat();
+    cargado = true; cargando = false;
+  }
+
+  let timer = null;
+  function buscarSocio(q) {
+    q = q.trim();
+    document.getElementById('btn-clear').style.display = q ? '' : 'none';
+    clearTimeout(timer);
+    if (q.length < 2) { document.getElementById('search-results').style.display = 'none'; return; }
+    timer = setTimeout(async () => {
+      if (!cargado) await cargarTodos();
+      const ql = q.toLowerCase().replace(/[.\s]/g,'');
+      const res = socios.filter(s =>
+        s.nombre.toLowerCase().includes(q.toLowerCase()) ||
+        s.dni.includes(ql)
+      ).slice(0, 12);
+      renderResultados(res, q);
+    }, 280);
+  }
+
+  function renderResultados(res, q) {
+    const wrap = document.getElementById('search-results');
+    const list = document.getElementById('result-list');
+    const title = document.getElementById('res-title');
+    wrap.style.display = '';
+    if (res.length === 0) {
+      list.innerHTML = `<div class="res-empty">Sin resultados para <strong>"${q}"</strong>.<br>
+        <span style="font-size:11px;color:#cbd5e1;">Verificá que los Sheets estén compartidos como "Cualquier persona con el enlace puede ver".</span></div>`;
+      title.textContent = 'Sin resultados';
+      return;
+    }
+    title.textContent = `${res.length} resultado${res.length>1?'s':''} encontrado${res.length>1?'s':''}`;
+    list.innerHTML = res.map(s => `
+      <div class="res-row">
+        <div class="res-avatar">${(s.nombre.charAt(0)||'?').toUpperCase()}</div>
+        <div>
+          <div class="res-name">${s.nombre}</div>
+          <div class="res-meta">DNI: ${s.dni || '—'}</div>
+        </div>
+        <div class="res-tag">${s.emoji} ${s.disc}</div>
+      </div>`).join('');
+  }
+
+  function limpiarBusqueda() {
+    document.getElementById('search-input').value = '';
+    document.getElementById('search-results').style.display = 'none';
+    document.getElementById('btn-clear').style.display = 'none';
+  }
+
+  /* Pre-carga datos al abrir (sin bloquear) */
+  window.addEventListener('load', () => setTimeout(cargarTodos, 600));
+</script>
+
+</body>
+</html>
