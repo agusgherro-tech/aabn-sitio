@@ -73,8 +73,8 @@
     .search-tag{font-size:11px;font-weight:700;letter-spacing:1px;background:#f0fdf4;border:1px solid rgba(26,103,42,.2);color:#1a672a;padding:4px 10px;border-radius:100px;white-space:nowrap;}
     #btn-clear{display:none;background:none;border:none;color:#9ca3af;cursor:pointer;padding:4px;line-height:0;}
 
-    /* ── Resultados ── */
-    #search-results{background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:14px;margin-bottom:32px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.06);display:none;}
+    /* ── Resultados búsqueda ── */
+    #search-results{background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:14px;margin-bottom:28px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.06);display:none;}
     .res-header{padding:10px 20px;background:#f8fafb;border-bottom:1px solid rgba(0,0,0,.06);font-size:10px;font-weight:700;letter-spacing:1.5px;color:#9ca3af;text-transform:uppercase;}
     .res-row{display:flex;align-items:center;gap:14px;padding:11px 20px;border-bottom:1px solid rgba(0,0,0,.04);cursor:default;transition:background .1s;}
     .res-row:last-child{border-bottom:none;}
@@ -88,26 +88,52 @@
     .res-debe{background:#fef2f2;color:#dc2626;border:1px solid rgba(220,38,38,.2);}
     .res-cat{display:inline-block;font-size:10px;font-weight:700;background:#eff6ff;color:#1d4ed8;border:1px solid rgba(29,78,216,.18);padding:1px 6px;border-radius:6px;margin-right:4px;}
 
-    /* ── Disc report cards ── */
-    .disc-report-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:36px;}
-    .disc-report-card{background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:16px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.05);transition:border-color .2s,box-shadow .2s;}
-    .disc-report-card:hover{border-color:rgba(26,103,42,.25);box-shadow:0 4px 16px rgba(26,103,42,.08);}
-    .disc-report-card.skeleton{height:162px;background:linear-gradient(90deg,#f3f4f6 25%,#e8eaed 50%,#f3f4f6 75%);background-size:400% 100%;animation:shimmer 1.4s infinite;border:1px solid #e5e7eb;}
+    /* ── Discipline tabs (pill container) ── */
+    .disc-tabs-pill{display:inline-flex;background:#fff;border-radius:100px;padding:5px;gap:4px;box-shadow:0 2px 16px rgba(0,0,0,.1),0 0 0 1px rgba(0,0,0,.06);flex-wrap:wrap;margin-bottom:28px;}
+    .disc-tab{border:none;cursor:pointer;font-family:'Rag',sans-serif;font-weight:700;transition:all .18s;display:flex;align-items:center;gap:8px;border-radius:100px;outline:none;}
+    .disc-tab.active{background:#111827;color:#fff;padding:8px 20px;font-size:13.5px;}
+    .disc-tab.inactive{background:#f3f4f6;color:#374151;width:40px;height:40px;justify-content:center;font-size:20px;padding:0;}
+    .disc-tab.inactive:hover{background:#e5e7eb;}
+    .disc-tab-name{font-size:13.5px;}
+    .disc-tab-skeleton{height:40px;border-radius:100px;background:linear-gradient(90deg,#f3f4f6 25%,#e8eaed 50%,#f3f4f6 75%);background-size:400% 100%;animation:shimmer 1.4s infinite;}
     @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-    .drc-header{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
-    .drc-emoji{font-size:1.5rem;line-height:1;}
-    .drc-nombre{font-weight:700;font-size:13px;color:#154C20;flex:1;}
-    .drc-tab{font-size:10px;color:#9ca3af;background:#f3f4f6;padding:2px 8px;border-radius:100px;}
-    .drc-stats{display:flex;gap:8px;margin-bottom:10px;}
-    .drc-stat{display:flex;flex-direction:column;align-items:center;flex:1;background:#f9fafb;border-radius:8px;padding:7px 4px;}
-    .drc-num{font-size:20px;font-weight:900;font-family:'Expose',sans-serif;line-height:1;}
-    .drc-lbl{font-size:9px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:#9ca3af;margin-top:2px;}
-    .drc-progress-wrap{height:5px;background:#f3f4f6;border-radius:4px;overflow:hidden;margin-bottom:4px;}
-    .drc-progress-bar{height:5px;background:#1a672a;border-radius:4px;}
-    .drc-pct{font-size:10px;color:#6b7280;margin-bottom:6px;}
-    .drc-deuda{font-size:13px;font-weight:700;}
 
-    /* ── Métricas ── */
+    /* ── Category pills ── */
+    .cat-bar{margin-bottom:24px;}
+    .cat-bar-label{font-size:10px;font-weight:700;letter-spacing:1.5px;color:#9ca3af;text-transform:uppercase;margin-bottom:12px;}
+    .cat-pills-row{display:flex;gap:8px;flex-wrap:wrap;}
+    .cat-pill{border-radius:100px;padding:7px 16px;font-size:11.5px;font-weight:700;cursor:pointer;border:1.5px solid #e5e7eb;font-family:'Rag',sans-serif;transition:all .15s;background:#f9fafb;color:#374151;white-space:nowrap;}
+    .cat-pill:hover{background:#f0fdf4;border-color:rgba(26,103,42,.3);color:#154C20;}
+    .cat-pill.active{background:#111827;color:#fff;border-color:#111827;}
+
+    /* ── Socios browser (inline table) ── */
+    .socios-browser{background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:16px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.05);margin-bottom:32px;}
+    .sb-hdr{padding:12px 20px;background:#f8fafb;border-bottom:1px solid rgba(0,0,0,.06);display:flex;align-items:center;justify-content:space-between;gap:12px;}
+    .sb-title{font-size:10px;font-weight:700;letter-spacing:1.5px;color:#6b7280;text-transform:uppercase;}
+    .sb-stats{display:flex;gap:14px;align-items:center;}
+    .sb-stat{font-size:12px;color:#9ca3af;white-space:nowrap;}
+    .sb-stat strong{font-weight:700;}
+    .sb-stat.ok strong{color:#16a34a;}
+    .sb-stat.debe strong{color:#dc2626;}
+    .table-scroll{overflow-x:auto;max-height:520px;overflow-y:auto;}
+    .socios-table{width:100%;border-collapse:collapse;font-size:12.5px;}
+    .socios-table th{background:#f8fafb;padding:8px 14px;text-align:left;font-size:10px;font-weight:700;letter-spacing:.8px;color:#9ca3af;text-transform:uppercase;border-bottom:1px solid rgba(0,0,0,.06);white-space:nowrap;position:sticky;top:0;z-index:2;}
+    .socios-table td{padding:9px 14px;border-bottom:1px solid rgba(0,0,0,.04);vertical-align:middle;white-space:nowrap;}
+    .socios-table tr:last-child td{border-bottom:none;}
+    .socios-table tbody tr:hover td{background:#f0fdf4;}
+    .td-nombre{font-weight:600;color:#111827;max-width:200px;overflow:hidden;text-overflow:ellipsis;position:sticky;left:0;background:#fff;z-index:1;}
+    .socios-table tbody tr:hover .td-nombre{background:#f0fdf4;}
+    .badge-socia{display:inline-block;font-size:9px;font-weight:700;background:#f0fdf4;color:#16a34a;border:1px solid rgba(22,163,74,.2);padding:2px 8px;border-radius:6px;}
+    .badge-no-socia{display:inline-block;font-size:9px;font-weight:700;background:#fef2f2;color:#dc2626;border:1px solid rgba(220,38,38,.2);padding:2px 8px;border-radius:6px;}
+    .cell-p{color:#16a34a;font-weight:800;font-size:13px;text-align:center;}
+    .cell-a{color:#dc2626;font-weight:800;font-size:13px;text-align:center;}
+    .cell-ok{color:#16a34a;font-weight:700;}
+    .cell-debe{color:#dc2626;font-weight:700;}
+    .cell-monto{color:#374151;font-size:12px;}
+    .cell-vacio{color:#d1d5db;text-align:center;}
+    .sb-empty{padding:48px;text-align:center;color:#9ca3af;font-size:13px;line-height:1.8;}
+
+    /* ── Métricas globales ── */
     .metrics-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
     .metrics-title{font-size:10px;font-weight:700;letter-spacing:2px;color:#6b7280;text-transform:uppercase;}
     .metrics-date{font-size:11px;color:#9ca3af;}
@@ -229,7 +255,7 @@
     SOCIOS — ASISTENCIAS
   </h1>
   <p class="text-sm mb-6" style="color:#6b7280;">
-    Buscá por nombre o DNI. Los datos se cargan en tiempo real desde las planillas de Drive.
+    Buscá por nombre o DNI, o explorá por disciplina y categoría. Datos en tiempo real desde Drive.
   </p>
 
   <!-- BUSCADOR -->
@@ -246,27 +272,45 @@
     </button>
   </div>
 
-  <!-- RESULTADOS -->
+  <!-- RESULTADOS BÚSQUEDA -->
   <div id="search-results">
     <div class="res-header" id="res-title">Resultados</div>
     <div id="result-list"></div>
   </div>
 
-  <div class="divider-mini"></div>
-
-  <!-- INFORME POR DISCIPLINA -->
-  <div class="metrics-head" style="margin-bottom:14px;">
-    <div class="metrics-title">Informe por disciplina</div>
+  <!-- PESTAÑAS DE DISCIPLINAS -->
+  <div class="metrics-head" style="margin-bottom:16px;">
+    <div class="metrics-title">Explorar por disciplina</div>
     <div class="metrics-date" id="reporte-mes">Cargando planillas…</div>
   </div>
 
-  <div id="disc-report-grid" class="disc-report-grid">
-    <div class="disc-report-card skeleton"></div>
-    <div class="disc-report-card skeleton"></div>
-    <div class="disc-report-card skeleton"></div>
-    <div class="disc-report-card skeleton"></div>
-    <div class="disc-report-card skeleton"></div>
-    <div class="disc-report-card skeleton"></div>
+  <div id="disc-tabs-pill" class="disc-tabs-pill">
+    <div class="disc-tab-skeleton" style="width:150px;"></div>
+    <div class="disc-tab-skeleton" style="width:40px;"></div>
+    <div class="disc-tab-skeleton" style="width:40px;"></div>
+    <div class="disc-tab-skeleton" style="width:40px;"></div>
+    <div class="disc-tab-skeleton" style="width:40px;"></div>
+    <div class="disc-tab-skeleton" style="width:40px;"></div>
+  </div>
+
+  <!-- CATEGORÍAS -->
+  <div id="cat-bar" class="cat-bar" style="display:none;">
+    <div class="cat-bar-label" id="cat-bar-label">Categorías</div>
+    <div class="cat-pills-row" id="cat-pills-row"></div>
+  </div>
+
+  <!-- TABLA DE SOCIOS (inline, no flotante) -->
+  <div class="socios-browser" id="socios-browser" style="display:none;">
+    <div class="sb-hdr">
+      <div class="sb-title" id="sb-title">Socios</div>
+      <div class="sb-stats" id="sb-stats"></div>
+    </div>
+    <div class="table-scroll">
+      <table class="socios-table">
+        <thead id="sb-thead"></thead>
+        <tbody id="sb-tbody"></tbody>
+      </table>
+    </div>
   </div>
 
   <div class="divider-mini"></div>
@@ -328,6 +372,7 @@
   ];
 
   let sociosTodos = [], statsPorDisc = [], cargado = false, cargando = false;
+  let discActiva = null, catActiva = null;
 
   /* ── CSV parser ── */
   function parsearCSV(txt) {
@@ -380,7 +425,6 @@
 
   function parsearMonto(v) {
     if (!v) return 0;
-    /* Formato argentino: 204.380 = 204380 pesos (punto como separador de miles) */
     const s = String(v).replace(/[$\s€]/g, '').replace(/\./g, '').replace(',', '.');
     const n = parseFloat(s);
     return isNaN(n) ? 0 : n;
@@ -399,7 +443,6 @@
         return { tab, txt };
       } catch {}
     }
-    /* fallback: pestaña por defecto */
     const r = await fetch(`https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:csv`, { cache: 'no-store' });
     return { tab: 'default', txt: await r.text() };
   }
@@ -409,27 +452,50 @@
       const { tab, txt } = await fetchLatestTab(sh.id, sh.tabs);
       const filas = parsearCSV(txt);
       const hIdx = encontrarHeader(filas);
-      if (hIdx < 0) return { disc: sh.nombre, emoji: sh.emoji, tab, socios: [], total: 0, alDia: 0, deudores: 0, deuda: 0 };
-      const cols = detectarCols(filas[hIdx]);
+      if (hIdx < 0) return { disc: sh.nombre, emoji: sh.emoji, tab, socios: [], mesesHeaders: [], total: 0, alDia: 0, deudores: 0, deuda: 0 };
+
+      const hdrRow = filas[hIdx];
+      const cols   = detectarCols(hdrRow);
+
+      /* Rango de columnas desde SOCIA/NO SOCIA hasta TOTAL (inclusive) */
+      const startIdx = cols.socio !== undefined ? cols.socio : (cols.dni !== undefined ? cols.dni + 1 : 4);
+      const endIdx   = cols.total !== undefined ? cols.total : hdrRow.length - 1;
+
+      const mesesHeaders = [];
+      for (let i = startIdx; i <= endIdx; i++) {
+        mesesHeaders.push((hdrRow[i] || `Col${i}`).trim());
+      }
+
       const socios = [];
       for (const f of filas.slice(hIdx + 1)) {
         const nombre = (f[cols.nombre] || '').trim();
         if (!nombre || nombre.length < 3) continue;
-        /* filtrar filas de metadatos */
-        if (/^(falta|mes|total|n[°o ]|basquet|al.?d[ií]a|deben|socio|resumen|categoria)/i.test(nombre)) continue;
-        const cat   = (cols.cat   !== undefined ? f[cols.cat]   || '' : '').trim();
-        const dni   = normDNI(cols.dni !== undefined ? f[cols.dni] : '');
-        const meses = (cols.meses !== undefined ? f[cols.meses] || '' : '').trim();
-        const total = parsearMonto(cols.total !== undefined ? f[cols.total] : 0);
-        const alDia = total === 0 || /al.?d[ií]a/i.test(meses) || meses === '' || meses === '0';
-        socios.push({ nombre, cat, dni, meses, total, alDia, disc: sh.nombre, emoji: sh.emoji });
+        if (/^(falta|mes[^a]|total|n[°o ]|basquet|al.?d[ií]a|deben|socios?$|resumen|categoria)/i.test(nombre)) continue;
+
+        const cat = (cols.cat !== undefined ? f[cols.cat] || '' : '').trim();
+        const dni = normDNI(cols.dni !== undefined ? f[cols.dni] : '');
+
+        /* Capturar todas las columnas del rango */
+        const mesesVals = [];
+        for (let i = startIdx; i <= endIdx; i++) {
+          mesesVals.push({ header: (hdrRow[i] || `Col${i}`).trim(), valor: (f[i] || '').trim() });
+        }
+
+        /* Total = último valor del rango */
+        const totalVal  = mesesVals.length ? mesesVals[mesesVals.length - 1].valor : '0';
+        const total     = parsearMonto(totalVal);
+        const mesesTxt  = (cols.meses !== undefined ? f[cols.meses] || '' : '').trim();
+        const alDia     = total === 0 || /al.?d[ií]a/i.test(mesesTxt);
+
+        socios.push({ nombre, cat, dni, mesesVals, total, alDia, disc: sh.nombre, emoji: sh.emoji });
       }
-      const deuda = socios.reduce((s, x) => s + x.total, 0);
+
+      const deuda      = socios.reduce((s, x) => s + x.total, 0);
       const alDiaCount = socios.filter(x => x.alDia).length;
-      return { disc: sh.nombre, emoji: sh.emoji, tab, socios, total: socios.length, alDia: alDiaCount, deudores: socios.length - alDiaCount, deuda };
+      return { disc: sh.nombre, emoji: sh.emoji, tab, socios, mesesHeaders, total: socios.length, alDia: alDiaCount, deudores: socios.length - alDiaCount, deuda };
     } catch (e) {
       console.error('Error procesando', sh.nombre, e);
-      return { disc: sh.nombre, emoji: sh.emoji, tab: '—', socios: [], total: 0, alDia: 0, deudores: 0, deuda: 0 };
+      return { disc: sh.nombre, emoji: sh.emoji, tab: '—', socios: [], mesesHeaders: [], total: 0, alDia: 0, deudores: 0, deuda: 0 };
     }
   }
 
@@ -438,7 +504,7 @@
     cargando = true;
     const resultados = await Promise.all(SHEETS.map(procesarSheet));
     statsPorDisc = resultados;
-    sociosTodos = resultados.flatMap(r => r.socios);
+    sociosTodos  = resultados.flatMap(r => r.socios);
     cargado = true; cargando = false;
     actualizarUI();
   }
@@ -452,39 +518,142 @@
     document.getElementById('search-tag-status').textContent = 'DNI · Nombre';
     const tabs = [...new Set(statsPorDisc.map(r => r.tab))].join(' · ');
     document.getElementById('reporte-mes').textContent = 'Pestaña: ' + tabs;
-    renderInformeDisciplinas();
+    renderDiscTabs();
     renderMetricasGlobales();
   }
 
-  function renderInformeDisciplinas() {
-    const grid = document.getElementById('disc-report-grid');
-    grid.innerHTML = '';
-    for (const s of statsPorDisc) {
-      const pct = s.total > 0 ? Math.round(s.alDia / s.total * 100) : 0;
-      const card = document.createElement('div');
-      card.className = 'disc-report-card';
-      card.innerHTML = `
-        <div class="drc-header">
-          <span class="drc-emoji">${s.emoji}</span>
-          <span class="drc-nombre">${s.disc}</span>
-          <span class="drc-tab">${s.tab}</span>
-        </div>
-        <div class="drc-stats">
-          <div class="drc-stat"><span class="drc-num">${s.total}</span><span class="drc-lbl">inscriptos</span></div>
-          <div class="drc-stat" style="color:#16a34a"><span class="drc-num">${s.alDia}</span><span class="drc-lbl">al día</span></div>
-          <div class="drc-stat" style="color:#dc2626"><span class="drc-num">${s.deudores}</span><span class="drc-lbl">deudores</span></div>
-        </div>
-        <div class="drc-progress-wrap">
-          <div class="drc-progress-bar" style="width:${pct}%"></div>
-        </div>
-        <div class="drc-pct">${pct}% al día</div>
-        <div class="drc-deuda" style="color:${s.deuda > 0 ? '#dc2626' : '#16a34a'}">
-          ${s.deuda > 0 ? fmtPeso(s.deuda) + ' pendiente' : 'Sin deuda registrada'}
-        </div>`;
-      grid.appendChild(card);
-    }
+  /* ─── DISC TABS ─── */
+  function renderDiscTabs() {
+    const container = document.getElementById('disc-tabs-pill');
+    container.innerHTML = statsPorDisc.map((s, i) =>
+      `<button class="disc-tab ${i === 0 ? 'active' : 'inactive'}" data-disc="${s.disc}"
+         onclick="seleccionarDisc('${s.disc.replace(/'/g,"\\'")}')">
+        <span>${s.emoji}</span>
+        <span class="disc-tab-name">${s.disc}</span>
+      </button>`
+    ).join('');
+    if (statsPorDisc.length > 0) seleccionarDisc(statsPorDisc[0].disc);
   }
 
+  function seleccionarDisc(disc) {
+    discActiva = disc;
+    catActiva  = null;
+
+    document.querySelectorAll('.disc-tab').forEach(btn => {
+      const active = btn.dataset.disc === disc;
+      btn.className = `disc-tab ${active ? 'active' : 'inactive'}`;
+    });
+
+    const discData = statsPorDisc.find(s => s.disc === disc);
+    if (!discData) return;
+
+    /* Categorías únicas, ordenadas */
+    const cats = [...new Set(discData.socios.map(s => s.cat).filter(c => c.length > 0))].sort();
+
+    const catBar   = document.getElementById('cat-bar');
+    const catPills = document.getElementById('cat-pills-row');
+    const catLabel = document.getElementById('cat-bar-label');
+
+    if (!cats.length) { catBar.style.display = 'none'; document.getElementById('socios-browser').style.display = 'none'; return; }
+
+    catBar.style.display = '';
+    catLabel.textContent = `${discData.emoji} ${disc} — ${cats.length} categoría${cats.length !== 1 ? 's' : ''}`;
+
+    catPills.innerHTML = cats.map(cat =>
+      `<button class="cat-pill" data-cat="${cat}"
+         onclick="seleccionarCat('${disc.replace(/'/g,"\\'")}','${cat.replace(/'/g,"\\'")}')">
+        ${cat}
+       </button>`
+    ).join('');
+
+    document.getElementById('socios-browser').style.display = 'none';
+  }
+
+  function seleccionarCat(disc, cat) {
+    catActiva = cat;
+    document.querySelectorAll('.cat-pill').forEach(p => {
+      p.classList.toggle('active', p.dataset.cat === cat);
+    });
+    renderTablaSocios(disc, cat);
+  }
+
+  /* ─── TABLA DE SOCIOS ─── */
+  function renderTablaSocios(disc, cat) {
+    const discData = statsPorDisc.find(s => s.disc === disc);
+    if (!discData) return;
+
+    const socios  = discData.socios.filter(s => s.cat === cat);
+    const browser = document.getElementById('socios-browser');
+    browser.style.display = 'block';
+
+    const alDia    = socios.filter(s => s.alDia).length;
+    const deudores = socios.length - alDia;
+    const deudaTotal = socios.reduce((a, s) => a + s.total, 0);
+
+    document.getElementById('sb-title').textContent = `${discData.emoji} ${disc} · ${cat}`;
+    document.getElementById('sb-stats').innerHTML =
+      `<span class="sb-stat"><strong>${socios.length}</strong> socios</span>` +
+      `<span class="sb-stat ok"><strong>${alDia}</strong> al día</span>` +
+      (deudores > 0 ? `<span class="sb-stat debe"><strong>${deudores}</strong> deben · ${fmtPeso(deudaTotal)}</span>` : '');
+
+    const thead = document.getElementById('sb-thead');
+    const tbody = document.getElementById('sb-tbody');
+
+    if (!socios.length) {
+      thead.innerHTML = '';
+      tbody.innerHTML = `<tr><td colspan="5" class="sb-empty">Sin socios registrados en esta categoría.</td></tr>`;
+      browser.scrollIntoView({ behavior:'smooth', block:'nearest' });
+      return;
+    }
+
+    /* Headers de la tabla */
+    const headers = socios[0]?.mesesVals?.map(m => m.header) || [];
+    thead.innerHTML = `<tr>
+      <th style="position:sticky;left:0;z-index:3;background:#f8fafb;">Nombre</th>
+      ${headers.map(h => `<th>${h}</th>`).join('')}
+    </tr>`;
+
+    /* Filas */
+    tbody.innerHTML = socios.map(s => {
+      const cells = (s.mesesVals || []).map((m, i) => {
+        const hNorm = normStr(m.header);
+        const v     = m.valor;
+        const vNorm = normStr(v);
+        const isLast = i === s.mesesVals.length - 1;
+
+        /* Primera columna → SOCIA / NO SOCIA */
+        if (i === 0 || hNorm.includes('SOCIA') || hNorm.includes('SOCIO')) {
+          const noSocia = /no.?soci/i.test(v);
+          return `<td><span class="${noSocia ? 'badge-no-socia' : 'badge-socia'}">${v || '—'}</span></td>`;
+        }
+
+        /* Última columna o header "TOTAL" → deuda */
+        if (isLast || hNorm === 'TOTAL') {
+          const monto = parsearMonto(v);
+          return `<td class="${monto === 0 ? 'cell-ok' : 'cell-debe'}">${monto === 0 ? 'AL DÍA' : fmtPeso(monto)}</td>`;
+        }
+
+        /* Presencia P / A */
+        if (vNorm === 'P' || vNorm === 'PRESENTE') return `<td class="cell-p">P</td>`;
+        if (vNorm === 'A' || vNorm === 'AUSENTE')  return `<td class="cell-a">A</td>`;
+
+        /* Montos intermedios (cuotas parciales) */
+        const monto = parsearMonto(v);
+        if (monto > 0) return `<td class="cell-monto">${fmtPeso(monto)}</td>`;
+
+        return `<td class="cell-vacio">—</td>`;
+      }).join('');
+
+      return `<tr>
+        <td class="td-nombre">${s.nombre}</td>
+        ${cells}
+      </tr>`;
+    }).join('');
+
+    browser.scrollIntoView({ behavior:'smooth', block:'nearest' });
+  }
+
+  /* ─── Métricas globales ─── */
   function renderMetricasGlobales() {
     const totalDeuda    = statsPorDisc.reduce((s, x) => s + x.deuda, 0);
     const totalDeudores = statsPorDisc.reduce((s, x) => s + x.deudores, 0);
@@ -516,7 +685,7 @@
       .join('') || '<div style="color:#9ca3af;font-size:13px;padding:8px 0;">Sin deuda registrada</div>';
   }
 
-  /* ── Búsqueda ── */
+  /* ─── Búsqueda ─── */
   let timer = null;
   function buscarSocio(q) {
     q = q.trim();
