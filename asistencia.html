@@ -134,6 +134,12 @@
     .cell-vacio{color:#d1d5db;text-align:center;}
     .sb-empty{padding:48px;text-align:center;color:#9ca3af;font-size:13px;line-height:1.8;}
 
+    /* ── Filtros de tabla ── */
+    .filter-row th{padding:5px 14px 8px;background:#f8fafb;}
+    .tbl-filter{width:100%;font-size:11px;padding:4px 8px;border:1.5px solid #e5e7eb;border-radius:6px;background:#fff;color:#374151;font-family:'Rag',sans-serif;outline:none;box-sizing:border-box;}
+    .tbl-filter:focus{border-color:#1a672a;}
+    select.tbl-filter{cursor:pointer;}
+
     /* ── Botones inline tabla ── */
     .btn-hist{font-size:10px;font-weight:700;letter-spacing:.5px;padding:3px 8px;border-radius:6px;border:1.5px solid rgba(26,103,42,.25);color:#1a672a;background:#f0fdf4;cursor:pointer;white-space:nowrap;margin-left:6px;font-family:'Rag',sans-serif;vertical-align:middle;}
     .btn-hist:hover{background:#dcfce7;border-color:#1a672a;}
@@ -456,15 +462,21 @@
       const u = normStr(h);
       if (u.includes('NOMBRE') && u.includes('APELLIDO')) c.nombre = i;
       else if (u.includes('CATEGOR')) c.cat = i;
-      else if (u === 'DNI' || u.includes('DOCUMENTO')) c.dni = i;
+      /* DNI: exacto o variantes comunes */
+      else if (u === 'DNI' || u === 'D.N.I' || u === 'D.N.I.' || u.includes('DOCUMENTO') || u.includes('IDENTIDAD')) c.dni = i;
+      /* Fecha de nacimiento: detectar antes de caer al fallback */
+      else if (u.includes('NACIM') || (u.includes('FECHA') && !u.includes('VENC') && !u.includes('ALTA'))) c.fechaNac = i;
       else if (u.includes('SOCIA') || u.includes('SOCIO')) c.socio = i;
       else if (u === 'MESES') c.meses = i;
       else if (u === 'TOTAL') c.total = i;
     });
-    if (c.nombre === undefined) c.nombre = 1;
-    /* fallback encadenado: cat y dni se ubican relativos al anterior detectado */
-    if (c.cat === undefined) c.cat = c.nombre + 1;
-    if (c.dni === undefined) c.dni = c.cat + 1;
+    if (c.nombre   === undefined) c.nombre   = 1;
+    if (c.cat      === undefined) c.cat      = c.nombre + 1;
+    /* Si fechaNac se detectó antes que dni, dni viene después de fechaNac */
+    if (c.dni === undefined) {
+      if (c.fechaNac !== undefined) c.dni = c.fechaNac + 1;
+      else c.dni = c.cat + 1;
+    }
     return c;
   }
 
@@ -517,8 +529,9 @@
         if (!nombre || nombre.length < 3) continue;
         if (/^(falta|mes[^a]|total|n[°o ]|basquet|al.?d[ií]a|deben|socios?$|resumen|categoria)/i.test(nombre)) continue;
 
-        const cat = (cols.cat !== undefined ? f[cols.cat] || '' : '').trim();
-        const dni = normDNI(cols.dni !== undefined ? f[cols.dni] : '');
+        const cat      = (cols.cat      !== undefined ? f[cols.cat]      || '' : '').trim();
+        const dni      = normDNI(cols.dni      !== undefined ? f[cols.dni]      : '');
+        const fechaNac = (cols.fechaNac !== undefined ? f[cols.fechaNac] || '' : '').trim();
 
         /* Capturar todas las columnas del rango */
         const mesesVals = [];
@@ -526,13 +539,21 @@
           mesesVals.push({ header: (hdrRow[i] || `Col${i}`).trim(), valor: (f[i] || '').trim() });
         }
 
-        /* Total = último valor del rango */
-        const totalVal  = mesesVals.length ? mesesVals[mesesVals.length - 1].valor : '0';
-        const total     = parsearMonto(totalVal);
-        const mesesTxt  = (cols.meses !== undefined ? f[cols.meses] || '' : '').trim();
-        const alDia     = total === 0 || /al.?d[ií]a/i.test(mesesTxt);
+        /* Sumar desde columna MESES hasta antes de TOTAL (máx 5 cols: cuota, adicional, seguro, recargo, inscripción)
+           NO usar la columna TOTAL del Drive porque puede tener errores de fórmula */
+        let total = 0;
+        if (cols.meses !== undefined) {
+          const monEnd = cols.total !== undefined ? cols.total : Math.min(cols.meses + 6, hdrRow.length);
+          for (let i = cols.meses; i < monEnd; i++) {
+            total += parsearMonto(f[i] || '');
+          }
+        } else {
+          const totalVal = mesesVals.length ? mesesVals[mesesVals.length - 1].valor : '0';
+          total = parsearMonto(totalVal);
+        }
+        const alDia = total === 0;
 
-        socios.push({ nombre, cat, dni, mesesVals, total, alDia, disc: sh.nombre, emoji: sh.emoji });
+        socios.push({ nombre, cat, dni, fechaNac, mesesVals, total, alDia, disc: sh.nombre, emoji: sh.emoji });
       }
 
       const deuda      = socios.reduce((s, x) => s + x.total, 0);
@@ -622,18 +643,59 @@
     renderTablaSocios(disc, cat);
   }
 
+  /* ─── Utilidades para tabla ─── */
+  let filtros = { nombre: '', condicion: '', ultMes: '', deuda: '' };
+
+  function getUltMes(s) {
+    for (let i = s.mesesVals.length - 2; i >= 1; i--) {
+      const vn = normStr(s.mesesVals[i].valor);
+      if (vn === 'P' || vn === 'A' || vn === 'PRESENTE' || vn === 'AUSENTE') return s.mesesVals[i];
+    }
+    return null;
+  }
+
+  function aplicarFiltros(lista) {
+    return lista.filter(s => {
+      if (filtros.nombre) {
+        const q = filtros.nombre.toLowerCase();
+        if (!s.nombre.toLowerCase().includes(q) && !s.dni.includes(filtros.nombre)) return false;
+      }
+      if (filtros.condicion) {
+        const cond = normStr(s.mesesVals[0]?.valor || '');
+        if (filtros.condicion === 'SOCIA' && cond.includes('NO')) return false;
+        if (filtros.condicion === 'NO'    && !cond.includes('NO')) return false;
+      }
+      if (filtros.ultMes) {
+        const um = getUltMes(s);
+        const vn = um ? normStr(um.valor) : '';
+        if (filtros.ultMes === 'P' && vn !== 'P' && vn !== 'PRESENTE') return false;
+        if (filtros.ultMes === 'A' && vn !== 'A' && vn !== 'AUSENTE')  return false;
+      }
+      if (filtros.deuda === 'aldia' && !s.alDia) return false;
+      if (filtros.deuda === 'deben' && s.alDia)  return false;
+      return true;
+    });
+  }
+
+  function actualizarFiltros() {
+    renderFilas(aplicarFiltros(sociosActuales));
+  }
+
   /* ─── TABLA DE SOCIOS ─── */
   function renderTablaSocios(disc, cat) {
     const discData = statsPorDisc.find(s => s.disc === disc);
     if (!discData) return;
 
-    const socios  = discData.socios.filter(s => s.cat === cat);
+    const socios = discData.socios.filter(s => s.cat === cat);
     sociosActuales = socios;
+    /* Resetear filtros al cambiar categoría */
+    filtros = { nombre: '', condicion: '', ultMes: '', deuda: '' };
+
     const browser = document.getElementById('socios-browser');
     browser.style.display = 'block';
 
-    const alDia    = socios.filter(s => s.alDia).length;
-    const deudores = socios.length - alDia;
+    const alDia     = socios.filter(s => s.alDia).length;
+    const deudores  = socios.length - alDia;
     const deudaTotal = socios.reduce((a, s) => a + s.total, 0);
 
     document.getElementById('sb-title').textContent = `${discData.emoji} ${disc} · ${cat}`;
@@ -643,66 +705,93 @@
       (deudores > 0 ? `<span class="sb-stat debe"><strong>${deudores}</strong> deben · ${fmtPeso(deudaTotal)}</span>` : '');
 
     const thead = document.getElementById('sb-thead');
-    const tbody = document.getElementById('sb-tbody');
 
     if (!socios.length) {
       thead.innerHTML = '';
-      tbody.innerHTML = `<tr><td colspan="4" class="sb-empty">Sin socios registrados en esta categoría.</td></tr>`;
+      document.getElementById('sb-tbody').innerHTML =
+        `<tr><td colspan="4" class="sb-empty">Sin socios registrados en esta categoría.</td></tr>`;
       browser.scrollIntoView({ behavior:'smooth', block:'nearest' });
       return;
     }
 
-    thead.innerHTML = `<tr>
-      <th style="position:sticky;left:0;z-index:3;background:#f8fafb;">Nombre · DNI</th>
-      <th>Condición</th>
-      <th>Últ. mes</th>
-      <th>Total deuda</th>
-    </tr>`;
-
-    tbody.innerHTML = socios.map((s, idx) => {
-      /* Condición: primera columna (SOCIA/NO SOCIA) */
-      const condVal = s.mesesVals[0]?.valor || '';
-      const noSocia = /no.?soci/i.test(condVal);
-      const condBadge = `<span class="${noSocia ? 'badge-no-socia' : 'badge-socia'}">${condVal || '—'}</span>`;
-
-      /* Último mes con P o A (busca de derecha a izquierda, excluyendo condición y total) */
-      let ultMes = null;
-      for (let i = s.mesesVals.length - 2; i >= 1; i--) {
-        const vn = normStr(s.mesesVals[i].valor);
-        if (vn === 'P' || vn === 'A' || vn === 'PRESENTE' || vn === 'AUSENTE') {
-          ultMes = s.mesesVals[i]; break;
-        }
-      }
-      const isP = ultMes && (normStr(ultMes.valor) === 'P' || normStr(ultMes.valor) === 'PRESENTE');
-      const ultMesCell = ultMes
-        ? `<span class="${isP ? 'cell-p' : 'cell-a'}" title="${ultMes.header}">${isP ? 'P' : 'A'}</span>`
-        : `<span class="cell-vacio">—</span>`;
-
-      /* Total deuda */
-      const totalCell = s.alDia
-        ? `<span class="cell-ok">AL DÍA</span>`
-        : `<span class="cell-debe">${fmtPeso(s.total)}</span>`;
-      const btnDeuda = !s.alDia
-        ? `<button class="btn-deuda" onclick="abrirModalDeuda(${idx})">Detalle</button>`
-        : '';
-
-      return `<tr>
-        <td class="td-nombre">
-          ${s.nombre}
-          ${s.dni ? `<span style="display:block;font-size:10px;color:#9ca3af;font-weight:400;margin-top:2px;">DNI ${s.dni}</span>` : ''}
-        </td>
-        <td>${condBadge}</td>
-        <td>
-          ${ultMesCell}
-          <button class="btn-hist" onclick="abrirModalAsistencia(${idx})">Asistencia</button>
-        </td>
-        <td>
-          ${totalCell}${btnDeuda}
-        </td>
+    thead.innerHTML = `
+      <tr>
+        <th style="position:sticky;left:0;z-index:3;background:#f8fafb;">Nombre · DNI</th>
+        <th>Condición</th>
+        <th>Últ. mes</th>
+        <th>Total deuda</th>
+      </tr>
+      <tr class="filter-row">
+        <th style="position:sticky;left:0;z-index:3;background:#f8fafb;">
+          <input class="tbl-filter" placeholder="Buscar nombre o DNI…" oninput="filtros.nombre=this.value;actualizarFiltros()">
+        </th>
+        <th>
+          <select class="tbl-filter" onchange="filtros.condicion=this.value;actualizarFiltros()">
+            <option value="">Todos</option>
+            <option value="SOCIA">Socio/a</option>
+            <option value="NO">No socio/a</option>
+          </select>
+        </th>
+        <th>
+          <select class="tbl-filter" onchange="filtros.ultMes=this.value;actualizarFiltros()">
+            <option value="">Todos</option>
+            <option value="P">Presente</option>
+            <option value="A">Ausente</option>
+          </select>
+        </th>
+        <th>
+          <select class="tbl-filter" onchange="filtros.deuda=this.value;actualizarFiltros()">
+            <option value="">Todos</option>
+            <option value="aldia">Al día</option>
+            <option value="deben">Deben</option>
+          </select>
+        </th>
       </tr>`;
-    }).join('');
 
+    renderFilas(socios);
     browser.scrollIntoView({ behavior:'smooth', block:'nearest' });
+  }
+
+  function renderFilas(lista) {
+    document.getElementById('sb-tbody').innerHTML = lista.length
+      ? lista.map((s, idx) => {
+          const condVal  = s.mesesVals[0]?.valor || '';
+          const noSocia  = /no.?soci/i.test(condVal);
+          const condBadge = `<span class="${noSocia ? 'badge-no-socia' : 'badge-socia'}">${condVal || '—'}</span>`;
+
+          const ultMes = getUltMes(s);
+          const isP    = ultMes && (normStr(ultMes.valor) === 'P' || normStr(ultMes.valor) === 'PRESENTE');
+          const ultMesCell = ultMes
+            ? `<span class="${isP ? 'cell-p' : 'cell-a'}" title="${ultMes.header}">${isP ? 'P' : 'A'}</span>`
+            : `<span class="cell-vacio">—</span>`;
+
+          const totalCell = s.alDia
+            ? `<span class="cell-ok">AL DÍA</span>`
+            : `<span class="cell-debe">${fmtPeso(s.total)}</span>`;
+          const btnDeuda = !s.alDia
+            ? `<button class="btn-deuda" onclick="abrirModalDeuda(${idx})">Detalle</button>`
+            : '';
+
+          /* DNI y fecha de nacimiento en la celda de nombre */
+          const dniLine = s.dni
+            ? `<span style="font-size:10px;color:#9ca3af;font-weight:400;">DNI ${s.dni}</span>` : '';
+          const nacLine = s.fechaNac
+            ? `<span style="font-size:10px;color:#9ca3af;font-weight:400;"> · F.Nac ${s.fechaNac}</span>` : '';
+
+          return `<tr>
+            <td class="td-nombre">
+              ${s.nombre}
+              ${(dniLine || nacLine) ? `<span style="display:block;margin-top:2px;">${dniLine}${nacLine}</span>` : ''}
+            </td>
+            <td>${condBadge}</td>
+            <td>
+              ${ultMesCell}
+              <button class="btn-hist" onclick="abrirModalAsistencia(${idx})">Asistencia</button>
+            </td>
+            <td>${totalCell}${btnDeuda}</td>
+          </tr>`;
+        }).join('')
+      : `<tr><td colspan="4" class="sb-empty">Sin resultados con los filtros aplicados.</td></tr>`;
   }
 
   /* ─── Modales de detalle ─── */
