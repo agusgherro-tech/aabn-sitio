@@ -455,15 +455,16 @@
     hdr.forEach((h, i) => {
       const u = normStr(h);
       if (u.includes('NOMBRE') && u.includes('APELLIDO')) c.nombre = i;
-      else if (u === 'CATEGORIA' || u === 'CATEGORÍA') c.cat = i;
-      else if (u === 'DNI') c.dni = i;
+      else if (u.includes('CATEGOR')) c.cat = i;
+      else if (u === 'DNI' || u.includes('DOCUMENTO')) c.dni = i;
       else if (u.includes('SOCIA') || u.includes('SOCIO')) c.socio = i;
       else if (u === 'MESES') c.meses = i;
       else if (u === 'TOTAL') c.total = i;
     });
     if (c.nombre === undefined) c.nombre = 1;
-    if (c.cat    === undefined) c.cat    = 2;
-    if (c.dni    === undefined) c.dni    = 4;
+    /* fallback encadenado: cat y dni se ubican relativos al anterior detectado */
+    if (c.cat === undefined) c.cat = c.nombre + 1;
+    if (c.dni === undefined) c.dni = c.cat + 1;
     return c;
   }
 
