@@ -204,7 +204,7 @@ def leer_pagos(conn):
 # ── Construcción de datos ─────────────────────────────────────────────────
 
 def construir_data(socios_list, disc_por_socio, socios_con_servicio, deuda, pagos):
-    filas, disc_set = [], set()
+    filas_activos, filas_baja, disc_set = [], [], set()
     conteo = {'al_dia': 0, 'deudor': 0, 'baja': 0}
 
     for s in socios_list:
@@ -229,7 +229,7 @@ def construir_data(socios_list, disc_por_socio, socios_con_servicio, deuda, pago
         else:
             estado_final = 'baja';   conteo['baja']   += 1
 
-        filas.append({
+        fila = {
             'nro_socio':    s['nro_socio'],
             'nombre':       s['nombre'],
             'dni':          s['dni'],
@@ -245,12 +245,19 @@ def construir_data(socios_list, disc_por_socio, socios_con_servicio, deuda, pago
             'deuda_total':  deuda_real,
             'ultimo_pago':  p.get('ultimo_pago', ''),
             'cobrado_2026': p.get('cobrado_2026', 0),
-        })
+        }
+
+        if estado_final == 'baja':
+            filas_baja.append(fila)
+        else:
+            filas_activos.append(fila)
 
     return {
-        '_filas':       filas,
+        '_filas':       filas_activos,
+        '_filas_baja':  filas_baja,
         '_conteo':      conteo,
-        '_total':       len(filas),
+        '_total':       len(filas_activos),
+        '_total_baja':  len(filas_baja),
         '_disciplinas': sorted(disc_set),
         '_generado':    date.today().strftime('%d/%m/%Y'),
     }
@@ -264,15 +271,15 @@ HTML_TEMPLATE = """\
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard Socios — A.A.B.N</title>
-  <script src="https://cdn.tailwindcss.com"><\/script>
+  <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
-            verde:{50:"#f0f9f3",100:"#d9f0e1",200:"#b2e0c3",300:"#7cc99a",
-                   400:"#46ad6f",500:"#28904f",600:"#1c743e",700:"#195e34",
-                   800:"#174b2b",900:"#133d23"}
+            verde:{50:"#f0fdf4",100:"#dcfce7",200:"#bbf7d0",300:"#86efac",
+                   400:"#4ade80",500:"#22903a",600:"#1a672a",700:"#1d7a31",
+                   800:"#1a672a",900:"#154C20"}
           },
           fontFamily: {
             sans:   ["Rag","Segoe UI","Arial","sans-serif"],
@@ -281,7 +288,7 @@ HTML_TEMPLATE = """\
         }
       }
     }
-  <\/script>
+  </script>
   <style>
     @font-face{font-family:"Expose";src:url("fonts/Expose-Black.woff2") format("woff2");font-weight:900;}
     @font-face{font-family:"Expose";src:url("fonts/Expose-Bold.woff2") format("woff2");font-weight:700;}
@@ -291,32 +298,32 @@ HTML_TEMPLATE = """\
     @font-face{font-family:"Rag";src:url("fonts/Rag-Black.woff2") format("woff2"),url("fonts/Rag-Black.woff") format("woff");font-weight:900;font-style:normal;}
     *{box-sizing:border-box;}
     html,body{height:100%;margin:0;}
-    body{background:#0d1117;}
+    body{background:#f3f4f6;color:#111827;}
 
-    .badge-al_dia{background:rgba(16,185,129,.1);color:#6ee7b7;border:1px solid rgba(110,231,183,.15);}
-    .badge-deudor{background:rgba(239,68,68,.1);color:#fca5a5;border:1px solid rgba(252,165,165,.15);}
-    .badge-baja  {background:rgba(255,255,255,.05);color:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.08);}
+    .badge-al_dia{background:rgba(16,185,129,.12);color:#047857;border:1px solid rgba(16,185,129,.25);}
+    .badge-deudor{background:rgba(239,68,68,.1);color:#dc2626;border:1px solid rgba(239,68,68,.2);}
+    .badge-baja  {background:rgba(0,0,0,.05);color:rgba(0,0,0,.4);border:1px solid rgba(0,0,0,.1);}
 
-    tr.data-row:hover td{background:rgba(255,255,255,.03);}
-    tr.data-row:nth-child(even) td{background:rgba(0,0,0,.13);}
+    tr.data-row:hover td{background:rgba(0,0,0,.025);}
+    tr.data-row:nth-child(even) td{background:rgba(0,0,0,.03);}
     tr.data-row td{transition:background .1s;}
-    tr.data-row{border-bottom:1px solid rgba(255,255,255,.04);}
+    tr.data-row{border-bottom:1px solid rgba(0,0,0,.06);}
 
     .sortable{cursor:pointer;user-select:none;transition:color .15s;}
-    .sortable:hover{color:rgba(255,255,255,.65)!important;}
+    .sortable:hover{color:rgba(0,0,0,.7)!important;}
     thead th{position:sticky;top:0;z-index:10;}
 
-    .table-wrap{max-height:calc(100vh - 300px);overflow:auto;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.08) transparent;}
+    .table-wrap{max-height:calc(100vh - 300px);overflow:auto;scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.15) transparent;}
     .table-wrap::-webkit-scrollbar{width:5px;height:5px;}
     .table-wrap::-webkit-scrollbar-track{background:transparent;}
-    .table-wrap::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:10px;}
+    .table-wrap::-webkit-scrollbar-thumb{background:rgba(0,0,0,.15);border-radius:10px;}
 
-    .input-f{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;
-             padding:7px 13px;font-size:12px;color:rgba(255,255,255,.65);outline:none;
+    .input-f{background:#fff;border:1px solid rgba(0,0,0,.12);border-radius:10px;
+             padding:7px 13px;font-size:12px;color:rgba(0,0,0,.7);outline:none;
              transition:border-color .2s,box-shadow .2s;font-family:inherit;}
-    .input-f:focus{border-color:rgba(40,144,79,.45);box-shadow:0 0 0 3px rgba(40,144,79,.07);}
-    .input-f::placeholder{color:rgba(255,255,255,.2);}
-    .input-f option{background:#111520;color:#d1d5db;}
+    .input-f:focus{border-color:rgba(26,103,42,.5);box-shadow:0 0 0 3px rgba(26,103,42,.08);}
+    .input-f::placeholder{color:rgba(0,0,0,.3);}
+    .input-f option{background:#fff;color:#374151;}
 
     .tag-disc{display:inline-flex;align-items:center;background:rgba(40,144,79,.13);color:#86efac;
               font-size:10px;font-weight:600;padding:1px 7px;border-radius:20px;
@@ -332,17 +339,17 @@ HTML_TEMPLATE = """\
               text-decoration:none;border:1px solid transparent;cursor:pointer;background:transparent;
               width:100%;text-align:left;font-family:inherit;}
     .nav-item:hover{color:rgba(255,255,255,.6);background:rgba(255,255,255,.04);}
-    .nav-active{background:rgba(28,116,62,.22)!important;border-color:rgba(28,116,62,.28)!important;color:#86efac!important;}
+    .nav-active{background:rgba(26,103,42,.35)!important;border-color:rgba(74,222,128,.3)!important;color:#86efac!important;}
 
     td,th{white-space:nowrap;}
-  <\/style>
-<\/head>
+  </style>
+</head>
 <body class="font-sans antialiased">
 
 <div style="display:flex;height:100vh;overflow:hidden;">
 
 <!-- ── SIDEBAR ── -->
-<aside style="width:220px;flex-shrink:0;background:#080b10;border-right:1px solid rgba(255,255,255,.05);display:flex;flex-direction:column;z-index:40;">
+<aside style="width:220px;flex-shrink:0;background:#154C20;border-right:1px solid rgba(255,255,255,.08);display:flex;flex-direction:column;z-index:40;">
 
   <div style="padding:20px;border-bottom:1px solid rgba(255,255,255,.05);flex-shrink:0">
     <a href="index.html" style="display:flex;align-items:center;gap:12px;text-decoration:none">
@@ -355,21 +362,6 @@ HTML_TEMPLATE = """\
   </div>
 
   <nav style="flex:1;padding:12px;overflow-y:auto;display:flex;flex-direction:column;gap:2px">
-    <div style="font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:0 8px;margin-bottom:8px;color:rgba(255,255,255,.18)">Gestión</div>
-    <a href="#" class="nav-item nav-active">
-      <svg style="width:16px;height:16px;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 7a4 4 0 100 8 4 4 0 000-8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
-      </svg>
-      Socios
-    </a>
-    <a href="estado-resultados.html" class="nav-item">
-      <svg style="width:16px;height:16px;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-      </svg>
-      Finanzas
-    </a>
-
-    <div style="height:1px;background:rgba(255,255,255,.05);margin:8px 0"></div>
     <div style="font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:0 8px;margin-bottom:8px;color:rgba(255,255,255,.18)">Navegación</div>
     <a href="selector.html" class="nav-item">
       <svg style="width:16px;height:16px;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
@@ -382,6 +374,28 @@ HTML_TEMPLATE = """\
         <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
       </svg>
       Sitio web
+    </a>
+
+    <div style="height:1px;background:rgba(255,255,255,.05);margin:8px 0"></div>
+    <div style="font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:0 8px;margin-bottom:8px;color:rgba(255,255,255,.18)">Gestión</div>
+    <button onclick="mostrarVista('socios')" id="nav-socios" class="nav-item nav-active">
+      <svg style="width:16px;height:16px;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 7a4 4 0 100 8 4 4 0 000-8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+      </svg>
+      Socios activos
+    </button>
+    <button onclick="mostrarVista('bajas')" id="nav-bajas" class="nav-item">
+      <svg style="width:16px;height:16px;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/>
+      </svg>
+      <span style="flex:1;text-align:left">Dados de baja</span>
+      <span id="nav-baja-cnt" style="font-size:10px;background:rgba(255,255,255,.07);border-radius:20px;padding:1px 7px;color:rgba(255,255,255,.3);font-weight:700"></span>
+    </button>
+    <a href="estado-resultados.html" class="nav-item">
+      <svg style="width:16px;height:16px;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+      </svg>
+      Finanzas
     </a>
   </nav>
 
@@ -409,58 +423,61 @@ HTML_TEMPLATE = """\
 <!-- ── MAIN ── -->
 <div style="flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0">
 
-  <header style="flex-shrink:0;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;border-bottom:1px solid rgba(255,255,255,.05);background:rgba(13,17,23,.9);backdrop-filter:blur(12px);z-index:30">
+  <header style="flex-shrink:0;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;border-bottom:1px solid rgba(0,0,0,.08);background:rgba(255,255,255,.95);backdrop-filter:blur(12px);z-index:30">
     <div style="display:flex;align-items:center;gap:12px">
-      <h1 class="font-expose font-black" style="font-size:15px;color:#fff;letter-spacing:-.01em">Dashboard Socios</h1>
-      <span style="font-size:12px;color:rgba(255,255,255,.14)">Asociación Atlética Banda Norte</span>
+      <h1 id="header-titulo" class="font-expose font-black" style="font-size:15px;color:#154C20;letter-spacing:-.01em">Dashboard Socios</h1>
+      <span style="font-size:12px;color:rgba(0,0,0,.35)">Asociación Atlética Banda Norte</span>
     </div>
-    <div style="font-size:12px;color:rgba(255,255,255,.25)">
-      Actualizado: <span id="fecha-gen" style="font-weight:600;color:rgba(255,255,255,.5);margin-left:4px"></span>
+    <div style="font-size:12px;color:rgba(0,0,0,.45)">
+      Actualizado: <span id="fecha-gen" style="font-weight:600;color:rgba(0,0,0,.65);margin-left:4px"></span>
     </div>
   </header>
 
   <div style="flex:1;overflow-y:auto;padding:28px 32px">
 
+<!-- ══ VISTA SOCIOS ACTIVOS ══ -->
+<div id="view-socios">
+
     <!-- STAT CARDS -->
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px">
 
-      <div style="background:#0e1117;border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:20px">
-        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.25);margin-bottom:14px">Padrón total</div>
-        <div id="c-total" class="card-num" style="color:#fff"></div>
-        <div style="font-size:11px;color:rgba(255,255,255,.14);margin-top:10px">socios en BD</div>
+      <div style="background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:16px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.06)">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:rgba(0,0,0,.4);margin-bottom:14px">Padrón activo</div>
+        <div id="c-total" class="card-num" style="color:#111827"></div>
+        <div style="font-size:11px;color:rgba(0,0,0,.35);margin-top:10px">socios activos</div>
       </div>
 
-      <div style="background:#0e1117;border:1px solid rgba(28,116,62,.35);border-radius:16px;padding:20px;position:relative;overflow:hidden">
+      <div style="background:#fff;border:1px solid rgba(28,116,62,.35);border-radius:16px;padding:20px;position:relative;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06)">
         <div style="position:absolute;top:16px;right:16px;width:6px;height:6px;border-radius:50%;background:#28904f"></div>
-        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:rgba(134,239,172,.5);margin-bottom:14px">Al día</div>
-        <div id="c-aldia" class="card-num" style="color:#86efac"></div>
-        <div id="p-aldia" style="font-size:11px;color:rgba(134,239,172,.25);margin-top:10px"></div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#1a672a;margin-bottom:14px">Al día</div>
+        <div id="c-aldia" class="card-num" style="color:#1a672a"></div>
+        <div id="p-aldia" style="font-size:11px;color:rgba(26,103,42,.5);margin-top:10px"></div>
       </div>
 
-      <div style="background:#0e1117;border:1px solid rgba(185,28,28,.25);border-radius:16px;padding:20px;position:relative;overflow:hidden">
+      <div style="background:#fff;border:1px solid rgba(185,28,28,.25);border-radius:16px;padding:20px;position:relative;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06)">
         <div style="position:absolute;top:16px;right:16px;width:6px;height:6px;border-radius:50%;background:#ef4444"></div>
-        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:rgba(252,165,165,.5);margin-bottom:14px">Deudores</div>
-        <div id="c-deudor" class="card-num" style="color:#fca5a5"></div>
-        <div id="p-deudor" style="font-size:11px;color:rgba(252,165,165,.22);margin-top:10px"></div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#dc2626;margin-bottom:14px">Deudores</div>
+        <div id="c-deudor" class="card-num" style="color:#dc2626"></div>
+        <div id="p-deudor" style="font-size:11px;color:rgba(220,38,38,.5);margin-top:10px"></div>
       </div>
 
-      <div style="background:#0e1117;border:1px solid rgba(251,146,60,.2);border-radius:16px;padding:20px;position:relative;overflow:hidden">
+      <div style="background:#fff;border:1px solid rgba(251,146,60,.3);border-radius:16px;padding:20px;position:relative;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06)">
         <div style="position:absolute;top:16px;right:16px;width:6px;height:6px;border-radius:50%;background:#f97316"></div>
-        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:rgba(251,146,60,.5);margin-bottom:14px">Deuda total</div>
-        <div id="c-deuda" class="card-num-sm" style="color:#fdba74"></div>
-        <div id="p-cobrado" style="font-size:11px;color:rgba(251,146,60,.3);margin-top:10px"></div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#ea580c;margin-bottom:14px">Deuda total</div>
+        <div id="c-deuda" class="card-num-sm" style="color:#ea580c"></div>
+        <div id="p-cobrado" style="font-size:11px;color:rgba(234,88,12,.5);margin-top:10px"></div>
       </div>
 
     </div>
 
     <!-- TABLE CARD -->
-    <div style="background:#0e1117;border:1px solid rgba(255,255,255,.06);border-radius:16px;overflow:hidden">
+    <div style="background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:16px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06)">
 
-      <div style="padding:20px 24px;border-bottom:1px solid rgba(255,255,255,.05)">
+      <div style="padding:20px 24px;border-bottom:1px solid rgba(0,0,0,.07)">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
           <div>
-            <h2 class="font-expose font-bold" style="font-size:15px;color:#fff;letter-spacing:-.01em">Padrón Completo</h2>
-            <p style="font-size:11px;color:rgba(255,255,255,.2);margin-top:2px">Click en columna para ordenar · <span id="conteo-f" style="color:rgba(134,239,172,.5)"></span></p>
+            <h2 class="font-expose font-bold" style="font-size:15px;color:#154C20;letter-spacing:-.01em">Padrón Completo</h2>
+            <p style="font-size:11px;color:rgba(0,0,0,.4);margin-top:2px">Click en columna para ordenar · <span id="conteo-f" style="color:#1a672a"></span></p>
           </div>
         </div>
         <div style="display:flex;flex-wrap:wrap;gap:8px">
@@ -482,7 +499,7 @@ HTML_TEMPLATE = """\
             <option value="1">Con débito</option>
             <option value="0">Sin débito</option>
           </select>
-          <button onclick="limpiar()" class="input-f" style="cursor:pointer;padding:7px 16px;color:rgba(255,255,255,.35)">
+          <button onclick="limpiar()" class="input-f" style="cursor:pointer;padding:7px 16px;color:rgba(0,0,0,.5)">
             Limpiar
           </button>
         </div>
@@ -491,32 +508,100 @@ HTML_TEMPLATE = """\
       <div class="table-wrap">
         <table style="width:100%;font-size:13px;border-collapse:collapse">
           <thead>
-            <tr style="border-bottom:1px solid rgba(255,255,255,.05);background:#080b10">
-              <th class="sortable px-3 py-3 text-center" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.22)" onclick="ordenar('nro_socio')"># ↕</th>
-              <th class="sortable px-4 py-3 text-left" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.22)" onclick="ordenar('nombre')">Nombre ↕</th>
-              <th class="sortable px-4 py-3 text-left" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.22)" onclick="ordenar('dni')">DNI ↕</th>
-              <th class="px-4 py-3 text-left" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.22)">Teléfono</th>
-              <th class="px-4 py-3 text-left" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.22)">Email</th>
-              <th class="px-4 py-3 text-center" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.22)">Estado</th>
-              <th class="px-4 py-3 text-left" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.22)">Disciplina</th>
-              <th class="sortable px-4 py-3 text-center" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.22)" onclick="ordenar('cant_pend')">Cuotas ↕</th>
-              <th class="sortable px-4 py-3 text-right" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.22)" onclick="ordenar('deuda_total')">Deuda ↕</th>
-              <th class="sortable px-4 py-3 text-left" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.22)" onclick="ordenar('ultimo_pago')">Últ. pago ↕</th>
-              <th class="sortable px-4 py-3 text-right" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.22)" onclick="ordenar('cobrado_2026')">Cobrado 2026 ↕</th>
-              <th class="px-4 py-3 text-center" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.22)">Déb.</th>
+            <tr style="border-bottom:1px solid rgba(0,0,0,.07);background:#f1f5f9">
+              <th class="sortable px-3 py-3 text-center" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(0,0,0,.45)" onclick="ordenar('nro_socio')"># ↕</th>
+              <th class="sortable px-4 py-3 text-left" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(0,0,0,.45)" onclick="ordenar('nombre')">Nombre ↕</th>
+              <th class="sortable px-4 py-3 text-left" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(0,0,0,.45)" onclick="ordenar('dni')">DNI ↕</th>
+              <th class="px-4 py-3 text-left" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(0,0,0,.45)">Teléfono</th>
+              <th class="px-4 py-3 text-left" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(0,0,0,.45)">Email</th>
+              <th class="px-4 py-3 text-center" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(0,0,0,.45)">Estado</th>
+              <th class="px-4 py-3 text-left" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(0,0,0,.45)">Disciplina</th>
+              <th class="sortable px-4 py-3 text-center" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(0,0,0,.45)" onclick="ordenar('cant_pend')">Cuotas ↕</th>
+              <th class="sortable px-4 py-3 text-right" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(0,0,0,.45)" onclick="ordenar('deuda_total')">Deuda ↕</th>
+              <th class="sortable px-4 py-3 text-left" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(0,0,0,.45)" onclick="ordenar('ultimo_pago')">Últ. pago ↕</th>
+              <th class="sortable px-4 py-3 text-right" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(0,0,0,.45)" onclick="ordenar('cobrado_2026')">Cobrado 2026 ↕</th>
+              <th class="px-4 py-3 text-center" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(0,0,0,.45)">Déb.</th>
             </tr>
           </thead>
           <tbody id="tbody"></tbody>
         </table>
       </div>
 
-      <div style="padding:12px 24px;border-top:1px solid rgba(255,255,255,.05);display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.14)">
+      <div style="padding:12px 24px;border-top:1px solid rgba(0,0,0,.07);display:flex;justify-content:space-between;font-size:11px;color:rgba(0,0,0,.4)">
         <span>Fuente: AABN_d.accdb · Siwin</span>
-        <span>Generado: <span id="fecha-pie" style="font-weight:600;color:rgba(255,255,255,.3)"></span></span>
+        <span>Generado: <span id="fecha-pie" style="font-weight:600;color:rgba(0,0,0,.55)"></span></span>
       </div>
 
     </div>
+</div><!-- /view-socios -->
+
+<!-- ══ VISTA DADOS DE BAJA ══ -->
+<div id="view-bajas" style="display:none">
+
+    <!-- STAT CARD BAJAS -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px">
+      <div style="background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:16px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.06)">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:rgba(0,0,0,.4);margin-bottom:14px">Dados de baja</div>
+        <div id="b-total" class="card-num" style="color:#64748b"></div>
+        <div style="font-size:11px;color:rgba(0,0,0,.35);margin-top:10px">sin servicio activo</div>
+      </div>
+      <div style="background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:16px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.06)">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:rgba(0,0,0,.4);margin-bottom:14px">Con último pago</div>
+        <div id="b-conpago" class="card-num" style="color:#64748b"></div>
+        <div style="font-size:11px;color:rgba(0,0,0,.35);margin-top:10px">alguna vez pagaron</div>
+      </div>
+      <div style="background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:16px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.06)">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:rgba(0,0,0,.4);margin-bottom:14px">Con disciplina</div>
+        <div id="b-condisc" class="card-num" style="color:#64748b"></div>
+        <div style="font-size:11px;color:rgba(0,0,0,.35);margin-top:10px">tenían deporte asignado</div>
+      </div>
+    </div>
+
+    <!-- TABLE BAJAS -->
+    <div style="background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:16px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06)">
+      <div style="padding:20px 24px;border-bottom:1px solid rgba(0,0,0,.07)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+          <div>
+            <h2 class="font-expose font-bold" style="font-size:15px;color:#154C20;letter-spacing:-.01em">Socios dados de baja</h2>
+            <p style="font-size:11px;color:rgba(0,0,0,.4);margin-top:2px">Sin servicio activo en Siwin · <span id="b-conteo-f" style="color:rgba(0,0,0,.5)"></span></p>
+          </div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <input id="b-buscar" oninput="filtrarBajas()" type="text"
+            placeholder="Buscar nombre, DNI, Nº, teléfono…"
+            class="input-f" style="flex:1;min-width:200px">
+          <button onclick="limpiarBajas()" class="input-f" style="cursor:pointer;padding:7px 16px;color:rgba(0,0,0,.5)">
+            Limpiar
+          </button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table style="width:100%;font-size:13px;border-collapse:collapse">
+          <thead>
+            <tr style="border-bottom:1px solid rgba(0,0,0,.07);background:#f1f5f9">
+              <th class="sortable px-3 py-3 text-center" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(0,0,0,.45)" onclick="ordenarBajas('nro_socio')"># ↕</th>
+              <th class="sortable px-4 py-3 text-left" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(0,0,0,.45)" onclick="ordenarBajas('nombre')">Nombre ↕</th>
+              <th class="sortable px-4 py-3 text-left" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(0,0,0,.45)" onclick="ordenarBajas('dni')">DNI ↕</th>
+              <th class="px-4 py-3 text-left" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(0,0,0,.45)">Teléfono</th>
+              <th class="px-4 py-3 text-left" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(0,0,0,.45)">Disciplina</th>
+              <th class="sortable px-4 py-3 text-left" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(0,0,0,.45)" onclick="ordenarBajas('ultimo_pago')">Últ. pago ↕</th>
+              <th class="sortable px-4 py-3 text-right" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(0,0,0,.45)" onclick="ordenarBajas('cobrado_2026')">Cobrado 2026 ↕</th>
+              <th class="sortable px-4 py-3 text-left" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(0,0,0,.45)" onclick="ordenarBajas('fecha_ing')">Ing. ↕</th>
+            </tr>
+          </thead>
+          <tbody id="tbody-bajas"></tbody>
+        </table>
+      </div>
+      <div style="padding:12px 24px;border-top:1px solid rgba(0,0,0,.07);display:flex;justify-content:space-between;font-size:11px;color:rgba(0,0,0,.4)">
+        <span>Fuente: AABN_d.accdb · Siwin</span>
+        <span>Generado: <span id="b-fecha-pie" style="font-weight:600;color:rgba(0,0,0,.55)"></span></span>
+      </div>
+    </div>
+</div><!-- /view-bajas -->
+
   </div>
+</div>
+
 </div>
 
 </div>
@@ -524,11 +609,7 @@ HTML_TEMPLATE = """\
 <script>
 const DATA = PLACEHOLDER_DATA;
 
-const filasTodas = DATA._filas;
-let filasFiltradas = [...filasTodas];
-let ordenCol = "nombre", ordenAsc = true;
-
-// Auth
+// ── Auth ──────────────────────────────────────────────────────────────────
 const admin = JSON.parse(sessionStorage.getItem("admin") || "null");
 if (!admin) { window.location.href = "login.html"; }
 else {
@@ -538,14 +619,16 @@ else {
 }
 function cerrarSesion() { sessionStorage.removeItem("admin"); window.location.href = "login.html"; }
 
-// Fechas
+// ── Fechas ─────────────────────────────────────────────────────────────────
 const gen = DATA._generado || "";
 document.getElementById("fecha-gen").textContent = gen;
 document.getElementById("fecha-pie").textContent = gen;
+document.getElementById("b-fecha-pie").textContent = gen;
 
-// Tarjetas
+// ── Tarjetas socios activos ────────────────────────────────────────────────
 const c   = DATA._conteo;
 const tot = DATA._total;
+const filasTodas = DATA._filas;
 const deudaTotal  = filasTodas.reduce((s, r) => s + (r.deuda_total  || 0), 0);
 const cobrado2026 = filasTodas.reduce((s, r) => s + (r.cobrado_2026 || 0), 0);
 
@@ -557,13 +640,40 @@ document.getElementById("p-aldia").textContent   = Math.round((c.al_dia||0)*100/
 document.getElementById("p-deudor").textContent  = Math.round((c.deudor||0)*100/tot) + "% del padrón";
 document.getElementById("p-cobrado").textContent = "Cobrado: $" + Math.round(cobrado2026/1000).toLocaleString("es-AR") + "K";
 
-// Select disciplinas
+// ── Tarjetas bajas ─────────────────────────────────────────────────────────
+const filasTodasBaja = DATA._filas_baja || [];
+const totalBaja = DATA._total_baja || 0;
+const bajaConPago = filasTodasBaja.filter(r => r.ultimo_pago).length;
+const bajaConDisc = filasTodasBaja.filter(r => r.disciplinas).length;
+
+document.getElementById("b-total").textContent   = totalBaja.toLocaleString("es-AR");
+document.getElementById("b-conpago").textContent = bajaConPago.toLocaleString("es-AR");
+document.getElementById("b-condisc").textContent = bajaConDisc.toLocaleString("es-AR");
+document.getElementById("nav-baja-cnt").textContent = totalBaja.toLocaleString("es-AR");
+
+// ── Select disciplinas ─────────────────────────────────────────────────────
 const selDisc = document.getElementById("f-disc");
 (DATA._disciplinas || []).forEach(d => {
   const o = document.createElement("option");
   o.value = d; o.textContent = d;
   selDisc.appendChild(o);
 });
+
+// ── Navegación de vistas ───────────────────────────────────────────────────
+function mostrarVista(v) {
+  document.getElementById("view-socios").style.display = v === "socios" ? "" : "none";
+  document.getElementById("view-bajas").style.display  = v === "bajas"  ? "" : "none";
+  document.getElementById("nav-socios").classList.toggle("nav-active", v === "socios");
+  document.getElementById("nav-bajas").classList.toggle("nav-active",  v === "bajas");
+  const titulos = { socios: "Dashboard Socios", bajas: "Socios dados de baja" };
+  document.getElementById("header-titulo").textContent = titulos[v];
+}
+
+// ══════════════════════════════════════════════════════════════════════════
+// TABLA SOCIOS ACTIVOS
+// ══════════════════════════════════════════════════════════════════════════
+let filasFiltradas = [...filasTodas];
+let ordenCol = "nombre", ordenAsc = true;
 
 function filtrar() {
   const q      = document.getElementById("f-buscar").value.toLowerCase().trim();
@@ -622,37 +732,37 @@ function renderTabla() {
   if (conteoEl) conteoEl.textContent = filasFiltradas.length.toLocaleString("es-AR") + " socios";
 
   if (!filasFiltradas.length) {
-    tbody.innerHTML = `<tr><td colspan="12" class="text-center py-16 text-sm" style="color:rgba(255,255,255,.2)">Sin resultados para los filtros aplicados</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="12" class="text-center py-16 text-sm" style="color:rgba(0,0,0,.4)">Sin resultados para los filtros aplicados</td></tr>`;
     return;
   }
 
   tbody.innerHTML = filasFiltradas.map(r => {
     const deudaFmt = (r.deuda_total || 0) > 0
-      ? `<span style="font-weight:700;color:#fca5a5">$${Math.round(r.deuda_total).toLocaleString("es-AR")}</span>`
-      : `<span style="color:rgba(255,255,255,.1)">—</span>`;
+      ? `<span style="font-weight:700;color:#dc2626">$${Math.round(r.deuda_total).toLocaleString("es-AR")}</span>`
+      : `<span style="color:rgba(0,0,0,.18)">—</span>`;
     const cobFmt = (r.cobrado_2026 || 0) > 0
-      ? `<span style="font-weight:600;color:#86efac">$${Math.round(r.cobrado_2026).toLocaleString("es-AR")}</span>`
-      : `<span style="color:rgba(255,255,255,.1)">—</span>`;
+      ? `<span style="font-weight:600;color:#1a672a">$${Math.round(r.cobrado_2026).toLocaleString("es-AR")}</span>`
+      : `<span style="color:rgba(0,0,0,.18)">—</span>`;
     const discFmt = r.disciplinas
       ? `<span class="tag-disc">${r.disciplinas}</span>`
-      : `<span style="color:rgba(255,255,255,.1)">—</span>`;
+      : `<span style="color:rgba(0,0,0,.18)">—</span>`;
     const telFmt = r.telefono
-      ? `<a href="tel:${r.telefono}" style="color:rgba(100,180,255,.65)">${r.telefono}</a>`
-      : `<span style="color:rgba(255,255,255,.1)">—</span>`;
+      ? `<a href="tel:${r.telefono}" style="color:#2563eb">${r.telefono}</a>`
+      : `<span style="color:rgba(0,0,0,.18)">—</span>`;
     const mailFmt = r.email
-      ? `<a href="mailto:${r.email}" style="color:rgba(100,180,255,.65);font-size:11px">${r.email}</a>`
-      : `<span style="color:rgba(255,255,255,.1)">—</span>`;
+      ? `<a href="mailto:${r.email}" style="color:#2563eb;font-size:11px">${r.email}</a>`
+      : `<span style="color:rgba(0,0,0,.18)">—</span>`;
     const debFmt = r.deb_auto
       ? `<span class="tag-deb">DBT</span>`
-      : `<span style="color:rgba(255,255,255,.1)">—</span>`;
+      : `<span style="color:rgba(0,0,0,.18)">—</span>`;
     const cantFmt = (r.cant_pend || 0) > 0
-      ? `<span style="font-weight:700;color:#fca5a5">${r.cant_pend}</span>`
-      : `<span style="color:rgba(255,255,255,.1)">—</span>`;
+      ? `<span style="font-weight:700;color:#dc2626">${r.cant_pend}</span>`
+      : `<span style="color:rgba(0,0,0,.18)">—</span>`;
     const badgeCls = "badge-" + (r.estado_final || "baja");
     return `<tr class="data-row">
-      <td class="px-3 py-3 text-center text-xs font-mono" style="color:rgba(255,255,255,.2)">${r.nro_socio||"—"}</td>
-      <td class="px-4 py-3 font-semibold" style="color:rgba(255,255,255,.82)">${r.nombre}</td>
-      <td class="px-4 py-3 font-mono text-xs" style="color:rgba(255,255,255,.3)">${r.dni||"—"}</td>
+      <td class="px-3 py-3 text-center text-xs font-mono" style="color:rgba(0,0,0,.35)">${r.nro_socio||"—"}</td>
+      <td class="px-4 py-3 font-semibold" style="color:#111827">${r.nombre}</td>
+      <td class="px-4 py-3 font-mono text-xs" style="color:rgba(0,0,0,.4)">${r.dni||"—"}</td>
       <td class="px-4 py-3 text-xs">${telFmt}</td>
       <td class="px-4 py-3 text-xs">${mailFmt}</td>
       <td class="px-4 py-3 text-center">
@@ -663,18 +773,91 @@ function renderTabla() {
       <td class="px-4 py-3">${discFmt}</td>
       <td class="px-4 py-3 text-center">${cantFmt}</td>
       <td class="px-4 py-3 text-right">${deudaFmt}</td>
-      <td class="px-4 py-3 text-xs" style="color:rgba(255,255,255,.3)">${r.ultimo_pago||"—"}</td>
+      <td class="px-4 py-3 text-xs" style="color:rgba(0,0,0,.4)">${r.ultimo_pago||"—"}</td>
       <td class="px-4 py-3 text-right">${cobFmt}</td>
       <td class="px-4 py-3 text-center">${debFmt}</td>
     </tr>`;
   }).join("");
 }
 
-// Init
+// ══════════════════════════════════════════════════════════════════════════
+// TABLA SOCIOS DADOS DE BAJA
+// ══════════════════════════════════════════════════════════════════════════
+let bajasFiltradas = [...filasTodasBaja];
+let ordenBajaCol = "nombre", ordenBajaAsc = true;
+
+function filtrarBajas() {
+  const q = document.getElementById("b-buscar").value.toLowerCase().trim();
+  bajasFiltradas = filasTodasBaja.filter(r => {
+    if (!q) return true;
+    const nro = String(r.nro_socio || "");
+    const tel = (r.telefono || "").toLowerCase();
+    return r.nombre.toLowerCase().includes(q) || r.dni.includes(q) ||
+           nro.includes(q) || tel.includes(q);
+  });
+  renderBajas();
+}
+
+function limpiarBajas() {
+  document.getElementById("b-buscar").value = "";
+  bajasFiltradas = [...filasTodasBaja];
+  renderBajas();
+}
+
+function ordenarBajas(col) {
+  if (ordenBajaCol === col) ordenBajaAsc = !ordenBajaAsc;
+  else { ordenBajaCol = col; ordenBajaAsc = true; }
+  const numCols = ["nro_socio","cobrado_2026"];
+  bajasFiltradas.sort((a, b) => {
+    let va = a[col], vb = b[col];
+    if (numCols.includes(col)) { va = va||0; vb = vb||0; }
+    else { va = (va||"").toString().toLowerCase(); vb = (vb||"").toString().toLowerCase(); }
+    if (va < vb) return ordenBajaAsc ? -1 : 1;
+    if (va > vb) return ordenBajaAsc ?  1 : -1;
+    return 0;
+  });
+  renderBajas();
+}
+
+function renderBajas() {
+  const tbody = document.getElementById("tbody-bajas");
+  const conteoEl = document.getElementById("b-conteo-f");
+  if (conteoEl) conteoEl.textContent = bajasFiltradas.length.toLocaleString("es-AR") + " socios";
+
+  if (!bajasFiltradas.length) {
+    tbody.innerHTML = `<tr><td colspan="8" class="text-center py-16 text-sm" style="color:rgba(0,0,0,.4)">Sin resultados</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = bajasFiltradas.map(r => {
+    const cobFmt = (r.cobrado_2026 || 0) > 0
+      ? `<span style="font-weight:600;color:rgba(26,103,42,.6)">$${Math.round(r.cobrado_2026).toLocaleString("es-AR")}</span>`
+      : `<span style="color:rgba(0,0,0,.18)">—</span>`;
+    const discFmt = r.disciplinas
+      ? `<span class="tag-disc" style="opacity:.6">${r.disciplinas}</span>`
+      : `<span style="color:rgba(0,0,0,.18)">—</span>`;
+    const telFmt = r.telefono
+      ? `<a href="tel:${r.telefono}" style="color:rgba(37,99,235,.6)">${r.telefono}</a>`
+      : `<span style="color:rgba(0,0,0,.18)">—</span>`;
+    return `<tr class="data-row" style="opacity:.75">
+      <td class="px-3 py-3 text-center text-xs font-mono" style="color:rgba(0,0,0,.28)">${r.nro_socio||"—"}</td>
+      <td class="px-4 py-3 font-semibold" style="color:rgba(0,0,0,.55)">${r.nombre}</td>
+      <td class="px-4 py-3 font-mono text-xs" style="color:rgba(0,0,0,.35)">${r.dni||"—"}</td>
+      <td class="px-4 py-3 text-xs">${telFmt}</td>
+      <td class="px-4 py-3">${discFmt}</td>
+      <td class="px-4 py-3 text-xs" style="color:rgba(0,0,0,.35)">${r.ultimo_pago||"—"}</td>
+      <td class="px-4 py-3 text-right">${cobFmt}</td>
+      <td class="px-4 py-3 text-xs" style="color:rgba(0,0,0,.35)">${r.fecha_ing||"—"}</td>
+    </tr>`;
+  }).join("");
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────
 ordenar("nombre");
-<\/script>
-<\/body>
-<\/html>
+ordenarBajas("nombre");
+</script>
+</body>
+</html>
 """
 
 

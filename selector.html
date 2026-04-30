@@ -12,13 +12,12 @@
           colors: {
             verde: {
               50:  '#f0f9f3', 100: '#d9f0e1', 200: '#b2e0c3', 300: '#7cc99a',
-              400: '#46ad6f', 500: '#28904f', 600: '#1c743e', 700: '#195e34',
-              800: '#174b2b', 900: '#133d23',
+              400: '#46ad6f', 500: '#1a672a', 600: '#154C20', 700: '#113d1a',
+              800: '#0d2e14', 900: '#09200e',
             }
           },
           fontFamily: {
             sans:   ['Rag', 'Segoe UI', 'Arial', 'sans-serif'],
-            rag:    ['Rag', 'Arial', 'sans-serif'],
             expose: ['Expose', 'Arial Black', 'sans-serif'],
           }
         }
@@ -29,151 +28,359 @@
     @font-face{font-family:"Expose";src:url("fonts/Expose-Black.woff2") format("woff2");font-weight:900;font-display:swap;}
     @font-face{font-family:"Expose";src:url("fonts/Expose-Bold.woff2") format("woff2");font-weight:700;font-display:swap;}
     @font-face{font-family:"Expose";src:url("fonts/Expose-Regular.woff2") format("woff2");font-weight:400;font-display:swap;}
-    @font-face{font-family:"Rag";src:url("fonts/Rag-Regular.woff2") format("woff2"),url("fonts/Rag-Regular.woff") format("woff");font-weight:400;font-style:normal;font-display:swap;}
-    @font-face{font-family:"Rag";src:url("fonts/Rag-Bold.woff2") format("woff2"),url("fonts/Rag-Bold.woff") format("woff");font-weight:700;font-style:normal;font-display:swap;}
-    @font-face{font-family:"Rag";src:url("fonts/Rag-Black.woff2") format("woff2"),url("fonts/Rag-Black.woff") format("woff");font-weight:900;font-style:normal;font-display:swap;}
+    @font-face{font-family:"Rag";src:url("fonts/Rag-Regular.woff2") format("woff2"),url("fonts/Rag-Regular.woff") format("woff");font-weight:400;font-display:swap;}
+    @font-face{font-family:"Rag";src:url("fonts/Rag-Bold.woff2") format("woff2"),url("fonts/Rag-Bold.woff") format("woff");font-weight:700;font-display:swap;}
+    @font-face{font-family:"Rag";src:url("fonts/Rag-Black.woff2") format("woff2"),url("fonts/Rag-Black.woff") format("woff");font-weight:900;font-display:swap;}
     *{box-sizing:border-box;margin:0;padding:0;}
 
-    .hero-bg {
-      background: linear-gradient(135deg, #133d23 0%, #195e34 55%, #1c743e 100%);
+    body { background: #f0fdf4; color: #111827; min-height: 100vh; display: flex; }
+
+    /* Sidebar */
+    #sidebar {
+      width: 240px;
+      min-width: 240px;
+      background: #154C20;
+      border-right: 1px solid rgba(255,255,255,0.07);
+      display: flex;
+      flex-direction: column;
       min-height: 100vh;
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      z-index: 40;
     }
 
-    .selector-card {
-      background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(255,255,255,0.13);
-      backdrop-filter: blur(12px);
-      transition: transform .2s, background .2s, box-shadow .2s;
-      cursor: pointer;
-    }
-    .selector-card:hover {
-      background: rgba(255,255,255,0.14);
-      transform: translateY(-5px);
-      box-shadow: 0 24px 60px rgba(0,0,0,0.3);
-    }
-
-    .card-icon-wrap {
-      background: rgba(255,255,255,0.12);
-      border: 1px solid rgba(255,255,255,0.18);
-      border-radius: 20px;
-      width: 72px;
-      height: 72px;
+    .sidebar-logo {
+      padding: 20px 16px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
       display: flex;
       align-items: center;
-      justify-content: center;
-      font-size: 2rem;
+      gap: 10px;
+    }
+    .sidebar-logo img { height: 36px; width: auto; border-radius: 8px; }
+    .sidebar-logo-text { line-height: 1.1; }
+    .sidebar-logo-text .club { font-family: 'Expose', sans-serif; font-weight: 900; font-size: 13px; letter-spacing: 3px; color: #fff; }
+    .sidebar-logo-text .sub  { font-size: 10px; color: #6ee7b7; letter-spacing: 1px; }
+
+    .sidebar-section { padding: 20px 12px 6px; }
+    .sidebar-section-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #4ade80;
+      text-transform: uppercase;
+      padding: 0 8px;
+      margin-bottom: 6px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 13.5px;
+      font-weight: 500;
+      color: #cbd5e1;
+      text-decoration: none;
+      transition: background .15s, color .15s;
+      margin-bottom: 2px;
+    }
+    .nav-item:hover { background: rgba(255,255,255,0.07); color: #fff; }
+    .nav-item.active { background: #1a672a; color: #fff; }
+    .nav-item svg { width: 16px; height: 16px; opacity: .7; flex-shrink: 0; }
+    .nav-item.active svg { opacity: 1; }
+
+    /* Sub-ítems Finanzas */
+    .nav-parent { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 10px; font-size: 13.5px; font-weight: 500; color: #cbd5e1; margin-bottom: 2px; }
+    .nav-parent svg { width: 16px; height: 16px; opacity: .7; flex-shrink: 0; }
+
+    .nav-subitems { padding-left: 20px; }
+    .nav-subitem {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      color: #94a3b8;
+      text-decoration: none;
+      transition: background .15s, color .15s;
+      margin-bottom: 1px;
+      border-left: 2px solid rgba(255,255,255,0.08);
+    }
+    .nav-subitem:hover { background: rgba(255,255,255,0.06); color: #e2e8f0; border-left-color: #1a672a; }
+    .nav-subitem.active { color: #4ade80; border-left-color: #4ade80; background: rgba(74,222,128,0.06); }
+
+    /* Bottom user */
+    .sidebar-footer {
+      margin-top: auto;
+      padding: 12px;
+      border-top: 1px solid rgba(255,255,255,0.07);
+    }
+    .user-chip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 12px;
+      margin-bottom: 8px;
+    }
+    .user-avatar {
+      width: 34px; height: 34px;
+      background: #1a672a;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; color: #fff; flex-shrink: 0;
+    }
+    .user-name  { font-size: 13px; font-weight: 600; color: #f1f5f9; }
+    .user-role  { font-size: 11px; color: #4ade80; }
+
+    .btn-logout {
+      width: 100%;
+      padding: 8px 12px;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      color: #94a3b8;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all .15s;
+      text-align: center;
+    }
+    .btn-logout:hover { background: rgba(255,255,255,0.06); color: #f1f5f9; border-color: rgba(255,255,255,0.2); }
+
+    /* Main */
+    #main {
+      margin-left: 240px;
+      flex: 1;
+      min-height: 100vh;
+      padding: 40px 48px;
+      background: #f0fdf4;
+    }
+
+    .welcome-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(26,103,42,0.25);
+      border: 1px solid rgba(74,222,128,0.25);
+      color: #4ade80;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 100px;
+      margin-bottom: 20px;
+    }
+
+    .module-card {
+      background: #ffffff;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+      padding: 28px;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transition: border-color .2s, transform .2s, box-shadow .2s;
+      cursor: pointer;
+    }
+    .module-card:hover {
+      border-color: #1a672a;
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+    }
+    .module-icon {
+      width: 52px; height: 52px;
+      background: rgba(26,103,42,0.2);
+      border: 1px solid rgba(74,222,128,0.15);
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem;
+    }
+    .module-title { font-family: 'Expose', sans-serif; font-weight: 900; font-size: 18px; color: #154C20; }
+    .module-desc  { font-size: 13px; color: #64748b; line-height: 1.5; }
+    .module-link  { font-size: 12px; font-weight: 700; color: #1a672a; letter-spacing: 1px; text-transform: uppercase; display: flex; align-items: center; gap-6px; }
+
+    .sub-module-card {
+      background: #ffffff;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 20px 24px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transition: border-color .2s, background .2s;
+      cursor: pointer;
+    }
+    .sub-module-card:hover { border-color: #1a672a; background: #243020; }
+    .sub-module-icon {
+      width: 42px; height: 42px;
+      background: rgba(26,103,42,0.2);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
       flex-shrink: 0;
     }
+    .sub-module-title { font-size: 14px; font-weight: 700; color: #154C20; }
+    .sub-module-desc  { font-size: 12px; color: #64748b; margin-top: 2px; }
 
-    .shield-glow {
-      filter: drop-shadow(0 0 14px rgba(255,255,255,0.2));
-    }
+    .divider { height: 1px; background: rgba(255,255,255,0.06); margin: 32px 0; }
 
-    .arrow-icon {
-      opacity: 0.5;
-      transition: opacity .2s, transform .2s;
-    }
-    .selector-card:hover .arrow-icon {
-      opacity: 1;
-      transform: translateX(4px);
-    }
+    .last-update { font-size: 11px; color: #475569; }
   </style>
 </head>
-<body class="hero-bg font-sans antialiased">
+<body class="font-sans antialiased">
 
-<!-- AUTH CHECK -->
+<!-- AUTH -->
 <script>
   const admin = JSON.parse(sessionStorage.getItem('admin') || 'null');
   if (!admin) window.location.href = 'login.html';
 </script>
 
-<!-- NAV -->
-<header class="sticky top-0 z-50 border-b border-white/10 bg-verde-900/60 backdrop-blur-md">
-  <div class="max-w-screen-lg mx-auto px-5 h-14 flex items-center justify-between gap-4">
-    <a href="index.html" class="flex items-center gap-3 shrink-0">
-      <img src="images.jpeg" alt="AABN" class="h-8 w-auto rounded-md shield-glow">
-      <span class="text-white font-expose font-black text-sm tracking-widest uppercase hidden sm:block">A.A.B.N</span>
-    </a>
-    <div class="flex items-center gap-2.5">
-      <div id="admin-info" class="hidden sm:flex items-center gap-2 bg-verde-800/80 border border-verde-700 rounded-full px-3.5 py-1.5">
-        <svg class="w-3.5 h-3.5 text-green-300 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-          <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
-        </svg>
-        <span id="admin-nombre" class="text-white text-xs font-semibold"></span>
-        <span class="text-verde-400 text-xs">·</span>
-        <span id="admin-rol" class="text-verde-300 text-xs"></span>
-      </div>
-      <button onclick="cerrarSesion()"
-        class="text-verde-300 hover:text-white text-xs border border-verde-700 hover:border-verde-400 rounded-full px-3.5 py-1.5 hover:bg-verde-800 transition-all">
-        Cerrar sesión
-      </button>
+<!-- SIDEBAR -->
+<aside id="sidebar">
+  <div class="sidebar-logo">
+    <img src="images.jpeg" alt="AABN">
+    <div class="sidebar-logo-text">
+      <div class="club">A.A.B.N</div>
+      <div class="sub">Banda Norte</div>
     </div>
   </div>
-</header>
 
-<!-- CONTENIDO PRINCIPAL -->
-<main class="max-w-screen-lg mx-auto px-5 py-16 sm:py-24">
-
-  <!-- Encabezado -->
-  <div class="text-center mb-14">
-    <div class="inline-flex items-center gap-2 bg-white/10 text-green-200 text-xs font-bold px-4 py-1.5 rounded-full mb-5 tracking-widest uppercase">
-      Panel de Control
-    </div>
-    <h1 class="font-expose font-black text-white text-4xl sm:text-5xl tracking-tight mb-3">
-      ¿QUÉ QUERÉS VER?
-    </h1>
-    <p id="bienvenida" class="text-green-200 text-base max-w-sm mx-auto">
-      Seleccioná un módulo para continuar.
-    </p>
+  <div class="sidebar-section">
+    <div class="sidebar-section-label">Navegación</div>
+    <a href="selector.html" class="nav-item active">
+      <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+      </svg>
+      Panel principal
+    </a>
+    <a href="index.html" class="nav-item">
+      <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9"/>
+      </svg>
+      Sitio web
+    </a>
   </div>
 
-  <!-- Tarjetas -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
+  <div class="sidebar-section">
+    <div class="sidebar-section-label">Gestión</div>
 
-    <!-- Tarjeta Socios -->
-    <a href="panel-admin.html" class="selector-card rounded-3xl p-8 flex flex-col gap-6 no-underline">
-      <div class="card-icon-wrap">🏟️</div>
-      <div class="flex-1">
-        <h2 class="font-expose font-black text-white text-2xl tracking-tight mb-2">Dashboard Socios</h2>
-        <p class="text-green-200/80 text-sm leading-relaxed">
-          Padrón completo, estado de deuda, disciplinas y filtros por categoría.
-        </p>
-      </div>
-      <div class="flex items-center justify-between">
-        <span class="text-green-300 text-xs font-semibold uppercase tracking-widest">Ver módulo</span>
-        <svg class="arrow-icon w-5 h-5 text-green-300" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
-        </svg>
-      </div>
+    <a href="panel-admin.html" class="nav-item">
+      <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0"/>
+      </svg>
+      Socios
     </a>
 
-    <!-- Tarjeta Financiero -->
-    <a href="dashboard-financiero.html" class="selector-card rounded-3xl p-8 flex flex-col gap-6 no-underline">
-      <div class="card-icon-wrap">💰</div>
-      <div class="flex-1">
-        <h2 class="font-expose font-black text-white text-2xl tracking-tight mb-2">Dashboard Financiero</h2>
-        <p class="text-green-200/80 text-sm leading-relaxed">
-          Posición financiera 2026, ingresos, egresos y balance mensual del club.
-        </p>
-      </div>
-      <div class="flex items-center justify-between">
-        <span class="text-green-300 text-xs font-semibold uppercase tracking-widest">Ver módulo</span>
-        <svg class="arrow-icon w-5 h-5 text-green-300" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
+    <div class="nav-parent">
+      <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
+      Finanzas
+    </div>
+    <div class="nav-subitems">
+      <a href="dashboard-financiero.html" class="nav-subitem">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
         </svg>
+        Posición Financiera
+      </a>
+      <a href="estado-resultados.html" class="nav-subitem">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+        </svg>
+        Resultado
+      </a>
+    </div>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="user-chip">
+      <div class="user-avatar" id="user-avatar">A</div>
+      <div>
+        <div class="user-name" id="user-nombre">—</div>
+        <div class="user-role"  id="user-rol">—</div>
       </div>
+    </div>
+    <button class="btn-logout" onclick="cerrarSesion()">Cerrar sesión</button>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main id="main">
+  <div class="welcome-badge">
+    <svg width="10" height="10" fill="currentColor" viewBox="0 0 20 20"><circle cx="10" cy="10" r="10"/></svg>
+    Panel de Control
+  </div>
+
+  <h1 class="font-expose font-black mb-1" style="font-size:2.6rem; letter-spacing:-1px; color:#154C20;">
+    ¿QUÉ QUERÉS VER?
+  </h1>
+  <p class="text-sm mb-10" style="color:#1a672a;" id="bienvenida">Seleccioná un módulo para continuar.</p>
+
+  <!-- Socios -->
+  <a href="panel-admin.html" class="module-card mb-5 block">
+    <div class="module-icon">🏟️</div>
+    <div>
+      <div class="module-title">Dashboard Socios</div>
+      <div class="module-desc mt-1">Padrón completo, estado de deuda, disciplinas y filtros por categoría.</div>
+    </div>
+    <div class="module-link">
+      Ver módulo
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" style="margin-left:6px">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
+      </svg>
+    </div>
+  </a>
+
+  <div class="divider"></div>
+
+  <div class="mb-4">
+    <h2 class="font-expose font-black mb-1" style="font-size:1.1rem; letter-spacing:1px; color:#154C20;">FINANZAS</h2>
+    <p class="text-slate-500 text-xs">Módulos financieros del club</p>
+  </div>
+
+  <div style="display:flex; flex-direction:column; gap:10px;">
+    <a href="dashboard-financiero.html" class="sub-module-card">
+      <div class="sub-module-icon">📊</div>
+      <div>
+        <div class="sub-module-title">Posición Financiera</div>
+        <div class="sub-module-desc">Posición financiera 2026, ingresos, egresos y balance mensual.</div>
+      </div>
+      <svg style="margin-left:auto; flex-shrink:0; color:#4ade80;" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
+      </svg>
     </a>
 
+    <a href="estado-resultados.html" class="sub-module-card">
+      <div class="sub-module-icon">📈</div>
+      <div>
+        <div class="sub-module-title">Resultado</div>
+        <div class="sub-module-desc">Estado de resultados del club.
+          <span class="last-update" style="margin-left:8px;">Actualizado: 28/04/2026</span>
+        </div>
+      </div>
+      <svg style="margin-left:auto; flex-shrink:0; color:#4ade80;" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
+      </svg>
+    </a>
   </div>
 </main>
 
 <script>
   const a = JSON.parse(sessionStorage.getItem('admin') || 'null');
   if (a) {
-    document.getElementById('admin-nombre').textContent = a.nombre;
-    document.getElementById('admin-rol').textContent    = a.rol;
-    document.getElementById('admin-info').classList.remove('hidden');
-    document.getElementById('bienvenida').textContent   = `Bienvenido, ${a.nombre.split(' ')[0]}.`;
+    document.getElementById('user-nombre').textContent = a.nombre;
+    document.getElementById('user-rol').textContent    = a.rol;
+    document.getElementById('user-avatar').textContent = a.nombre.charAt(0).toUpperCase();
+    document.getElementById('bienvenida').textContent  = `Bienvenido, ${a.nombre.split(' ')[0]}.`;
   }
 
   function cerrarSesion() {
