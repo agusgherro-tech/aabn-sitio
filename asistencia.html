@@ -102,10 +102,17 @@
     /* ── Category pills ── */
     .cat-bar{margin-bottom:24px;}
     .cat-bar-label{font-size:10px;font-weight:700;letter-spacing:1.5px;color:#9ca3af;text-transform:uppercase;margin-bottom:12px;}
-    .cat-pills-row{display:flex;gap:8px;flex-wrap:wrap;}
+    .cat-pills-row{display:flex;gap:8px;flex-wrap:wrap;align-items:flex-start;}
     .cat-pill{border-radius:100px;padding:7px 16px;font-size:11.5px;font-weight:700;cursor:pointer;border:1.5px solid #e5e7eb;font-family:'Rag',sans-serif;transition:all .15s;background:#f9fafb;color:#374151;white-space:nowrap;}
     .cat-pill:hover{background:#f0fdf4;border-color:rgba(26,103,42,.3);color:#154C20;}
     .cat-pill.active{background:#111827;color:#fff;border-color:#111827;}
+    /* Pill de grupo padre */
+    .cat-group-btn{background:#eef2ff;color:#3730a3;border-color:rgba(55,48,163,.2);}
+    .cat-group-btn:hover{background:#e0e7ff;border-color:#3730a3;}
+    .cat-group-btn.open{background:#3730a3;color:#fff;border-color:#3730a3;}
+    /* Sub-row de divisiones */
+    .cat-sub-row{display:none;gap:6px;flex-wrap:wrap;margin-top:10px;padding:10px 14px;background:#f0fdf4;border-radius:12px;border:1px dashed rgba(26,103,42,.2);}
+    .cat-sub-row .cat-pill{font-size:11px;padding:5px 14px;}
 
     /* ── Socios browser (inline table) ── */
     .socios-browser{background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:16px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.05);margin-bottom:32px;}
@@ -122,8 +129,13 @@
     .socios-table td{padding:9px 14px;border-bottom:1px solid rgba(0,0,0,.04);vertical-align:middle;white-space:nowrap;}
     .socios-table tr:last-child td{border-bottom:none;}
     .socios-table tbody tr:hover td{background:#f0fdf4;}
-    .td-nombre{font-weight:600;color:#111827;max-width:200px;overflow:hidden;text-overflow:ellipsis;position:sticky;left:0;background:#fff;z-index:1;}
+    /* Columna NOMBRE — sticky izquierda */
+    .td-nombre{font-weight:600;color:#111827;width:200px;min-width:200px;max-width:200px;overflow:hidden;text-overflow:ellipsis;position:sticky;left:0;background:#fff;z-index:1;}
     .socios-table tbody tr:hover .td-nombre{background:#f0fdf4;}
+    /* Columna SITUACIÓN — sticky segunda */
+    .td-situacion{position:sticky;left:200px;background:#fff;z-index:1;min-width:160px;}
+    .socios-table tbody tr:hover .td-situacion{background:#f0fdf4;}
+    .th-situacion{position:sticky;left:200px;z-index:3 !important;background:#f8fafb !important;min-width:160px;}
     .badge-socia{display:inline-block;font-size:9px;font-weight:700;background:#f0fdf4;color:#16a34a;border:1px solid rgba(22,163,74,.2);padding:2px 8px;border-radius:6px;}
     .badge-no-socia{display:inline-block;font-size:9px;font-weight:700;background:#fef2f2;color:#dc2626;border:1px solid rgba(220,38,38,.2);padding:2px 8px;border-radius:6px;}
     .cell-p{color:#16a34a;font-weight:800;font-size:13px;text-align:center;}
@@ -141,10 +153,17 @@
     select.tbl-filter{cursor:pointer;}
 
     /* ── Botones inline tabla ── */
-    .btn-hist{font-size:10px;font-weight:700;letter-spacing:.5px;padding:3px 8px;border-radius:6px;border:1.5px solid rgba(26,103,42,.25);color:#1a672a;background:#f0fdf4;cursor:pointer;white-space:nowrap;margin-left:6px;font-family:'Rag',sans-serif;vertical-align:middle;}
+    .btn-hist{font-size:10px;font-weight:700;letter-spacing:.5px;padding:3px 8px;border-radius:6px;border:1.5px solid rgba(26,103,42,.25);color:#1a672a;background:#f0fdf4;cursor:pointer;white-space:nowrap;font-family:'Rag',sans-serif;vertical-align:middle;}
     .btn-hist:hover{background:#dcfce7;border-color:#1a672a;}
-    .btn-deuda{font-size:10px;font-weight:700;letter-spacing:.5px;padding:3px 8px;border-radius:6px;border:1.5px solid rgba(220,38,38,.25);color:#dc2626;background:#fef2f2;cursor:pointer;white-space:nowrap;margin-left:6px;font-family:'Rag',sans-serif;vertical-align:middle;}
+    .btn-deuda{font-size:10px;font-weight:700;letter-spacing:.5px;padding:3px 8px;border-radius:6px;border:1.5px solid rgba(220,38,38,.25);color:#dc2626;background:#fef2f2;cursor:pointer;white-space:nowrap;font-family:'Rag',sans-serif;vertical-align:middle;}
     .btn-deuda:hover{background:#fee2e2;border-color:#dc2626;}
+    /* Botón BECA — celeste */
+    .btn-beca{font-size:10px;font-weight:700;letter-spacing:.5px;padding:3px 8px;border-radius:6px;border:1.5px solid rgba(14,165,233,.3);color:#0284c7;background:#f0f9ff;cursor:pointer;white-space:nowrap;font-family:'Rag',sans-serif;vertical-align:middle;}
+    .btn-beca:hover{background:#e0f2fe;border-color:#0284c7;}
+
+    /* ── Checkbox Retención ── */
+    .cb-retencion{width:16px;height:16px;cursor:pointer;accent-color:#dc2626;}
+    .cb-retencion:disabled{cursor:default;accent-color:#9ca3af;opacity:.35;}
 
     /* ── Modal flotante ── */
     .modal-overlay{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;}
@@ -164,8 +183,7 @@
     .modal-val-monto{font-size:13px;font-weight:700;color:#dc2626;}
     .modal-empty{text-align:center;color:#9ca3af;font-size:13px;padding:28px 0;}
 
-    /* ── Becado / Observación ── */
-    .badge-becado{display:inline-block;font-size:9px;font-weight:700;background:#fdf4ff;color:#9333ea;border:1px solid rgba(147,51,234,.2);padding:2px 6px;border-radius:6px;margin-left:4px;vertical-align:middle;}
+    /* ── Obs inline ── */
     .obs-text{font-size:10px;color:#9ca3af;font-style:italic;margin-top:1px;white-space:normal;line-height:1.3;}
 
     /* ── Métricas globales ── */
@@ -253,9 +271,7 @@
       </svg>
       Socios Asistencia
     </a>
-    <div class="nav-subitems" id="disc-nav-subitems" style="display:none;">
-      <!-- generado dinámicamente al cargar datos -->
-    </div>
+    <div class="nav-subitems" id="disc-nav-subitems" style="display:none;"></div>
 
     <div class="nav-parent">
       <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
@@ -345,6 +361,8 @@
   <div id="cat-bar" class="cat-bar" style="display:none;">
     <div class="cat-bar-label" id="cat-bar-label">Categorías</div>
     <div class="cat-pills-row" id="cat-pills-row"></div>
+    <!-- Sub-row para divisiones de grupos (A, B, C) -->
+    <div class="cat-sub-row" id="cat-sub-row"></div>
   </div>
 
   <!-- TABLA DE SOCIOS (inline, no flotante) -->
@@ -369,7 +387,6 @@
     <div class="metrics-date" id="reporte-aging">Datos en tiempo real desde Drive</div>
   </div>
   <div class="aging-grid" id="aging-grid">
-    <!-- generado en JS -->
     <div class="aging-card" style="border-top:3px solid #e5e7eb"><div class="ac-num" style="color:#9ca3af">—</div><div class="ac-lbl">Cargando</div></div>
   </div>
 
@@ -384,7 +401,7 @@
 
 </main>
 
-<!-- Modal reutilizable (asistencia y deuda) -->
+<!-- Modal reutilizable -->
 <div id="modal-overlay" class="modal-overlay" style="display:none;" onclick="if(event.target===this)cerrarModal()">
   <div class="modal-box">
     <div class="modal-hdr">
@@ -425,6 +442,8 @@
   let sociosTodos = [], statsPorDisc = [], cargado = false, cargando = false;
   let discActiva = null, catActiva = null;
   let sociosActuales = [];
+  let retencionMap = {};
+  let catGrupos = {}, catGrupoActivo = null;
 
   /* ── CSV parser ── */
   function parsearCSV(txt) {
@@ -464,9 +483,9 @@
       const u = normStr(h);
       if (u.includes('NOMBRE') && u.includes('APELLIDO')) c.nombre = i;
       else if (u.includes('CATEGOR')) c.cat = i;
-      /* DNI: exacto o variantes comunes */
-      else if (u === 'DNI' || u === 'D.N.I' || u === 'D.N.I.' || u.includes('DOCUMENTO') || u.includes('IDENTIDAD')) c.dni = i;
-      /* Fecha de nacimiento: detectar antes de caer al fallback */
+      /* DNI: cualquier variante que contenga "DNI" o sinónimos — captura "N° DNI", "NUMERO DNI", "D.N.I.", etc. */
+      else if (u.includes('DNI') || u.includes('D.N.I') || u.includes('DOCUMENTO') || u.includes('IDENTIDAD') || u.includes('CEDULA')) c.dni = i;
+      /* Fecha de nacimiento */
       else if (u.includes('NACIM') || (u.includes('FECHA') && !u.includes('VENC') && !u.includes('ALTA'))) c.fechaNac = i;
       else if (u.includes('SOCIA') || u.includes('SOCIO')) c.socio = i;
       else if (u === 'MESES') c.meses = i;
@@ -476,12 +495,28 @@
     });
     if (c.nombre   === undefined) c.nombre   = 1;
     if (c.cat      === undefined) c.cat      = c.nombre + 1;
-    /* Si fechaNac se detectó antes que dni, dni viene después de fechaNac */
     if (c.dni === undefined) {
+      /* Si fechaNac está antes que la columna esperada de DNI, DNI viene después de fechaNac */
       if (c.fechaNac !== undefined) c.dni = c.fechaNac + 1;
       else c.dni = c.cat + 1;
     }
     return c;
+  }
+
+  /* Nombres reales para columnas vacías según su posición relativa a MESES */
+  const PAYMENT_NAMES = ['CUOTA SOCIAL','CUOTA ADICIONAL','SEGURO','RECARGO','INSCRIPCION'];
+
+  function resolverHeader(i, rawHdr, cols) {
+    const h = (rawHdr || '').trim();
+    if (h) return h;
+    if (cols.meses !== undefined) {
+      if (cols.total !== undefined && i === cols.total) return 'TOTAL';
+      if (i > cols.meses && (cols.total === undefined || i < cols.total)) {
+        const offset = i - cols.meses - 1;
+        return PAYMENT_NAMES[offset] || `Col${i}`;
+      }
+    }
+    return `Col${i}`;
   }
 
   function parsearMonto(v) {
@@ -519,19 +554,13 @@
       const { tab, txt } = await fetchLatestTab(sh.id, sh.tabs);
       const filas = parsearCSV(txt);
       const hIdx = encontrarHeader(filas);
-      if (hIdx < 0) return { disc: sh.nombre, emoji: sh.emoji, tab, socios: [], mesesHeaders: [], total: 0, alDia: 0, deudores: 0, deuda: 0 };
+      if (hIdx < 0) return { disc: sh.nombre, emoji: sh.emoji, tab, socios: [], total: 0, alDia: 0, deudores: 0, deuda: 0 };
 
       const hdrRow = filas[hIdx];
       const cols   = detectarCols(hdrRow);
 
-      /* Rango de columnas desde SOCIA/NO SOCIA hasta TOTAL (inclusive) */
       const startIdx = cols.socio !== undefined ? cols.socio : (cols.dni !== undefined ? cols.dni + 1 : 4);
       const endIdx   = cols.total !== undefined ? cols.total : hdrRow.length - 1;
-
-      const mesesHeaders = [];
-      for (let i = startIdx; i <= endIdx; i++) {
-        mesesHeaders.push((hdrRow[i] || `Col${i}`).trim());
-      }
 
       const socios = [];
       for (const f of filas.slice(hIdx + 1)) {
@@ -547,23 +576,21 @@
         const mesesTxt = (cols.meses    !== undefined ? f[cols.meses]    || '' : '').trim();
         const mesesDeuda = parsearMesesDeuda(mesesTxt);
 
-        /* Capturar todas las columnas del rango */
+        /* Capturar todas las columnas del rango con nombres reales */
         const mesesVals = [];
         for (let i = startIdx; i <= endIdx; i++) {
-          mesesVals.push({ header: (hdrRow[i] || `Col${i}`).trim(), valor: (f[i] || '').trim() });
+          const h = resolverHeader(i, hdrRow[i], cols);
+          mesesVals.push({ header: h, valor: (f[i] || '').trim() });
         }
 
-        /* Sumar desde columna MESES hasta antes de TOTAL (máx 5 cols: cuota, adicional, seguro, recargo, inscripción)
-           NO usar la columna TOTAL del Drive porque puede tener errores de fórmula */
+        /* Sumar columnas desde MESES hasta antes de TOTAL (no usar el TOTAL del Drive) */
         let total = 0;
         if (cols.meses !== undefined) {
           const monEnd = cols.total !== undefined ? cols.total : Math.min(cols.meses + 6, hdrRow.length);
-          for (let i = cols.meses; i < monEnd; i++) {
-            total += parsearMonto(f[i] || '');
-          }
+          for (let i = cols.meses; i < monEnd; i++) total += parsearMonto(f[i] || '');
         } else {
-          const totalVal = mesesVals.length ? mesesVals[mesesVals.length - 1].valor : '0';
-          total = parsearMonto(totalVal);
+          const lastVal = mesesVals.length ? mesesVals[mesesVals.length - 1].valor : '0';
+          total = parsearMonto(lastVal);
         }
         const alDia = total === 0;
 
@@ -572,10 +599,10 @@
 
       const deuda      = socios.reduce((s, x) => s + x.total, 0);
       const alDiaCount = socios.filter(x => x.alDia).length;
-      return { disc: sh.nombre, emoji: sh.emoji, tab, socios, mesesHeaders, total: socios.length, alDia: alDiaCount, deudores: socios.length - alDiaCount, deuda };
+      return { disc: sh.nombre, emoji: sh.emoji, tab, socios, total: socios.length, alDia: alDiaCount, deudores: socios.length - alDiaCount, deuda };
     } catch (e) {
       console.error('Error procesando', sh.nombre, e);
-      return { disc: sh.nombre, emoji: sh.emoji, tab: '—', socios: [], mesesHeaders: [], total: 0, alDia: 0, deudores: 0, deuda: 0 };
+      return { disc: sh.nombre, emoji: sh.emoji, tab: '—', socios: [], total: 0, alDia: 0, deudores: 0, deuda: 0 };
     }
   }
 
@@ -600,7 +627,6 @@
     document.getElementById('reporte-mes').textContent = 'Pestaña: ' + tabs;
     renderDiscTabs();
     renderMetricasGlobales();
-    /* Poblar subitems de disciplinas en el sidebar */
     const nav = document.getElementById('disc-nav-subitems');
     if (nav) {
       nav.style.display = '';
@@ -631,9 +657,60 @@
     if (statsPorDisc.length > 0) seleccionarDisc(statsPorDisc[0].disc);
   }
 
+  /* ─── Agrupación de categorías ─── */
+  function agruparCats(cats) {
+    const groups = {}, singles = [];
+    cats.forEach(cat => {
+      /* Detecta "2014-A", "2014 A", "SUB13-B", "SUB15 - C", etc. */
+      const m = cat.match(/^(.+?)\s*[-–\s]+([A-C])$/i);
+      if (m) {
+        const base = m[1].trim();
+        if (!groups[base]) groups[base] = [];
+        groups[base].push({ original: cat, div: m[2].toUpperCase() });
+      } else {
+        singles.push(cat);
+      }
+    });
+    /* Ordenar divisiones dentro de cada grupo */
+    Object.values(groups).forEach(arr => arr.sort((a, b) => a.div.localeCompare(b.div)));
+    return { groups, singles };
+  }
+
+  function toggleCatGroup(base, disc) {
+    const subRow = document.getElementById('cat-sub-row');
+    const btn = document.querySelector(`.cat-group-btn[data-base="${base}"]`);
+
+    if (catGrupoActivo === base) {
+      /* Cerrar */
+      subRow.style.display = 'none';
+      subRow.innerHTML = '';
+      catGrupoActivo = null;
+      if (btn) btn.classList.remove('open');
+      return;
+    }
+
+    /* Abrir */
+    if (catGrupoActivo) {
+      const prevBtn = document.querySelector(`.cat-group-btn[data-base="${catGrupoActivo}"]`);
+      if (prevBtn) prevBtn.classList.remove('open');
+    }
+    catGrupoActivo = base;
+    if (btn) btn.classList.add('open');
+
+    const divs = catGrupos[base] || [];
+    subRow.innerHTML = divs.map(d =>
+      `<button class="cat-pill" data-cat="${d.original}"
+         onclick="seleccionarCat('${disc.replace(/'/g,"\\'")}','${d.original.replace(/'/g,"\\'")}')">
+        ${base} - ${d.div}
+      </button>`
+    ).join('');
+    subRow.style.display = 'flex';
+  }
+
   function seleccionarDisc(disc) {
     discActiva = disc;
     catActiva  = null;
+    catGrupoActivo = null;
 
     document.querySelectorAll('.disc-tab').forEach(btn => {
       const active = btn.dataset.disc === disc;
@@ -643,30 +720,48 @@
     const discData = statsPorDisc.find(s => s.disc === disc);
     if (!discData) return;
 
-    /* Categorías únicas, ordenadas */
-    const cats = [...new Set(discData.socios.map(s => s.cat).filter(c => c.length > 0))].sort();
+    /* Categorías únicas, filtrando vacíos y "0" (filas sin categoría asignada) */
+    const cats = [...new Set(discData.socios.map(s => s.cat).filter(c => c.length > 0 && c !== '0'))].sort();
 
     const catBar   = document.getElementById('cat-bar');
     const catPills = document.getElementById('cat-pills-row');
     const catLabel = document.getElementById('cat-bar-label');
+    const subRow   = document.getElementById('cat-sub-row');
 
     if (!cats.length) { catBar.style.display = 'none'; document.getElementById('socios-browser').style.display = 'none'; return; }
 
     catBar.style.display = '';
+    subRow.style.display = 'none';
+    subRow.innerHTML = '';
     catLabel.textContent = `${discData.emoji} ${disc} — ${cats.length} categoría${cats.length !== 1 ? 's' : ''}`;
 
-    catPills.innerHTML = cats.map(cat =>
-      `<button class="cat-pill" data-cat="${cat}"
-         onclick="seleccionarCat('${disc.replace(/'/g,"\\'")}','${cat.replace(/'/g,"\\'")}')">
-        ${cat}
-       </button>`
-    ).join('');
+    const { groups, singles } = agruparCats(cats);
+    catGrupos = groups;
 
+    let html = '';
+    /* Primero los singles (PRIMERA, RESERVA, etc.) */
+    singles.forEach(cat => {
+      html += `<button class="cat-pill" data-cat="${cat}"
+        onclick="seleccionarCat('${disc.replace(/'/g,"\\'")}','${cat.replace(/'/g,"\\'")}')">
+        ${cat}
+      </button>`;
+    });
+    /* Luego los grupos agrupados (2014, SUB13, etc.) */
+    Object.keys(groups).sort().forEach(base => {
+      html += `<button class="cat-pill cat-group-btn" data-base="${base}"
+        onclick="toggleCatGroup('${base}','${disc.replace(/'/g,"\\'")}')">
+        ${base} <span style="font-size:9px;">▾</span>
+      </button>`;
+    });
+
+    catPills.innerHTML = html;
     document.getElementById('socios-browser').style.display = 'none';
   }
 
   function seleccionarCat(disc, cat) {
     catActiva = cat;
+    /* Limpiar retención al cambiar categoría */
+    retencionMap = {};
     document.querySelectorAll('.cat-pill').forEach(p => {
       p.classList.toggle('active', p.dataset.cat === cat);
     });
@@ -674,14 +769,14 @@
   }
 
   /* ─── Utilidades para tabla ─── */
-  let filtros = { nombre: '', condicion: '', ultMes: '', deuda: '' };
+  let filtros = { nombre: '', condicion: '', deuda: '' };
 
-  function getUltMes(s) {
-    for (let i = s.mesesVals.length - 2; i >= 1; i--) {
-      const vn = normStr(s.mesesVals[i].valor);
-      if (vn === 'P' || vn === 'A' || vn === 'PRESENTE' || vn === 'AUSENTE') return s.mesesVals[i];
-    }
-    return null;
+  function socioGetCondicion(s) {
+    const m = s.mesesVals.find(mv => {
+      const h = normStr(mv.header);
+      return h.includes('SOCIA') || h.includes('SOCIO');
+    });
+    return normStr(m?.valor || '');
   }
 
   function aplicarFiltros(lista) {
@@ -691,15 +786,9 @@
         if (!s.nombre.toLowerCase().includes(q) && !s.dni.includes(filtros.nombre)) return false;
       }
       if (filtros.condicion) {
-        const cond = normStr(s.mesesVals[0]?.valor || '');
+        const cond = socioGetCondicion(s);
         if (filtros.condicion === 'SOCIA' && cond.includes('NO')) return false;
         if (filtros.condicion === 'NO'    && !cond.includes('NO')) return false;
-      }
-      if (filtros.ultMes) {
-        const um = getUltMes(s);
-        const vn = um ? normStr(um.valor) : '';
-        if (filtros.ultMes === 'P' && vn !== 'P' && vn !== 'PRESENTE') return false;
-        if (filtros.ultMes === 'A' && vn !== 'A' && vn !== 'AUSENTE')  return false;
       }
       if (filtros.deuda === 'aldia' && !s.alDia) return false;
       if (filtros.deuda === 'deben' && s.alDia)  return false;
@@ -718,8 +807,7 @@
 
     const socios = discData.socios.filter(s => s.cat === cat);
     sociosActuales = socios;
-    /* Resetear filtros al cambiar categoría */
-    filtros = { nombre: '', condicion: '', ultMes: '', deuda: '' };
+    filtros = { nombre: '', condicion: '', deuda: '' };
 
     const browser = document.getElementById('socios-browser');
     browser.style.display = 'block';
@@ -744,25 +832,38 @@
       return;
     }
 
-    const headers = socios[0]?.mesesVals?.map(m => m.header) || [];
-    const midCount = Math.max(0, headers.length - 2);
+    /* Determinar columnas visibles (excluir SOCIA/SOCIO, BECA, OBS — van en SITUACIÓN) */
+    const visHeaders = [];
+    (socios[0]?.mesesVals || []).forEach(m => {
+      const h = normStr(m.header);
+      if (h.includes('SOCIA') || h.includes('SOCIO')) return;
+      if (h.includes('BECAD') || h === 'BECA') return;
+      if (h.includes('OBSERV') || h === 'OBS') return;
+      visHeaders.push(m.header);
+    });
+
+    /* Celdas de filtro vacías para columnas intermedias (todo menos primera y última visible) */
+    const midEmpties = Math.max(0, visHeaders.length - 1);
+
     thead.innerHTML = `
       <tr>
-        <th style="position:sticky;left:0;z-index:3;background:#f8fafb;">Nombre · DNI</th>
-        ${headers.map(h => `<th>${h}</th>`).join('')}
+        <th style="position:sticky;left:0;z-index:3;background:#f8fafb;min-width:200px;">Nombre · DNI</th>
+        <th class="th-situacion" style="z-index:3;">Situación</th>
+        ${visHeaders.map(h => `<th>${h}</th>`).join('')}
+        <th style="white-space:nowrap;">Retención</th>
       </tr>
       <tr class="filter-row">
         <th style="position:sticky;left:0;z-index:3;background:#f8fafb;">
           <input class="tbl-filter" placeholder="Buscar nombre o DNI…" oninput="filtros.nombre=this.value;actualizarFiltros()">
         </th>
-        <th>
+        <th class="th-situacion" style="z-index:3;">
           <select class="tbl-filter" onchange="filtros.condicion=this.value;actualizarFiltros()">
             <option value="">Todos</option>
             <option value="SOCIA">Socio/a</option>
             <option value="NO">No socio/a</option>
           </select>
         </th>
-        ${'<th></th>'.repeat(midCount)}
+        ${'<th></th>'.repeat(midEmpties)}
         <th>
           <select class="tbl-filter" onchange="filtros.deuda=this.value;actualizarFiltros()">
             <option value="">Todos</option>
@@ -770,6 +871,7 @@
             <option value="deben">Deben</option>
           </select>
         </th>
+        <th></th>
       </tr>`;
 
     renderFilas(socios);
@@ -785,43 +887,64 @@
             ? `<span style="font-size:10px;color:#9ca3af;font-weight:400;"> · F.Nac ${s.fechaNac}</span>` : '';
           const obsLine = s.obs ? `<div class="obs-text">${s.obs}</div>` : '';
 
-          const cells = (s.mesesVals || []).map((m, i) => {
-            const hNorm  = normStr(m.header);
-            const v      = m.valor;
-            const vNorm  = normStr(v);
-            const isFirst = i === 0;
-            const isLast  = i === s.mesesVals.length - 1;
+          /* Celda SITUACIÓN */
+          const socioVal = s.mesesVals.find(m => {
+            const h = normStr(m.header);
+            return h.includes('SOCIA') || h.includes('SOCIO');
+          })?.valor || '';
+          const noSocia  = /no.?soci/i.test(socioVal);
+          const esBecado = /s[ií]/i.test(s.becado || '');
+          const situacionTd = `<td class="td-situacion">
+            <span class="${noSocia ? 'badge-no-socia' : 'badge-socia'}">${socioVal || '—'}</span>
+            <div style="margin-top:5px;display:flex;gap:4px;flex-wrap:wrap;">
+              <button class="btn-hist" onclick="abrirModalAsistencia(${idx})">Asistencia</button>
+              ${esBecado ? `<button class="btn-beca" onclick="abrirModalBeca(${idx})">Beca</button>` : ''}
+            </div>
+          </td>`;
 
-            /* Primera columna: SOCIA/NO SOCIA + becado + botón asistencia */
-            if (isFirst || hNorm.includes('SOCIA') || hNorm.includes('SOCIO')) {
-              const noSocia  = /no.?soci/i.test(v);
-              const esBecado = /s[ií]/i.test(s.becado || '');
-              return `<td>
-                <span class="${noSocia ? 'badge-no-socia' : 'badge-socia'}">${v || '—'}</span>
-                ${esBecado ? `<span class="badge-becado">BECADO</span>` : ''}
-                <div style="margin-top:4px;"><button class="btn-hist" onclick="abrirModalAsistencia(${idx})">Asistencia</button></div>
-              </td>`;
-            }
+          /* Celdas de datos (excluir SOCIA/BECA/OBS) */
+          const cells = (s.mesesVals || []).map((m) => {
+            const hNorm = normStr(m.header);
+            /* Saltar columnas que van en SITUACIÓN */
+            if (hNorm.includes('SOCIA') || hNorm.includes('SOCIO')) return null;
+            if (hNorm.includes('BECAD') || hNorm === 'BECA') return null;
+            if (hNorm.includes('OBSERV') || hNorm === 'OBS') return null;
 
-            /* Última columna: TOTAL + botón detalle deuda */
-            if (isLast || hNorm === 'TOTAL') {
-              const monto = parsearMonto(v);
+            const v = m.valor; const vNorm = normStr(v);
+
+            /* Columna TOTAL — usa el total calculado, no el del Drive */
+            if (hNorm === 'TOTAL') {
+              const monto = s.total;
               return `<td>
                 <span class="${monto === 0 ? 'cell-ok' : 'cell-debe'}">${monto === 0 ? 'AL DÍA' : fmtPeso(monto)}</span>
                 ${monto > 0 ? `<div style="margin-top:4px;"><button class="btn-deuda" onclick="abrirModalDeuda(${idx})">Detalle</button></div>` : ''}
               </td>`;
             }
 
-            /* Presencia P / A */
+            /* Columna MESES — texto descriptivo */
+            if (hNorm === 'MESES') {
+              return `<td style="font-size:12px;color:#374151;">${v || '—'}</td>`;
+            }
+
+            /* Asistencia P / A */
             if (vNorm === 'P' || vNorm === 'PRESENTE') return `<td class="cell-p">P</td>`;
             if (vNorm === 'A' || vNorm === 'AUSENTE')  return `<td class="cell-a">A</td>`;
 
-            /* Montos intermedios */
+            /* Montos */
             const monto = parsearMonto(v);
             if (monto > 0) return `<td class="cell-monto">${fmtPeso(monto)}</td>`;
-
             return `<td class="cell-vacio">—</td>`;
-          }).join('');
+          }).filter(c => c !== null).join('');
+
+          /* Celda RETENCIÓN */
+          const retChecked = retencionMap[idx] || false;
+          const retencionTd = `<td style="text-align:center;">
+            <input type="checkbox" class="cb-retencion"
+              ${s.alDia ? 'disabled' : ''}
+              ${retChecked ? 'checked' : ''}
+              onchange="toggleRetencion(${idx}, this.checked)"
+              title="${s.alDia ? 'Al día — habilitado automáticamente' : 'Marcar como retenido para el fin de semana'}">
+          </td>`;
 
           return `<tr>
             <td class="td-nombre">
@@ -829,40 +952,65 @@
               ${(dniLine || nacLine) ? `<span style="display:block;margin-top:2px;">${dniLine}${nacLine}</span>` : ''}
               ${obsLine}
             </td>
+            ${situacionTd}
             ${cells}
+            ${retencionTd}
           </tr>`;
         }).join('')
       : `<tr><td colspan="20" class="sb-empty">Sin resultados con los filtros aplicados.</td></tr>`;
   }
 
-  /* ─── Modales de detalle ─── */
+  /* ── Retención ── */
+  function toggleRetencion(idx, checked) {
+    retencionMap[idx] = checked;
+  }
+
+  /* ─── Modal asistencia: muestra todos los meses con sus valores ─── */
   function abrirModalAsistencia(idx) {
     const s = sociosActuales[idx];
     if (!s) return;
-    const historial = s.mesesVals.slice(1, -1).filter(m => {
-      const vn = normStr(m.valor);
-      return vn === 'P' || vn === 'A' || vn === 'PRESENTE' || vn === 'AUSENTE';
+    /* Mostrar todas las columnas excepto SOCIA/BECA/OBS/TOTAL */
+    const historial = s.mesesVals.filter(m => {
+      const h = normStr(m.header);
+      return !h.includes('SOCIA') && !h.includes('SOCIO') &&
+             !h.includes('BECAD') && h !== 'BECA' &&
+             !h.includes('OBSERV') && h !== 'OBS' &&
+             h !== 'TOTAL';
     });
     document.getElementById('modal-title').textContent = s.nombre;
-    document.getElementById('modal-sub').textContent   = `${s.disc} · Historial de asistencias`;
+    document.getElementById('modal-sub').textContent   = `${s.disc} · Historial por mes`;
     document.getElementById('modal-body').innerHTML = historial.length
       ? historial.map(m => {
-          const vn = normStr(m.valor);
-          const ok = vn === 'P' || vn === 'PRESENTE';
+          const vNorm = normStr(m.valor);
+          const isP   = vNorm === 'P' || vNorm === 'PRESENTE';
+          const isA   = vNorm === 'A' || vNorm === 'AUSENTE';
+          const monto = parsearMonto(m.valor);
+          let valHtml;
+          if (isP)       valHtml = `<span class="modal-val-p">✓ PRESENTE</span>`;
+          else if (isA)  valHtml = `<span class="modal-val-a">✗ AUSENTE</span>`;
+          else if (monto > 0) valHtml = `<span class="modal-val-monto">${fmtPeso(monto)}</span>`;
+          else           valHtml = `<span style="color:#9ca3af;">—</span>`;
           return `<div class="modal-row">
             <span class="modal-mes">${m.header}</span>
-            <span class="${ok ? 'modal-val-p' : 'modal-val-a'}">${ok ? '✓ PRESENTE' : '✗ AUSENTE'}</span>
+            ${valHtml}
           </div>`;
         }).join('')
-      : '<div class="modal-empty">Sin registros de asistencia.</div>';
+      : '<div class="modal-empty">Sin datos de meses disponibles.</div>';
     document.getElementById('modal-overlay').style.display = 'flex';
   }
 
+  /* ─── Modal deuda ─── */
   function abrirModalDeuda(idx) {
     const s = sociosActuales[idx];
     if (!s) return;
-    /* Meses intermedios con monto > 0 */
-    const detalles = s.mesesVals.slice(1, -1).filter(m => parsearMonto(m.valor) > 0);
+    const detalles = s.mesesVals.filter(m => {
+      const h = normStr(m.header);
+      if (h.includes('SOCIA') || h.includes('SOCIO')) return false;
+      if (h.includes('BECAD') || h === 'BECA') return false;
+      if (h.includes('OBSERV') || h === 'OBS') return false;
+      if (h === 'TOTAL' || h === 'MESES') return false;
+      return parsearMonto(m.valor) > 0;
+    });
     document.getElementById('modal-title').textContent = s.nombre;
     document.getElementById('modal-sub').textContent   = `${s.disc} · Detalle de deuda`;
     document.getElementById('modal-body').innerHTML = detalles.length
@@ -878,6 +1026,26 @@
     document.getElementById('modal-overlay').style.display = 'flex';
   }
 
+  /* ─── Modal beca ─── */
+  function abrirModalBeca(idx) {
+    const s = sociosActuales[idx];
+    if (!s) return;
+    document.getElementById('modal-title').textContent = s.nombre;
+    document.getElementById('modal-sub').textContent   = `${s.disc} · Información de beca`;
+    document.getElementById('modal-body').innerHTML = `
+      <div style="padding:8px 0;">
+        <div class="modal-row">
+          <span class="modal-mes">Estado</span>
+          <span style="font-size:13px;font-weight:700;color:#0284c7;background:#f0f9ff;border:1px solid rgba(14,165,233,.25);padding:3px 10px;border-radius:8px;">BECADO/A</span>
+        </div>
+        ${s.obs ? `<div class="modal-row" style="align-items:flex-start;">
+          <span class="modal-mes">Observación</span>
+          <span style="font-size:13px;color:#374151;max-width:220px;white-space:normal;text-align:right;line-height:1.5;">${s.obs}</span>
+        </div>` : ''}
+      </div>`;
+    document.getElementById('modal-overlay').style.display = 'flex';
+  }
+
   function cerrarModal() {
     document.getElementById('modal-overlay').style.display = 'none';
   }
@@ -886,7 +1054,7 @@
 
   /* ─── Métricas globales ─── */
   function renderMetricasGlobales() {
-    /* ── 1. AGING (de columna MESES) ── */
+    /* 1. AGING */
     const grupos = { 0:0, 1:0, 2:0, 3:0, 4:0 };
     sociosTodos.forEach(s => {
       const m = Math.min(s.mesesDeuda || 0, 4);
@@ -905,7 +1073,7 @@
       </div>`;
     }).join('');
 
-    /* ── 2. DESGLOSE FIJO por disciplina (expandible a categorías) ── */
+    /* 2. DESGLOSE */
     const totalDeuda    = statsPorDisc.reduce((s, x) => s + x.deuda, 0);
     const totalAlDia    = statsPorDisc.reduce((s, x) => s + x.alDia, 0);
     const totalDeudores = statsPorDisc.reduce((s, x) => s + x.deudores, 0);
@@ -921,7 +1089,7 @@
       </div>
       ${statsPorDisc.map((d, di) => {
         const pct = d.total ? Math.round(d.alDia / d.total * 100) : 0;
-        const cats = [...new Set(d.socios.map(s => s.cat).filter(c => c))].sort();
+        const cats = [...new Set(d.socios.map(s => s.cat).filter(c => c && c !== '0'))].sort();
         const catsHtml = cats.map(cat => {
           const sc = d.socios.filter(s => s.cat === cat);
           const okC = sc.filter(s => s.alDia).length;
