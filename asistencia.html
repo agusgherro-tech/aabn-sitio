@@ -224,6 +224,7 @@
     .nav-badge{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 5px;border-radius:100px;font-size:10px;font-weight:700;margin-left:auto;flex-shrink:0;}
     .nav-badge-cyan{background:#0ea5e9;color:#fff;}
     .nav-badge-red{background:#dc2626;color:#fff;}
+    .nav-badge-orange{background:#ea580c;color:#fff;}
     /* Sub-toggle disciplinas */
     .nav-subitem-toggle{display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:8px;cursor:pointer;font-size:13px;color:#94a3b8;transition:background .15s,color .15s;margin-bottom:1px;border-left:2px solid rgba(255,255,255,.08);user-select:none;}
     .nav-subitem-toggle:hover{background:rgba(255,255,255,.06);color:#e2e8f0;border-left-color:#1a672a;}
@@ -304,6 +305,14 @@
         </svg>
         Becados
         <span id="badge-becados" class="nav-badge nav-badge-cyan" style="display:none;">0</span>
+      </a>
+      <!-- Deudores -->
+      <a class="nav-subitem" id="nav-item-deudores" href="#" onclick="event.preventDefault();mostrarVistaDeudores()">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        Deudores
+        <span id="badge-deudores" class="nav-badge nav-badge-orange" style="display:none;">0</span>
       </a>
       <!-- Retención de Carnet -->
       <a class="nav-subitem" id="nav-item-retencion" href="#" onclick="event.preventDefault();mostrarVistaRetencion()">
@@ -443,6 +452,17 @@
   </div>
   </div><!-- /vista-principal -->
 
+  <!-- Vista Deudores -->
+  <div id="vista-deudores" style="display:none;">
+    <div class="vista-hdr">
+      <h2>DEUDORES</h2>
+      <p>Todos los socios con deuda pendiente, ordenados por monto.</p>
+    </div>
+    <div class="socios-browser" id="deudores-content">
+      <div style="padding:32px;text-align:center;color:#9ca3af;font-size:13px;">Cargando…</div>
+    </div>
+  </div>
+
   <!-- Vista Becados -->
   <div id="vista-becados" style="display:none;">
     <div class="vista-hdr">
@@ -505,6 +525,9 @@
     { nombre:'Patín',            emoji:'⛸️', id:'1TkL0PdhjSO0vj-MxFMg7NGpsl9tf5ZYDqJlQvWLME_A', tabs:['04/26','03/26','02/26'] },
   ];
 
+  const CACHE_KEY = 'aabn_asistencia_v1';
+  const CACHE_TTL = 30 * 60 * 1000;
+  let tsActualizacion = null;
   let sociosTodos = [], statsPorDisc = [], cargado = false, cargando = false;
   let discActiva = null, catActiva = null;
   let sociosActuales = [];
@@ -684,12 +707,47 @@
 
   async function cargarTodos() {
     if (cargado || cargando) return;
+    /* Intentar caché localStorage */
+    try {
+      const raw = localStorage.getItem(CACHE_KEY);
+      if (raw) {
+        const { ts, data } = JSON.parse(raw);
+        if (Date.now() - ts < CACHE_TTL) {
+          statsPorDisc    = data;
+          sociosTodos     = data.flatMap(r => r.socios);
+          tsActualizacion = ts;
+          cargado         = true;
+          actualizarUI();
+          refrescarEnBackground();
+          return;
+        }
+      }
+    } catch {}
     cargando = true;
-    const resultados = await Promise.all(SHEETS.map(procesarSheet));
-    statsPorDisc = resultados;
-    sociosTodos  = resultados.flatMap(r => r.socios);
-    cargado = true; cargando = false;
+    await fetchYGuardar();
+    cargando = false;
+  }
+
+  async function fetchYGuardar() {
+    const resultados    = await Promise.all(SHEETS.map(procesarSheet));
+    statsPorDisc        = resultados;
+    sociosTodos         = resultados.flatMap(r => r.socios);
+    tsActualizacion     = Date.now();
+    cargado             = true;
+    try { localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: tsActualizacion, data: resultados })); } catch {}
     actualizarUI();
+  }
+
+  async function refrescarEnBackground() {
+    try {
+      const resultados = await Promise.all(SHEETS.map(procesarSheet));
+      statsPorDisc     = resultados;
+      sociosTodos      = resultados.flatMap(r => r.socios);
+      tsActualizacion  = Date.now();
+      try { localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: tsActualizacion, data: resultados })); } catch {}
+      actualizarBadges();
+      actualizarTextoTs();
+    } catch {}
   }
 
   function fmtPeso(n) {
@@ -697,10 +755,18 @@
     return '$' + Math.round(n).toLocaleString('es-AR');
   }
 
+  function actualizarTextoTs() {
+    if (!tsActualizacion) return;
+    const mins = Math.round((Date.now() - tsActualizacion) / 60000);
+    const txt  = mins === 0 ? 'Actualizado ahora' : `Actualizado hace ${mins} min`;
+    const el   = document.getElementById('reporte-mes');
+    if (el) el.textContent = txt;
+  }
+  setInterval(actualizarTextoTs, 60000);
+
   function actualizarUI() {
     document.getElementById('search-tag-status').textContent = 'DNI · Nombre';
-    const tabs = [...new Set(statsPorDisc.map(r => r.tab))].join(' · ');
-    document.getElementById('reporte-mes').textContent = 'Pestaña: ' + tabs;
+    actualizarTextoTs();
     renderDiscTabs();
     renderMetricasGlobales();
     const asistenciaSubitems = document.getElementById('asistencia-subitems');
@@ -1278,10 +1344,11 @@
 
   /* ── Control de vistas ── */
   function mostrarVista(id) {
-    ['vista-principal','vista-becados','vista-retencion'].forEach(v => {
+    ['vista-principal','vista-deudores','vista-becados','vista-retencion'].forEach(v => {
       document.getElementById(v).style.display = v === id ? '' : 'none';
     });
-    document.getElementById('nav-item-becados').classList.toggle('active', id === 'vista-becados');
+    document.getElementById('nav-item-deudores').classList.toggle('active',  id === 'vista-deudores');
+    document.getElementById('nav-item-becados').classList.toggle('active',   id === 'vista-becados');
     document.getElementById('nav-item-retencion').classList.toggle('active', id === 'vista-retencion');
   }
 
@@ -1300,6 +1367,11 @@
     if (!open) mostrarVistaPrincipal();
   }
 
+  function mostrarVistaDeudores() {
+    mostrarVista('vista-deudores');
+    renderVistaDeudores();
+  }
+
   function mostrarVistaBecados() {
     mostrarVista('vista-becados');
     renderVistaBecados();
@@ -1311,11 +1383,105 @@
   }
 
   function actualizarBadges() {
-    const becados = sociosTodos.filter(s => /s[ií]/i.test(s.becado || ''));
+    const becados   = sociosTodos.filter(s => /s[ií]/i.test(s.becado || ''));
+    const deudores  = sociosTodos.filter(s => !s.alDia);
     const bdgB = document.getElementById('badge-becados');
-    if (bdgB) { bdgB.textContent = becados.length; bdgB.style.display = becados.length > 0 ? '' : 'none'; }
+    if (bdgB) { bdgB.textContent = becados.length;  bdgB.style.display = becados.length  > 0 ? '' : 'none'; }
+    const bdgD = document.getElementById('badge-deudores');
+    if (bdgD) { bdgD.textContent = deudores.length; bdgD.style.display = deudores.length > 0 ? '' : 'none'; }
     const bdgR = document.getElementById('badge-retencion');
     if (bdgR) { bdgR.textContent = retencionSet.size; bdgR.style.display = retencionSet.size > 0 ? '' : 'none'; }
+  }
+
+  /* ── Vista Deudores ── */
+  function renderVistaDeudores() {
+    const deudores = sociosTodos.filter(s => !s.alDia).sort((a, b) => b.total - a.total);
+    const cont = document.getElementById('deudores-content');
+    if (!cont) return;
+    if (!deudores.length) {
+      cont.innerHTML = '<div class="vista-empty">¡Sin deudores! Todos los socios están al día.</div>';
+      return;
+    }
+    const totalDeuda = deudores.reduce((a, s) => a + s.total, 0);
+    /* Agrupar por disciplina para el resumen */
+    const porDisc = {};
+    deudores.forEach(s => { porDisc[s.disc] = (porDisc[s.disc] || 0) + 1; });
+    const resumenDisc = Object.entries(porDisc).map(([d, n]) => {
+      const info = statsPorDisc.find(x => x.disc === d);
+      return `${info?.emoji || ''} ${d.replace(' Masculino',' M.').replace(' Femenino',' F.')}: <strong>${n}</strong>`;
+    }).join(' &nbsp;·&nbsp; ');
+    cont.innerHTML = `
+      <div class="sb-hdr">
+        <div class="sb-title">💸 Deudores del Club</div>
+        <div class="sb-stats">
+          <span class="sb-stat debe"><strong>${deudores.length}</strong> deudores</span>
+          <span class="sb-stat debe"><strong>${fmtPeso(totalDeuda)}</strong> total</span>
+        </div>
+      </div>
+      <div style="padding:8px 20px;background:#fff7ed;border-bottom:1px solid rgba(0,0,0,.06);font-size:11px;color:#9a3412;">${resumenDisc}</div>
+      <div class="table-scroll">
+        <table class="socios-table">
+          <thead>
+            <tr>
+              <th style="position:sticky;left:0;z-index:3;background:#f8fafb;min-width:200px;">Nombre · DNI</th>
+              <th>Categoría</th>
+              <th>Actividad</th>
+              <th>Situación</th>
+              <th>Deuda</th>
+              <th>Detalle</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${deudores.map(s => {
+              const dniLine  = s.dni      ? ` · DNI ${s.dni}` : '';
+              const nacLine  = s.fechaNac ? ` · F.Nac ${s.fechaNac}` : '';
+              const socioVal = s.mesesVals.find(m => { const h = normStr(m.header); return h.includes('SOCIA') || h.includes('SOCIO'); })?.valor || '';
+              const noSocia  = /no.?soci/i.test(socioVal);
+              const detalle  = s.mesesVals.filter(m => {
+                const h = normStr(m.header);
+                if (h.includes('SOCIA')||h.includes('SOCIO')||h.includes('BECAD')||h==='BECA'||h.includes('OBSERV')||h==='OBS'||h==='TOTAL'||h==='MESES') return false;
+                return parsearMonto(m.valor) > 0;
+              }).map(m => `${m.header}: ${fmtPeso(parsearMonto(m.valor))}`).join(' · ') || '—';
+              return `<tr>
+                <td class="td-nombre">
+                  ${s.nombre}
+                  <span style="display:block;font-size:10px;color:#9ca3af;font-weight:400;">${dniLine}${nacLine}</span>
+                </td>
+                <td><span class="res-cat">${s.cat || '—'}</span></td>
+                <td style="font-size:12px;">${s.emoji} ${s.disc}</td>
+                <td><span class="${noSocia ? 'badge-no-socia' : 'badge-socia'}">${socioVal || '—'}</span></td>
+                <td><span class="cell-debe" style="font-weight:800;">${fmtPeso(s.total)}</span></td>
+                <td style="font-size:11px;color:#374151;white-space:normal;line-height:1.5;max-width:220px;">${detalle}</td>
+              </tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:16px;text-align:right;">
+        <button onclick="copiarResumenDeudores()" style="background:#154C20;color:#fff;border:none;border-radius:10px;padding:10px 20px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Rag',sans-serif;">
+          📋 Copiar informe de deuda
+        </button>
+      </div>`;
+  }
+
+  function copiarResumenDeudores() {
+    const deudores = sociosTodos.filter(s => !s.alDia).sort((a, b) => b.total - a.total);
+    if (!deudores.length) return;
+    const fecha = new Date().toLocaleDateString('es-AR');
+    let txt = `DEUDORES — A.A.B.N\nFecha: ${fecha}\n\n`;
+    deudores.forEach((s, i) => {
+      txt += `${i+1}. ${s.nombre} — ${fmtPeso(s.total)}\n`;
+      txt += `   ${s.disc} · ${s.cat || '—'}\n`;
+      if (s.dni) txt += `   DNI: ${s.dni}\n`;
+      const det = s.mesesVals.filter(m => {
+        const h = normStr(m.header);
+        if (h.includes('SOCIA')||h.includes('SOCIO')||h.includes('BECAD')||h==='BECA'||h.includes('OBSERV')||h==='OBS'||h==='TOTAL'||h==='MESES') return false;
+        return parsearMonto(m.valor) > 0;
+      }).map(m => `     ${m.header}: ${fmtPeso(parsearMonto(m.valor))}`).join('\n');
+      if (det) txt += det + '\n';
+      txt += '\n';
+    });
+    navigator.clipboard.writeText(txt).then(() => alert('Informe copiado al portapapeles ✓')).catch(() => alert('No se pudo copiar.'));
   }
 
   /* ── Vista Becados ── */
