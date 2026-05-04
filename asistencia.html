@@ -161,9 +161,8 @@
     .btn-beca{font-size:10px;font-weight:700;letter-spacing:.5px;padding:3px 8px;border-radius:6px;border:1.5px solid rgba(14,165,233,.3);color:#0284c7;background:#f0f9ff;cursor:pointer;white-space:nowrap;font-family:'Rag',sans-serif;vertical-align:middle;}
     .btn-beca:hover{background:#e0f2fe;border-color:#0284c7;}
 
-    /* ── Checkbox Retención ── */
+    /* ── Checkbox Retención — habilitado para todos ── */
     .cb-retencion{width:16px;height:16px;cursor:pointer;accent-color:#dc2626;}
-    .cb-retencion:disabled{cursor:default;accent-color:#9ca3af;opacity:.35;}
 
     /* ── Modal flotante ── */
     .modal-overlay{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;}
@@ -569,8 +568,17 @@
         if (/^(falta|mes[^a]|total|n[°o ]|basquet|al.?d[ií]a|deben|socios?$|resumen|categoria)/i.test(nombre)) continue;
 
         const cat      = (cols.cat      !== undefined ? f[cols.cat]      || '' : '').trim();
-        const dni      = normDNI(cols.dni      !== undefined ? f[cols.dni]      : '');
-        const fechaNac = (cols.fechaNac !== undefined ? f[cols.fechaNac] || '' : '').trim();
+        /* Validar que el valor de DNI no sea una fecha (6/12/2011) — si lo es, es fechaNac mal mapeada */
+        const looksLikeDate = v => /^\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4}$/.test(String(v).trim());
+        let dniRaw   = cols.dni     !== undefined ? (f[cols.dni]     || '') : '';
+        let fNacRaw  = cols.fechaNac !== undefined ? (f[cols.fechaNac] || '') : '';
+        if (looksLikeDate(dniRaw) && !looksLikeDate(fNacRaw)) {
+          /* El supuesto DNI es una fecha → swap */
+          if (!fNacRaw.trim()) fNacRaw = dniRaw;
+          dniRaw = '';
+        }
+        const dni      = normDNI(dniRaw);
+        const fechaNac = fNacRaw.trim();
         const becado   = (cols.becado   !== undefined ? f[cols.becado]   || '' : '').trim();
         const obs      = (cols.obs      !== undefined ? f[cols.obs]      || '' : '').trim();
         const mesesTxt = (cols.meses    !== undefined ? f[cols.meses]    || '' : '').trim();
@@ -936,14 +944,13 @@
             return `<td class="cell-vacio">—</td>`;
           }).filter(c => c !== null).join('');
 
-          /* Celda RETENCIÓN */
+          /* Celda RETENCIÓN — disponible para todos, al día o no */
           const retChecked = retencionMap[idx] || false;
           const retencionTd = `<td style="text-align:center;">
             <input type="checkbox" class="cb-retencion"
-              ${s.alDia ? 'disabled' : ''}
               ${retChecked ? 'checked' : ''}
               onchange="toggleRetencion(${idx}, this.checked)"
-              title="${s.alDia ? 'Al día — habilitado automáticamente' : 'Marcar como retenido para el fin de semana'}">
+              title="${s.alDia ? 'Al día — podés retener igual' : 'Marcar como retenido para el fin de semana'}">
           </td>`;
 
           return `<tr>
@@ -965,37 +972,30 @@
     retencionMap[idx] = checked;
   }
 
-  /* ─── Modal asistencia: muestra todos los meses con sus valores ─── */
+  /* ─── Modal asistencia: solo muestra columnas P/A (presencia física) ─── */
   function abrirModalAsistencia(idx) {
     const s = sociosActuales[idx];
     if (!s) return;
-    /* Mostrar todas las columnas excepto SOCIA/BECA/OBS/TOTAL */
+    /* Solo columnas cuyo valor sea P, A, PRESENTE o AUSENTE */
     const historial = s.mesesVals.filter(m => {
-      const h = normStr(m.header);
-      return !h.includes('SOCIA') && !h.includes('SOCIO') &&
-             !h.includes('BECAD') && h !== 'BECA' &&
-             !h.includes('OBSERV') && h !== 'OBS' &&
-             h !== 'TOTAL';
+      const vNorm = normStr(m.valor);
+      return vNorm === 'P' || vNorm === 'PRESENTE' || vNorm === 'A' || vNorm === 'AUSENTE';
     });
     document.getElementById('modal-title').textContent = s.nombre;
-    document.getElementById('modal-sub').textContent   = `${s.disc} · Historial por mes`;
+    document.getElementById('modal-sub').textContent   = `${s.disc} · Historial de asistencia`;
     document.getElementById('modal-body').innerHTML = historial.length
       ? historial.map(m => {
           const vNorm = normStr(m.valor);
           const isP   = vNorm === 'P' || vNorm === 'PRESENTE';
-          const isA   = vNorm === 'A' || vNorm === 'AUSENTE';
-          const monto = parsearMonto(m.valor);
-          let valHtml;
-          if (isP)       valHtml = `<span class="modal-val-p">✓ PRESENTE</span>`;
-          else if (isA)  valHtml = `<span class="modal-val-a">✗ AUSENTE</span>`;
-          else if (monto > 0) valHtml = `<span class="modal-val-monto">${fmtPeso(monto)}</span>`;
-          else           valHtml = `<span style="color:#9ca3af;">—</span>`;
+          const valHtml = isP
+            ? `<span class="modal-val-p">✓ PRESENTE</span>`
+            : `<span class="modal-val-a">✗ AUSENTE</span>`;
           return `<div class="modal-row">
             <span class="modal-mes">${m.header}</span>
             ${valHtml}
           </div>`;
         }).join('')
-      : '<div class="modal-empty">Sin datos de meses disponibles.</div>';
+      : '<div class="modal-empty">Sin registros de asistencia. Esta disciplina puede registrar pagos en lugar de presencia física.</div>';
     document.getElementById('modal-overlay').style.display = 'flex';
   }
 
