@@ -219,6 +219,21 @@
     .dsg-col-monto{font-size:13px;font-weight:700;color:#dc2626;text-align:right;white-space:nowrap;}
     .dsg-chevron{font-size:10px;color:#9ca3af;margin-left:auto;flex-shrink:0;transition:transform .15s;}
     .dsg-chevron.open{transform:rotate(90deg);}
+
+    /* ── Nav badges ── */
+    .nav-badge{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 5px;border-radius:100px;font-size:10px;font-weight:700;margin-left:auto;flex-shrink:0;}
+    .nav-badge-cyan{background:#0ea5e9;color:#fff;}
+    .nav-badge-red{background:#dc2626;color:#fff;}
+    /* Sub-toggle disciplinas */
+    .nav-subitem-toggle{display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:8px;cursor:pointer;font-size:13px;color:#94a3b8;transition:background .15s,color .15s;margin-bottom:1px;border-left:2px solid rgba(255,255,255,.08);user-select:none;}
+    .nav-subitem-toggle:hover{background:rgba(255,255,255,.06);color:#e2e8f0;border-left-color:#1a672a;}
+    .nav-subitem-toggle.open{color:#e2e8f0;border-left-color:#4ade80;}
+    /* Badge BECADO inline en tabla */
+    .badge-becado{display:inline-block;font-size:9px;font-weight:700;background:#f0f9ff;color:#0284c7;border:1px solid rgba(14,165,233,.25);padding:2px 6px;border-radius:6px;margin-left:4px;vertical-align:middle;}
+    /* Cabeceras de vistas */
+    .vista-hdr h2{font-size:2rem;font-weight:900;letter-spacing:-0.5px;color:#154C20;font-family:'Expose',sans-serif;margin-bottom:4px;}
+    .vista-hdr p{font-size:13px;color:#6b7280;margin-bottom:20px;}
+    .vista-empty{padding:48px;text-align:center;color:#9ca3af;font-size:13px;line-height:1.8;}
   </style>
 </head>
 <body class="font-sans antialiased">
@@ -264,13 +279,41 @@
       Socios SWIN
     </a>
 
-    <a href="asistencia.html" class="nav-item active">
+    <a href="asistencia.html" class="nav-item active" onclick="mostrarVistaPrincipal()">
       <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
       </svg>
       Socios Asistencia
     </a>
-    <div class="nav-subitems" id="disc-nav-subitems" style="display:none;"></div>
+    <div class="nav-subitems" id="asistencia-subitems" style="display:none;">
+      <!-- Disciplinas (expandible) -->
+      <div class="nav-subitem-toggle" id="disc-nav-toggle" onclick="toggleDiscNav()">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 6h18M3 12h18M3 18h18"/>
+        </svg>
+        Disciplinas
+        <svg id="disc-nav-arrow" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" style="margin-left:auto;transition:transform .15s;">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+        </svg>
+      </div>
+      <div id="disc-nav-subitems" style="display:none;padding-left:10px;"></div>
+      <!-- Becados -->
+      <a class="nav-subitem" id="nav-item-becados" href="#" onclick="event.preventDefault();mostrarVistaBecados()">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+        </svg>
+        Becados
+        <span id="badge-becados" class="nav-badge nav-badge-cyan" style="display:none;">0</span>
+      </a>
+      <!-- Retención de Carnet -->
+      <a class="nav-subitem" id="nav-item-retencion" href="#" onclick="event.preventDefault();mostrarVistaRetencion()">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+        </svg>
+        Retención de Carnet
+        <span id="badge-retencion" class="nav-badge nav-badge-red" style="display:none;">0</span>
+      </a>
+    </div>
 
     <div class="nav-parent">
       <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
@@ -341,6 +384,7 @@
     <div id="result-list"></div>
   </div>
 
+  <div id="vista-principal">
   <!-- PESTAÑAS DE DISCIPLINAS -->
   <div class="metrics-head" style="margin-bottom:16px;">
     <div class="metrics-title">Explorar por disciplina</div>
@@ -397,6 +441,29 @@
   <div class="desglose-panel" id="desglose-panel">
     <div style="padding:32px;text-align:center;color:#9ca3af;font-size:13px;">Cargando…</div>
   </div>
+  </div><!-- /vista-principal -->
+
+  <!-- Vista Becados -->
+  <div id="vista-becados" style="display:none;">
+    <div class="vista-hdr">
+      <h2>BECADOS</h2>
+      <p>Todos los socios con beca activa en las planillas de Drive.</p>
+    </div>
+    <div class="socios-browser" id="becados-content">
+      <div style="padding:32px;text-align:center;color:#9ca3af;font-size:13px;">Cargando…</div>
+    </div>
+  </div>
+
+  <!-- Vista Retención de Carnet -->
+  <div id="vista-retencion" style="display:none;">
+    <div class="vista-hdr">
+      <h2>RETENCIÓN DE CARNET</h2>
+      <p>Socios marcados para retención este fin de semana.</p>
+    </div>
+    <div class="socios-browser" id="retencion-content">
+      <div style="padding:32px;text-align:center;color:#9ca3af;font-size:13px;">Marcá el checkbox de retención en la tabla de cada disciplina.</div>
+    </div>
+  </div>
 
 </main>
 
@@ -442,6 +509,7 @@
   let discActiva = null, catActiva = null;
   let sociosActuales = [];
   let retencionMap = {};
+  const retencionSet = new Map();
   let catGrupos = {}, catGrupoActivo = null;
 
   /* ── CSV parser ── */
@@ -635,16 +703,18 @@
     document.getElementById('reporte-mes').textContent = 'Pestaña: ' + tabs;
     renderDiscTabs();
     renderMetricasGlobales();
+    const asistenciaSubitems = document.getElementById('asistencia-subitems');
+    if (asistenciaSubitems) asistenciaSubitems.style.display = '';
     const nav = document.getElementById('disc-nav-subitems');
     if (nav) {
-      nav.style.display = '';
       nav.innerHTML = statsPorDisc.map(d =>
-        `<a class="nav-subitem" href="#" onclick="event.preventDefault();seleccionarDiscYScroll('${d.disc.replace(/'/g,"\\'")}')">
+        `<a class="nav-subitem" href="#" onclick="event.preventDefault();mostrarVistaPrincipal();seleccionarDiscYScroll('${d.disc.replace(/'/g,"\\'")}')">
           <span style="font-size:13px;">${d.emoji}</span>
           ${d.disc.replace(' Masculino',' M.').replace(' Femenino',' F.')}
         </a>`
       ).join('');
     }
+    actualizarBadges();
   }
 
   function seleccionarDiscYScroll(disc) {
@@ -903,7 +973,7 @@
           const noSocia  = /no.?soci/i.test(socioVal);
           const esBecado = /s[ií]/i.test(s.becado || '');
           const situacionTd = `<td class="td-situacion">
-            <span class="${noSocia ? 'badge-no-socia' : 'badge-socia'}">${socioVal || '—'}</span>
+            <span class="${noSocia ? 'badge-no-socia' : 'badge-socia'}">${socioVal || '—'}</span>${esBecado ? ' <span class="badge-becado">BECADO</span>' : ''}
             <div style="margin-top:5px;display:flex;gap:4px;flex-wrap:wrap;">
               <button class="btn-hist" onclick="abrirModalAsistencia(${idx})">Asistencia</button>
               ${esBecado ? `<button class="btn-beca" onclick="abrirModalBeca(${idx})">Beca</button>` : ''}
@@ -970,6 +1040,13 @@
   /* ── Retención ── */
   function toggleRetencion(idx, checked) {
     retencionMap[idx] = checked;
+    const s = sociosActuales[idx];
+    if (s) {
+      const key = `${s.nombre}__${s.disc}`;
+      if (checked) retencionSet.set(key, s);
+      else retencionSet.delete(key);
+    }
+    actualizarBadges();
   }
 
   /* ─── Modal asistencia: solo muestra columnas P/A (presencia física) ─── */
@@ -1197,6 +1274,183 @@
     document.getElementById('search-input').value = '';
     document.getElementById('search-results').style.display = 'none';
     document.getElementById('btn-clear').style.display = 'none';
+  }
+
+  /* ── Control de vistas ── */
+  function mostrarVista(id) {
+    ['vista-principal','vista-becados','vista-retencion'].forEach(v => {
+      document.getElementById(v).style.display = v === id ? '' : 'none';
+    });
+    document.getElementById('nav-item-becados').classList.toggle('active', id === 'vista-becados');
+    document.getElementById('nav-item-retencion').classList.toggle('active', id === 'vista-retencion');
+  }
+
+  function mostrarVistaPrincipal() {
+    mostrarVista('vista-principal');
+  }
+
+  function toggleDiscNav() {
+    const sub   = document.getElementById('disc-nav-subitems');
+    const arrow = document.getElementById('disc-nav-arrow');
+    const tog   = document.getElementById('disc-nav-toggle');
+    const open  = sub.style.display !== 'none';
+    sub.style.display = open ? 'none' : '';
+    if (arrow) arrow.style.transform = open ? '' : 'rotate(90deg)';
+    if (tog)   tog.classList.toggle('open', !open);
+    if (!open) mostrarVistaPrincipal();
+  }
+
+  function mostrarVistaBecados() {
+    mostrarVista('vista-becados');
+    renderVistaBecados();
+  }
+
+  function mostrarVistaRetencion() {
+    mostrarVista('vista-retencion');
+    renderVistaRetencion();
+  }
+
+  function actualizarBadges() {
+    const becados = sociosTodos.filter(s => /s[ií]/i.test(s.becado || ''));
+    const bdgB = document.getElementById('badge-becados');
+    if (bdgB) { bdgB.textContent = becados.length; bdgB.style.display = becados.length > 0 ? '' : 'none'; }
+    const bdgR = document.getElementById('badge-retencion');
+    if (bdgR) { bdgR.textContent = retencionSet.size; bdgR.style.display = retencionSet.size > 0 ? '' : 'none'; }
+  }
+
+  /* ── Vista Becados ── */
+  function renderVistaBecados() {
+    const becados = sociosTodos.filter(s => /s[ií]/i.test(s.becado || ''));
+    const cont = document.getElementById('becados-content');
+    if (!cont) return;
+    if (!becados.length) {
+      cont.innerHTML = '<div class="vista-empty">No hay socios marcados como becados en ninguna disciplina.</div>';
+      return;
+    }
+    cont.innerHTML = `
+      <div class="sb-hdr">
+        <div class="sb-title">🌟 Becados del Club</div>
+        <div class="sb-stats"><span class="sb-stat"><strong>${becados.length}</strong> becados</span></div>
+      </div>
+      <div class="table-scroll">
+        <table class="socios-table">
+          <thead>
+            <tr>
+              <th style="position:sticky;left:0;z-index:3;background:#f8fafb;min-width:200px;">Nombre · DNI</th>
+              <th>Categoría</th>
+              <th>Actividad</th>
+              <th>Situación</th>
+              <th>Observación Beca</th>
+              <th>Deuda</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${becados.map(s => {
+              const dniLine = s.dni ? ` · DNI ${s.dni}` : '';
+              const nacLine = s.fechaNac ? ` · F.Nac ${s.fechaNac}` : '';
+              const socioVal = s.mesesVals.find(m => { const h = normStr(m.header); return h.includes('SOCIA') || h.includes('SOCIO'); })?.valor || '';
+              const noSocia  = /no.?soci/i.test(socioVal);
+              return `<tr>
+                <td class="td-nombre">
+                  ${s.nombre}
+                  <span style="display:block;font-size:10px;color:#9ca3af;font-weight:400;">${dniLine}${nacLine}</span>
+                </td>
+                <td><span class="res-cat">${s.cat || '—'}</span></td>
+                <td style="font-size:12px;">${s.emoji} ${s.disc}</td>
+                <td><span class="${noSocia ? 'badge-no-socia' : 'badge-socia'}">${socioVal || '—'}</span></td>
+                <td style="font-size:12px;color:#374151;max-width:200px;white-space:normal;line-height:1.4;">${s.obs || '<span style="color:#9ca3af;">—</span>'}</td>
+                <td><span class="${s.alDia ? 'cell-ok' : 'cell-debe'}">${s.alDia ? 'AL DÍA' : fmtPeso(s.total)}</span></td>
+              </tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>`;
+  }
+
+  /* ── Vista Retención de Carnet ── */
+  function renderVistaRetencion() {
+    const retenidos = [...retencionSet.values()];
+    const cont = document.getElementById('retencion-content');
+    if (!cont) return;
+    if (!retenidos.length) {
+      cont.innerHTML = '<div class="vista-empty">No hay socios marcados para retención de carnet.<br><span style="font-size:11px;color:#9ca3af;">Marcá el checkbox en la tabla de cada disciplina.</span></div>';
+      return;
+    }
+    const totalDeuda = retenidos.reduce((a, s) => a + s.total, 0);
+    cont.innerHTML = `
+      <div class="sb-hdr">
+        <div class="sb-title">🔒 Retención de Carnet</div>
+        <div class="sb-stats">
+          <span class="sb-stat"><strong>${retenidos.length}</strong> retenidos</span>
+          ${totalDeuda > 0 ? `<span class="sb-stat debe"><strong>Deuda total: ${fmtPeso(totalDeuda)}</strong></span>` : ''}
+        </div>
+      </div>
+      <div class="table-scroll">
+        <table class="socios-table">
+          <thead>
+            <tr>
+              <th style="position:sticky;left:0;z-index:3;background:#f8fafb;min-width:200px;">Nombre · DNI</th>
+              <th>Categoría</th>
+              <th>Actividad</th>
+              <th>Situación</th>
+              <th>Deuda</th>
+              <th>Detalle deuda</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${retenidos.map(s => {
+              const dniLine  = s.dni     ? ` · DNI ${s.dni}` : '';
+              const nacLine  = s.fechaNac ? ` · F.Nac ${s.fechaNac}` : '';
+              const socioVal = s.mesesVals.find(m => { const h = normStr(m.header); return h.includes('SOCIA') || h.includes('SOCIO'); })?.valor || '';
+              const noSocia  = /no.?soci/i.test(socioVal);
+              const detalle  = s.mesesVals.filter(m => {
+                const h = normStr(m.header);
+                if (h.includes('SOCIA')||h.includes('SOCIO')||h.includes('BECAD')||h==='BECA'||h.includes('OBSERV')||h==='OBS'||h==='TOTAL'||h==='MESES') return false;
+                return parsearMonto(m.valor) > 0;
+              }).map(m => `${m.header}: ${fmtPeso(parsearMonto(m.valor))}`).join(' · ') || '—';
+              return `<tr>
+                <td class="td-nombre">
+                  ${s.nombre}
+                  <span style="display:block;font-size:10px;color:#9ca3af;font-weight:400;">${dniLine}${nacLine}</span>
+                </td>
+                <td><span class="res-cat">${s.cat || '—'}</span></td>
+                <td style="font-size:12px;">${s.emoji} ${s.disc}</td>
+                <td><span class="${noSocia ? 'badge-no-socia' : 'badge-socia'}">${socioVal || '—'}</span></td>
+                <td><span class="${s.alDia ? 'cell-ok' : 'cell-debe'}">${s.alDia ? 'AL DÍA' : fmtPeso(s.total)}</span></td>
+                <td style="font-size:11px;color:#374151;white-space:normal;line-height:1.5;max-width:220px;">${detalle}</td>
+              </tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:16px;text-align:right;">
+        <button onclick="copiarResumenRetencion()" style="background:#154C20;color:#fff;border:none;border-radius:10px;padding:10px 20px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Rag',sans-serif;">
+          📋 Copiar resumen para el profe
+        </button>
+      </div>`;
+  }
+
+  function copiarResumenRetencion() {
+    const retenidos = [...retencionSet.values()];
+    if (!retenidos.length) return;
+    const fecha = new Date().toLocaleDateString('es-AR');
+    let txt = `RETENCIÓN DE CARNET — A.A.B.N\nFecha: ${fecha}\n\n`;
+    retenidos.forEach((s, i) => {
+      txt += `${i+1}. ${s.nombre}\n`;
+      txt += `   Actividad: ${s.disc} · Categoría: ${s.cat || '—'}\n`;
+      if (s.dni) txt += `   DNI: ${s.dni}\n`;
+      txt += `   Estado: ${s.alDia ? 'AL DÍA' : 'DEBE ' + fmtPeso(s.total)}\n`;
+      if (!s.alDia) {
+        const det = s.mesesVals.filter(m => {
+          const h = normStr(m.header);
+          if (h.includes('SOCIA')||h.includes('SOCIO')||h.includes('BECAD')||h==='BECA'||h.includes('OBSERV')||h==='OBS'||h==='TOTAL'||h==='MESES') return false;
+          return parsearMonto(m.valor) > 0;
+        }).map(m => `     ${m.header}: ${fmtPeso(parsearMonto(m.valor))}`).join('\n');
+        if (det) txt += det + '\n';
+      }
+      txt += '\n';
+    });
+    navigator.clipboard.writeText(txt).then(() => alert('Resumen copiado al portapapeles ✓')).catch(() => alert('No se pudo copiar. Copiá manualmente.'));
   }
 
   window.addEventListener('load', () => cargarTodos());
